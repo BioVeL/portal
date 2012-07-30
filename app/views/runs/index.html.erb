@@ -1,0 +1,27 @@
+<h1>Listing runs</h1>
+
+<table>
+  <tr>
+    <th>Description</th>
+    <th>Creation</th>
+    <th>State</th>
+    <th>Results</th>
+    <th>User</th>
+  </tr>
+
+<% @runs.each do |run| %>
+  <tr>
+    <td><%= run.description %></td>
+    <td><%= run.creation %></td>
+    <td><%= run.state %></td>
+    <td><%= run.results.count %></td>
+    <td><%= User.find(run.user_id).name %></td>
+    <td><%= link_to 'Show', run %></td>
+    <td><%= link_to 'Destroy', run, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
+    <td>Archive</td>
+  </tr>
+<% end %>
+  
+</table>
+<br />
+

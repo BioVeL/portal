@@ -1,0 +1,85 @@
+Generate Workflow scaffolding
+
+script/generate scaffold workflow name:string description:string creation:datetime start:datetime end:datetime expiry:datetime workflow_id:integer description:string 
+
+
+Generate Run scaffolding
+
+script/generate scaffold run run_identification:string state:string creation:datetime start:datetime end:datetime expiry:datetime workflow_id:integer description:string 
+
+Add relationships between workflows and runs
+
+added app/models/workflow.rb
+  # a workflow can have many runs
+  has_many :runs
+
+added app/models/run.rb
+  # every run is linked to a workflow, trough workflow_id
+  belongs_to :workflow
+
+added styles to the runs layout page
+
+added sytled to the workflows layout page
+
+Generate Result scaffolding
+
+script/generate scaffold result name:string type:string depth:integer run_id:integer 
+
+Add relationships between workflows and runs
+
+added app/models/run.rb
+  # a run can have many results
+  has_many :results
+
+added app/models/result.rb
+  # every result is linked to a run, trough run_id
+  belongs_to :run
+
+Need to create a cron, observer or daemon that keeps checking if the running process has finished, updates its state and copies the outputs into the filespace. 
+
+**********************RAKE IN BACKGROUND*****************************
+http://railscasts.com/episodes/127-rake-in-background
+*********************************************************************
+
+
+
+
+******************DAEMON OPTION**************************************
+from: http://railscasts.com/episodes/129-custom-daemon
+*********************************************************************
+For this, first install the deamons gem and a daemon generator api. The daemon gem is installed as all other gems:
+
+:~/tlite$ sudo gem install daemons
+Fetching: daemons-1.1.8.gem (100%)
+Successfully installed daemons-1.1.8
+1 gem installed
+Installing ri documentation for daemons-1.1.8...
+Installing RDoc documentation for daemons-1.1.8...
+
+The daemon generator api is installed from git
+
+:~/tlite$ script/plugin install git://github.com/dougal/daemon_generator.git
+Initialized empty Git repository in /home/abraham/tlite/vendor/plugins/daemon_generator/.git/
+remote: Counting objects: 25, done.
+remote: Compressing objects: 100% (21/21), done.
+remote: Total 25 (delta 2), reused 20 (delta 1)
+Unpacking objects: 100% (25/25), done.
+From git://github.com/dougal/daemon_generator
+ * branch            HEAD       -> FETCH_HEAD
+Daemon Generator
+================
+
+To get yourself rolling:
+> sudo gem install daemons
+> ./script/generate daemon <name>
+
+Then insert your code in the lib/daemons/<name>.rb stub. All pid's and logs will live in the normal log/ folder.  This helps to make things Capistrano friendly.
+
+Individual control script:
+> ./lib/daemons/<name>_ctl [start|stop|restart]
+
+App-wide control script (I add this to my capistrano recipe's after_restart task):
+> ./script/daemons [start|stop|restart]
+
+
+

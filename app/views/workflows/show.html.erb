@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @workflow.name %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%= @workflow.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @workflow.description %>
+</p>
+
+<p>
+  <b>Author:</b>
+  <%= @workflow.author %>
+</p>
+
+<p>
+  <b>Workflow file:</b>
+  <%= @workflow.workflow_file %>
+</p>
+
+<%= button_to 'Create Run', :controller => 'runs', :action => 'new_run', :id => @workflow %>
+
+<%= link_to 'Edit', edit_workflow_path(@workflow) %> |
+<%= link_to 'Back', workflows_path %>

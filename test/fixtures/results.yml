@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  filetype: MyString
+  depth: 1
+  run_id: 1
+  filepath: MyString
+
+two:
+  name: MyString
+  filetype: MyString
+  depth: 1
+  run_id: 1
+  filepath: MyString

@@ -1,0 +1,73 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Run identification:</b>
+  <%= @run.run_identification %>
+</p>
+
+<p>
+  <b>State:</b>
+  <%= @run.state %>
+</p>
+
+<p>
+  <b>Creation:</b>
+  <%= @run.creation %>
+</p>
+
+<p>
+  <b>Start:</b>
+  <%= @run.start %>
+</p>
+
+<p>
+  <b>End:</b>
+  <%= @run.end %>
+</p>
+
+<p>
+  <b>Expiry:</b>
+  <%= @run.expiry %>
+</p>
+
+<p>
+  <b>Workflow:</b>
+  <%= @run.workflow_id %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @run.description %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @run.user_id %>
+</p>
+
+<h3>Results</h3>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Result type</th>
+  </tr>
+
+<% for result in @run.results.each %>
+  
+    
+  <tr>
+    <td><%=h result.name %></td>
+    <td><%=h result.filetype.split(/-*/) %></td>
+  </tr>
+  <tr> 
+    <td colspan="2">
+      <% if result.filetype.to_s =~ /text/ %>
+        <%= IO.read(result.result_filename)%>
+      <% else %>
+        <%= image_tag( result.result_filepath, :height => '100%', :width =>'100%') %>
+      <% end %>
+    </td>    
+   </tr>
+<% end %>
+

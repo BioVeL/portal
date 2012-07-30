@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  run_identification: MyString
+  state: MyString
+  creation: 2012-07-25 14:39:44
+  start: 2012-07-25 14:39:44
+  end: 2012-07-25 14:39:44
+  expiry: 2012-07-25 14:39:44
+  workflow_id: 1
+  description: MyString
+  user_id: 1
+
+two:
+  run_identification: MyString
+  state: MyString
+  creation: 2012-07-25 14:39:44
+  start: 2012-07-25 14:39:44
+  end: 2012-07-25 14:39:44
+  expiry: 2012-07-25 14:39:44
+  workflow_id: 1
+  description: MyString
+  user_id: 1
