@@ -61,6 +61,18 @@ class Workflow < ActiveRecord::Base
       self.description = model.annotations.descriptions.to_s
       puts self.name
   end 
+  def connects_to_r_server?
+    response = false
+    for df in self.get_model.dataflows do
+      for indv_proc in df.processors do
+        if indv_proc.type == "rshell"
+          response = true
+          break
+        end
+      end
+    end  
+    return response
+  end 
   private 
   #the store wffile method is called after the details are saved    
   def store_wffile
@@ -76,4 +88,5 @@ class Workflow < ActiveRecord::Base
       @file_data = nil
     end
   end
+  
 end

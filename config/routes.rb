@@ -1,4 +1,6 @@
 TliteR3::Application.routes.draw do
+  resources :credentials
+
   #*****************************************************
   # mapping for the authentication redirections 
   get "log_in" => "sessions#new", :as => "log_in"

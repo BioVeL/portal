@@ -1,12 +1,4 @@
 class Tavernaserv < ActiveRecord::Base
-  # attr_accessible :title, :body
-  @server = nil;
-  @server_uri = "http://localhost:8080/ts24"
-  @server_user = "taverna"
-  @server_pass = "taverna"
-
-  @credentials = T2Server::HttpBasic.new("taverna", "taverna")
-
 
   @updater_running = false
   
@@ -21,7 +13,7 @@ class Tavernaserv < ActiveRecord::Base
     if count > 0
       for runner in @runs do
         #update each run's details with the values from the server
-        svrrun = @server.run(runner.run_identification, @credentials)
+        svrrun = @server.run(runner.run_identification, Credential.get_taverna_credentials)
         tmprn = runner
         if svrrun.nil? 
           runner.state = 'expired'
@@ -62,10 +54,10 @@ class Tavernaserv < ActiveRecord::Base
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
   def self.check_serv
-    puts @server_uri
+    puts Credential.get_taverna_uri
     if (!defined?(@server) || (@server == nil)) #then
       begin
-        @server = T2Server::Server.new(@server_uri)
+        @server = T2Server::Server.new(Credential.get_taverna_uri)
       rescue Exception => e  
         @server = nil
         puts '/no_configuration'

@@ -99,7 +99,7 @@ class RunsController < ApplicationController
     unless params[:workflow_id].nil?
       puts 'using submitted inputs'
       check_server()    
-      run = $server.create_run(@workflow.get_file, $credentials)
+      run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
       cookies[:run_identification] = run.identifier
       run.input_ports.each_value do |port|
         input = port.name  
@@ -132,6 +132,11 @@ class RunsController < ApplicationController
           exit 1
         end
       end
+      # determine if an rserver is being called
+      if @workflow.connects_to_r_server?
+        rs_cred = Credential.find_by_server_type_and_default_and_in_use("rserver",true,true)
+        run.add_password_credential(rs_cred.url,rs_cred.login,rs_cred.password)
+      end
       run.start()
     end
     
@@ -141,8 +146,12 @@ class RunsController < ApplicationController
       puts 'no inputs'
       # create a new run
       check_server()    
-      run = $server.create_run(@workflow.get_file, $credentials)
+      run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
       cookies[:run_identification] = run.identifier
+      if @workflow.connects_to_r_server?
+        rs_cred = Credential.find_by_server_type_and_default_and_in_use("rserver",true,true)
+        run.add_password_credential(rs_cred.url,rs_cred.login,rs_cred.password)
+      end
       run.start()
       save_run(run)
     elsif cookies[:run_identification]=="" 
@@ -153,6 +162,8 @@ class RunsController < ApplicationController
       save_run(run)
     end   
   end
+  
+
   # get the inputs from the model
   def get_inputs
     # get the workflow t2flow model
@@ -195,7 +206,7 @@ class RunsController < ApplicationController
     check_server()    
     @runs.each do |rn|
       #update each run's details with the values from the server
-      svrrun = $server.run(rn.run_identification, $credentials)
+      svrrun = $server.run(rn.run_identification, Credential.get_taverna_credentials)
       tmprn = rn
       unless svrrun.nil?
       #if the state of the run has changed since the last update
@@ -276,10 +287,28 @@ class RunsController < ApplicationController
     #puts "USER: #{current_user.id} #{current_user.login}"
     result.save
   end
+  
   private
   # Get the workflow that will be executed
   def get_workflow
     puts "getting workflow for #{params[:id]}"
     @workflow = Workflow.find(params[:id])
+  end
+    # Scrub sensitive parameters from your log
+  # filter_parameter_logging :password
+
+  def check_server()
+    if (!defined?($server) || ($server == nil)) #then
+      #settings = YAML.load(IO.read(File.join(File.dirname(__FILE__), "config.yaml")))      #if settings
+      #  $server_uri = settings['server_uri']
+        begin
+         $server = T2Server::Server.new(Credential.get_taverna_uri)
+        rescue Exception => e  
+          $server = nil
+          redirect_to '/no_configuration'
+        end
+      #else
+      #  redirect_to '/no_configuration'
+    end
   end
 end

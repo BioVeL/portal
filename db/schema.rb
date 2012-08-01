@@ -10,7 +10,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120730094238) do
+ActiveRecord::Schema.define(:version => 20120801094031) do
+
+  create_table "credentials", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "url"
+    t.string   "login"
+    t.string   "password"
+    t.string   "server_type"
+    t.boolean  "in_use",      :default => false, :null => false
+    t.boolean  "default",     :default => false, :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
 
   create_table "results", :force => true do |t|
     t.string   "name"
