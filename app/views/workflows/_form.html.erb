@@ -1,4 +1,7 @@
-<%= form_for(@workflow) do |f| %>
+<%= form_for(@workflow, 
+  :url => {:action => "update"},
+  :html => { :multipart => true,
+  :method =>:put}) do |f| %>
   <% if @workflow.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@workflow.errors.count, "error") %> prohibited this workflow from being saved:</h2>
@@ -28,8 +31,8 @@
     <%= f.text_field :author %>
   </div>
   <div class="field">
-    <%= f.label :workflow_file %><br />
-    <%= f.text_field :workflow_file %>
+    <%= f.label :workflow_file %>:  <%= @workflow.workflow_file %><br />
+    <%= f.file_field :wf_file%>
   </div>
   <div class="actions">
     <%= f.submit %>
