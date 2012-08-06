@@ -1,6 +1,6 @@
 <h1>New run</h1>
 
-<%= form_tag(:controller => 'runs', :action => 'new_run') do %>
+<%= form_for :file_uploads, :url => {:controller => 'runs', :action => 'new_run'}, :html => {:multipart => true} do |f| %>
   <% #error_message_tag %>
   <%= hidden_field_tag "workflow_id", @workflow.id %>
   <p>
@@ -17,9 +17,10 @@
     <% @sources.each do |item| %> 
     <p>
         <% portname = item[0] %>
-        <%= label_tag portname %>
-        <%=h text_field_tag portname, @sources[portname] %>
-        <%= label_tag @descriptions[portname] %> 
+        Value for <b><%= label_tag portname %></b>: <%=h f.text_field portname %> or  File <%= f.file_field  "file_for_#{portname}" %><br/> 
+        
+        <%= label_tag @descriptions[portname] %> <br/>
+        Example Value: <%= @sources[portname] %>
     </p>
     <% end %>
     <p>

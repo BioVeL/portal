@@ -103,11 +103,12 @@ class RunsController < ApplicationController
       cookies[:run_identification] = run.identifier
       run.input_ports.each_value do |port|
         input = port.name  
-        if params.include? input
+        input_file =  "file_for_#{port.name}"
+        if params[:file_uploads].include? input
           puts "1   Actual Input for #{input} as string #{params[input].to_s}"
-          stringinput = params[input].to_s
+          stringinput = params[:file_uploads][input].to_s
           puts "2   #{stringinput.class}"
-        if stringinput.include?("[") and stringinput.include?("]")
+          if stringinput.include?("[") and stringinput.include?("]")
             puts "3   Input is a list"
             inputarray = stringinput[1..-2].split(',').collect! {|n| n.to_s}
             puts '4   Values' 
@@ -123,13 +124,15 @@ class RunsController < ApplicationController
           #  puts 'no values assigned'
           #  run.input_port("name").value = "Surprise!!"
           #end
-        elsif files.include? input
-          port.file = files[input]
-          puts "Input '#{input}' set to use file '#{port.file}'"
         else
           puts "Input '#{input}' has not been set."
           run.delete
           exit 1
+        end
+        puts "Files? #{input_file}"
+        if params[:file_uploads].include? input_file
+          port.file = params[:file_uploads][input_file].tempfile.path
+          puts "Input '#{input}' set to use file '#{params[:file_uploads][input_file].original_filename}'"
         end
       end
       # determine if an rserver is being called
