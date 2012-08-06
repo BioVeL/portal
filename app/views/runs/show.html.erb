@@ -63,11 +63,11 @@
   <tr> 
     <td colspan="2">
       <% if result.filetype.to_s =~ /text/ %>
-        <%= IO.read(result.result_filename)%>
+        <%= simple_format(IO.read(result.result_filename))%>
       <% else %>
         <%= image_tag( result.result_filepath, :height => '100%', :width =>'100%') %>
       <% end %>
     </td>    
    </tr>
 <% end %>
-
+</table>
