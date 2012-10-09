@@ -20,7 +20,7 @@
         Value for <b><%= label_tag portname %></b>: <%=h f.text_field portname %> or  File <%= f.file_field  "file_for_#{portname}" %><br/> 
         
         <%= label_tag @descriptions[portname] %> <br/>
-        Example Value: <%= @sources[portname] %>
+        <b>Example Value:</b> <%= simple_format(@sources[portname]) %>
     </p>
     <% end %>
     <p>

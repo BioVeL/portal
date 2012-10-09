@@ -4,20 +4,17 @@
   <tr>
     <th>Title</th>
     <th>Author</th>
-    <th>Workflow file</th>
-    <th></th>
-    <th></th>
-    <th></th>
+    <th colspan="4">Operations</h>
   </tr>
 
 <% @workflows.each do |workflow| %>
   <tr>
     <td title="<%= workflow.description %>" alt="<%= workflow.description %>"><%= workflow.title %></td>
     <td><%= workflow.author %></td>
-    <td><%= workflow.workflow_file %></td>
     <td><%= link_to 'Show', workflow %></td>
     <td><%= link_to 'Edit', edit_workflow_path(workflow) %></td>
     <td><%= link_to 'Destroy', workflow, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
+    <td><%= button_to 'Run', :controller => 'runs', :action => 'new_run', :id => workflow.id %></td>
   </tr>
 <% end %>
 </table>

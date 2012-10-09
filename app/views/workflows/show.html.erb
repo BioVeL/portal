@@ -9,17 +9,23 @@
   <b>Title:</b>
   <%= @workflow.title %>
 </p>
-
 <p>
-  <b>Description:</b>
-  <%= @workflow.description %>
-</p>
-
-<p>
-  <b>Author:</b>
+  <b>Author(s):</b>
   <%= @workflow.author %>
 </p>
-
+<p>
+  <b>Description:</b>
+  <%= simple_format(@workflow.description) %>
+</p>
+<p>
+  <b>myExperiment ID:</b>
+  <%= @workflow.my_experiment_id %>
+</p>
+<p>
+  This workflow has been executed :
+  <%= @workflow.run_count %> times and takes <%= @workflow.average_run %> 
+  seconds to fininsh on average
+</p>
 <p>
   <b>Workflow file:</b>
   <%= @workflow.workflow_file %>

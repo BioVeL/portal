@@ -1,5 +1,6 @@
 require 't2flow/model'
 require 't2flow/parser'
+require 't2flow/dot'
 
 class Workflow < ActiveRecord::Base
   attr_accessible :author, :description, :name, :title, :workflow_file, :wf_file
@@ -59,6 +60,7 @@ class Workflow < ActiveRecord::Base
       self.title = model.annotations.titles.to_s
       self.author = model.annotations.authors.to_s
       self.description = model.annotations.descriptions.to_s
+      puts model
       puts self.name
   end 
   def connects_to_r_server?

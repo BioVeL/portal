@@ -12,6 +12,11 @@ TliteR3::Application.routes.draw do
   #*****************************************************
 
   resources :runs
+  #*****************************************************
+  # mapping for refreshing results if run has not finished
+  match 'runs/refresh/:id'  => 'runs#refresh'
+  match 'runs/interaction/:id/:interactionid' => 'runs#interaction'
+  #*****************************************************
 
   resources :workflows
 
@@ -26,7 +31,14 @@ TliteR3::Application.routes.draw do
   
 
 
+  #*****************************************************
+  # mapping for the redirection when downloading a result
+  match 'results/:id/download/', :controller => 'result', :action => 'download'
+  #*****************************************************
+
   get '/no_configuration' => "static#no_configuration" , :as => 'no_configuration'
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

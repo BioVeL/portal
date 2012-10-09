@@ -1,3 +1,5 @@
+gem 'ratom'
+require 'atom'
 class RunsController < ApplicationController
   before_filter :login_required
   # GET /runs
@@ -18,7 +20,7 @@ class RunsController < ApplicationController
   # GET /runs/1.json
   def show
     @run = Run.find(params[:id])
-
+    Tavernaserv.run_update(@run) 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @run }
@@ -85,7 +87,132 @@ class RunsController < ApplicationController
       format.json { head :no_content }
     end
   end
-    #GET /workflows/1/newrun
+
+  def refresh
+    @run = Run.find(params[:id])
+    @interaction_id, @interaction_uri = get_interaction(@run.run_identification, @run.start)
+    respond_to do |format|
+      format.js 
+    end
+  end
+
+  $feed_ns = "http://ns.taverna.org.uk/2012/interaction"
+  $feed_uri = "http://localhost:8080/ah/interaction/notifications"
+  def get_interaction(run_id = "7952aed1-b5e7-46ab-88ac-db08975d16c0", run_date =  DateTime.now())
+    puts "*****************************************************"
+    puts "MONITORING RUN TO GET INTERACTIONS*******************"
+    puts "*****************************************************"
+
+    feed = Atom::Feed.load_feed(URI.parse($feed_uri))
+    replies_for_run = Array.new
+    interaction = nil
+    puts run_id
+    puts feed.entries.count
+    # Go through all the entries in reverse order and return the first which
+    # does not have a reply.
+    feed.each_entry do |entry|
+      entry_run_id = entry[$feed_ns, "run-id"]
+      puts entry[$feed_ns, "run-id"]
+      if (entry_run_id.empty?)
+        puts("empty")
+        next
+      end
+      unless (entry_run_id[0] == run_id)
+        puts "not equal #{entry_run_id} to #{run_id}"
+        next
+      end
+
+      puts "Found equal #{entry_run_id} to #{run_id}"
+      r_id = entry[$feed_ns, "in-reply-to"]
+      puts "Run Date: " + run_date.to_s
+      feed_datetime = entry.updated
+      puts feed_datetime
+      
+      puts "reply ID: " + r_id.to_s
+      puts "Stored Replies: " + replies_for_run.to_s
+      if r_id.empty?
+        if replies_for_run.include?(entry[$feed_ns, "id"][0].to_s)
+          puts "This interaction has been responded already"
+          next
+        else
+          interaction = entry
+          puts "Found interaction " + interaction[$feed_ns, "id"][0]
+          break
+        end      
+      else 
+        puts "respose to interaction: " + r_id.to_s + " for run: "+ run_id
+        if !replies_for_run.include?(r_id.to_s)
+          replies_for_run.push r_id.to_s
+        end
+      end 
+      if feed_datetime < run_date
+        break
+      end 
+    end
+    # Return nil if there are no interactions
+    return [nil, nil] if interaction.nil?
+
+    # Get the interaction link from the feed entry
+    interaction.links.each do |link|
+      if link.rel == "presentation"
+        return [interaction[$feed_ns, "id"][0], link.to_s]
+      end
+    end
+
+    # Should not get here but return nil just in case...
+    [nil, nil]
+  end  
+
+  def interaction
+    interactionid = params[:interactionid].to_s
+    @run = Run.find(params[:id])
+    @responded = probe_interaction(@run.run_identification, interactionid)
+  end
+
+  def probe_interaction(run_id = "7952aed1-b5e7-46ab-88ac-db08975d16c0", interaction_id = "")
+    puts "*****************************************************"
+    puts "MONITORING INTERACTION TO GET RESPONSE***************"
+    puts "interaction " + interaction_id
+    puts "*****************************************************"
+    feed = Atom::Feed.load_feed(URI.parse($feed_uri))
+    interaction = nil
+    puts run_id
+    puts feed.entries.count
+    # Go through all the entries in reverse order and return true if
+    # it has been replied.
+    feed.each_entry do |entry|
+      entry_run_id = entry[$feed_ns, "run-id"]
+      puts entry[$feed_ns, "run-id"]
+      if (entry_run_id.empty?)
+        puts("empty")
+        next
+      end
+      unless (entry_run_id[0] == run_id)
+        puts "not equal #{entry_run_id} to #{run_id}"
+        next
+      end
+
+      puts "Found equal #{entry_run_id} to #{run_id}"
+      r_id = entry[$feed_ns, "in-reply-to"]
+      puts "interaction id: " + interaction_id
+      puts "response to: " + r_id.to_s
+      if r_id.empty? && interaction_id == entry[$feed_ns, "id"][0] 
+        #the interaction has not been responded
+        puts "Found interaction not completed yet"
+        return false;
+      end
+      if r_id.to_s == interaction_id.to_s
+        puts "respose sent for " + run_id
+        return true;
+      end
+      break
+    end
+    # Return nil if there are no interactions
+    return false
+  end
+  
+
+  #GET /workflows/1/newrun
   def new_run
     cookies[:run_identification]=""
     puts "number of parameters: #{params.count}"
@@ -195,14 +322,21 @@ class RunsController < ApplicationController
     puts "CREATE #{params}" 
     puts "CREATE run identifier #{cookies[:run_identification]}"
     @run.workflow_id = @workflow.id
-    @run.description = @workflow.name + " " + @workflow.workflow_file
+    @run.description = @workflow.title
     @run.run_identification = run.identifier
     @run.creation = run.create_time
     @run.start = run.start_time
     @run.expiry = run.expiry
     @run.state = run.status
     @run.user_id = current_user.id
-    @run.save
+
+    # the run has been started so redirect to it
+    respond_to do |format|
+      if @run.save
+        format.html { redirect_to  @run, :notice => 'The run was successfully created.' }
+        format.json { render :json => @run, :status => :created, :location => @run }    
+      end
+    end
   end
   def update_all
     # ensure the server has been instantiated
@@ -250,17 +384,18 @@ class RunsController < ApplicationController
   #this process is called to copy the results to the local result_store
   def save_results(runid, outputs)
     #resultset = {}
+    "#SAVE_RESULTS"
     if outputs.empty?
-      #puts "The workflow has no output ports"    
+      puts "#SAVE_RESULTS: The workflow has no output ports"    
     else 
       outputs.each do |name, port|
-        #puts "#{name} (depth #{port.depth})"
+        puts "#SAVE_RESULTS: #{name} (depth #{port.depth})"
         if port.value.is_a?(Array)
-          #puts " partial Results are in a list"
+          puts "#SAVE_RESULTS:  partial Results are in a list"
           sub_array = port.value
           save_nested(runid,name,sub_array,port.type[0],port.depth,index="")
         else
-          #puts "path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
+          puts "#SAVE_RESULTS: path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)                  
         end
       end
@@ -268,12 +403,13 @@ class RunsController < ApplicationController
     #resultset
   end
   def save_nested(runid, portname, sub_array, porttype, portdepth, index="")
+    puts  "#SAVE_NESTED: "
     (0 .. sub_array.length - 1).each do |i|
       value = sub_array[i]
       if value.is_a?(Array) then
         save_nested(runid,portname,value,porttype, portdepth, i.to_s)
-      else
-        puts  "path #{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i} type: #{porttype}"
+      else 
+        puts  "#SAVE_NESTED: path #{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i} type: #{porttype}"
         save_to_db(portname, porttype, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
       end
     end 
@@ -286,6 +422,7 @@ class RunsController < ApplicationController
     result.run_id = run
     result.filepath = filepath
     result.result_file = value
+    puts "#SAVE_TO_DB: #{value}" 
     #result.user_id = current_user.id
     #puts "USER: #{current_user.id} #{current_user.login}"
     result.save
@@ -314,4 +451,5 @@ class RunsController < ApplicationController
       #  redirect_to '/no_configuration'
     end
   end
+
 end

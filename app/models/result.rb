@@ -22,12 +22,12 @@ class Result < ActiveRecord::Base
     File.join RESULT_STORE, self.filepath, "value"
   end
   
-  #return the path that contains the workflow file
+  #return the path that contains the result file
   def result_filepath
     return "/result_store/#{self.filepath}/value"
   end
 
-  # check if a workflow file exists
+  # check if a result file exists
   def has_resultfile?
     File.exists?  result_filename
   end
@@ -49,6 +49,6 @@ class Result < ActiveRecord::Base
       # ensure that the data is only save once by clearing the cache after savig
       @file_data = nil
     end
-    puts "no data to save"
+    puts "#STORE_RESULTFILE no data to save #{result_filename}"
   end    
 end

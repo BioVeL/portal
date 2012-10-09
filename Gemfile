@@ -45,3 +45,5 @@ gem 'bcrypt-ruby', '~> 3.0.0', :require => 'bcrypt'
 gem 't2-server'
 # T2flow gem to parse and read workflows
 gem 'taverna-t2flow'
+
+gem 'ratom'

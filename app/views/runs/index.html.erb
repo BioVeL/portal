@@ -6,16 +6,21 @@
     <th>Creation</th>
     <th>State</th>
     <th>Results</th>
-    <th>User</th>
+    <% if current_user.admin %>
+      <th>User</th>
+    <% end %>
+    <th colspan="3">Operations</h>
   </tr>
 
 <% @runs.each do |run| %>
   <tr>
     <td><%= run.description %></td>
-    <td><%= run.creation %></td>
+    <td><%= run.creation.strftime("%d/%m/%Y-%H:%M:%S") %></td>
     <td><%= run.state %></td>
     <td><%= run.results.count %></td>
-    <td><%= User.find(run.user_id).name %></td>
+    <% if current_user.admin -%>
+      <td><%= User.find(run.user_id).name %></td>	
+    <% end -%>
     <td><%= link_to 'Show', run %></td>
     <td><%= link_to 'Destroy', run, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
     <td>Archive</td>
@@ -24,4 +29,10 @@
   
 </table>
 <br />
+<%= javascript_tag do -%>
+$(document).ready(
+  function(){
+      setInterval("location.reload(true);", 5000 );
+  });
+<% end -%>
 

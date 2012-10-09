@@ -1,0 +1,28 @@
+<div id="runstate">
+  <p>
+    <b>Current State:</b>
+    <%= run.state %>
+  </p>
+  <p>
+    <b>The run was started at:</b>
+    <%= run.start.strftime("%d/%m/%Y - %H:%M:%S") %>
+  </p>
+
+  <% if run.state == "finished" %>
+    <p>
+      <b>The run finished at:</b>
+        <%= run.end.strftime("%d/%m/%Y - %H:%M:%S") %>
+    </p>
+    <p>
+      <b>Running time (aprox.):</b>
+        <%= run.end - run.start %> seconds
+    </p>
+  <%else workflow = Workflow.find(run.workflow_id)%>
+    <p> The execution will take approximately 
+        <%= workflow.average_run %> seconds to fininsh, 
+        calculated as an average after 
+        <%= workflow.run_count %> runs
+    </p>
+  <% end %>
+</div>
+

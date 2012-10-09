@@ -1,0 +1,8 @@
+$('#runstate').replaceWith('<%= escape_javascript(render(:partial => 'runstate', :locals => {:run=>@run})) %>');
+$('#runresults').replaceWith('<%= escape_javascript(render(:partial => 'runresults', :locals => {:run=>@run})) %>');
+$('#interactionframe').replaceWith('<%= escape_javascript(render(:partial => 'interactionframe'))%>');
+  <% unless @interaction_id.nil? %>
+    interaction_identifier = '<%=@interaction_id%>'
+    monitor_interaction()
+  <% end %>
+
