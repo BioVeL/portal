@@ -5,10 +5,9 @@ class RunsController < ApplicationController
   # GET /runs
   # GET /runs.json
   def index  
-    Tavernaserv.run_update()   
-    @runs = Run.all 
+    @runs = Run.find(:all, :order =>'start desc') 
     if (!current_user.admin?)
-      @runs = Run.find_all_by_user_id(current_user.id)
+      @runs = Run.find_all_by_user_id(current_user.id, :order =>'start desc')
     end 
     respond_to do |format|
       format.html # index.html.erb
@@ -20,7 +19,6 @@ class RunsController < ApplicationController
   # GET /runs/1.json
   def show
     @run = Run.find(params[:id])
-    Tavernaserv.run_update(@run) 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @run }
@@ -338,48 +336,6 @@ class RunsController < ApplicationController
       end
     end
   end
-  def update_all
-    # ensure the server has been instantiated
-    check_server()    
-    @runs.each do |rn|
-      #update each run's details with the values from the server
-      svrrun = $server.run(rn.run_identification, Credential.get_taverna_credentials)
-      tmprn = rn
-      unless svrrun.nil?
-      #if the state of the run has changed since the last update
-        if (rn.state != svrrun.status)
-          rn.state = svrrun.status
-          rn.creation = svrrun.create_time
-          rn.start = svrrun.start_time
-          rn.expiry = svrrun.expiry
-          rn.state = svrrun.status
-          #rn.user_id = current_user.id
-          #puts "USER: #{current_user.id} #{current_user.login}"
-          rn.end = svrrun.finish_time
-          # if the new values make the run different then save the new values 
-          if rn != tmprn  
-             rn.save      
-          end 
-          # if the run has finished copy the outputs 
-          if rn.state.to_s.eql?('finished')
-            # if run finishes copy run output to outputs dir within run
-            #puts "run has finished"
-            # if run does not have outputs yet
-            if rn.results.count == 0
-              #puts "no results recorded for this run"
-              outputs = svrrun.output_ports
-              save_results(rn.id, outputs)
-            end
-          else 
-            #puts "run is executing"
-          end
-        end
-      else
-        rn.state = 'expired'
-        rn.save
-      end
-    end
-  end
 
   #this process is called to copy the results to the local result_store
   def save_results(runid, outputs)
@@ -434,9 +390,9 @@ class RunsController < ApplicationController
     puts "getting workflow for #{params[:id]}"
     @workflow = Workflow.find(params[:id])
   end
-    # Scrub sensitive parameters from your log
-  # filter_parameter_logging :password
 
+  # Scrub sensitive parameters from your log
+  # filter_parameter_logging :password
   def check_server()
     if (!defined?($server) || ($server == nil)) #then
       #settings = YAML.load(IO.read(File.join(File.dirname(__FILE__), "config.yaml")))      #if settings

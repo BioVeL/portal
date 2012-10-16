@@ -1,65 +1,53 @@
 class Tavernaserv < ActiveRecord::Base
 
-  @updater_running = false
-   
 
+
+  # start checking the runs list to see if there are any workflows running
   def self.run_update(*args)
     if args.empty?
-      @updater_running = true
-      @runs = Run.find(:all).select {|r| r.results.count == 0 && (r.state.scan('running') || r.state.scan('finished') )}
-      count = @runs.count
-      puts "Current runing: #{count}\n"
-      if count > 0
-        for runner in @runs do
-          update_this_run(runner)
-        end
-        puts "Current runing: #{count}\n"
+      @runs = Run.find(:all, :conditions => ["state = 'running'"])
+      #If there are runing workflows then verify if they have finished
+      for runner in @runs do
+        update_this_run(runner)
       end
-      puts "no more running"
-      @updater_running = false
     elsif args.size == 1 and args.first.is_a? Run
       update_this_run(args.first)
-      puts "Individual Run, id: #{args.first.id}"
     end
-  end  
+  end
+
+  # verify if the indivirual workflow is still running and if not see if outputs
+  # are ready to copy
   def self.update_this_run(runner)
     #update run details with the values from the server
     check_serv   
-    svrrun = @server.run(runner.run_identification,Credential.get_taverna_credentials)
-    tmprn = runner
-    if svrrun.nil? 
-      runner.state = 'expired'
-    elsif (runner.state != svrrun.status )
-      runner.creation = svrrun.create_time
-      runner.start = svrrun.start_time
-      runner.expiry = svrrun.expiry
-      runner.state = svrrun.status.to_s
-      runner.end = svrrun.finish_time
-      # if the new values make the run different then save the new values 
-      if runner != tmprn  
-         runner.save
-      end 
+    svrrun = @server.run(runner.run_identification, 
+                         Credential.get_taverna_credentials)
+    unless svrrun.nil?      
       # if the run has finished copy the outputs 
-      if runner.state.to_s.scan('finished')
+      if svrrun.status.to_s == 'finished'
+        runner.expiry = svrrun.expiry
+        runner.state = svrrun.status.to_s
+        runner.end = svrrun.finish_time
         # if run finishes copy run output to outputs dir within run
-        #puts "run has finished"
-        # if run does not have outputs yet
         if runner.results.count == 0
           #puts "no results recorded for this run"
           outputs = svrrun.output_ports
-          save_results(runner.id, outputs)
-        ##if the run has finished but there are no results
+          save_results(runner.id, outputs)    
+          runner.save
+          running_time = runner.end - runner.start
+          # update workflow statistics after the run has finished
+          update_workflow_stats(runner.workflow_id, running_time)
+        ## what if the run has finished but there are no results?
         end
-      else 
-        puts "run is executing"
       end
     end
-    runner.save
-    running_time = runner.end - runner.start
-    wf = Workflow.find(runner.workflow_id)
+  end
+  def self.update_workflow_stats(wf_id = 0, running_time = 0)
+    wf = Workflow.find(wf_id)
     prev_run_count = wf.run_count
     prev_avg_run = wf.average_run
-    wf.average_run = ((prev_run_count*prev_avg_run)+running_time)/(prev_run_count+1)
+    wf.average_run = ((prev_run_count * prev_avg_run) + running_time ) /
+                       (prev_run_count+1)
     wf.run_count = wf.run_count + 1
     wf.save 
   end
@@ -78,6 +66,8 @@ class Tavernaserv < ActiveRecord::Base
       puts '/no_configuration'
     end
   end
+
+
   #this process is called to copy the results to the local result_store
   def self.save_results(runid, outputs)
     #resultset = {}

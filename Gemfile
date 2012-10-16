@@ -27,8 +27,6 @@ gem 'jquery-rails'
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0', :require => 'bcrypt'  
 
-
-
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
 
@@ -45,5 +43,7 @@ gem 'bcrypt-ruby', '~> 3.0.0', :require => 'bcrypt'
 gem 't2-server'
 # T2flow gem to parse and read workflows
 gem 'taverna-t2flow'
-
+# RATOM to read and parse Atom feeds
 gem 'ratom'
+# Daemons for handling background tasks
+gem 'daemons-rails'

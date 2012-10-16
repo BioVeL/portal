@@ -31,7 +31,7 @@
 .menu {
   padding-right: 1px;
   overflow:  hidden;
-  background: url("/assets/gradient.png") repeat scroll 0 0 transparent;
+  background: url("/assets/images/gradient.png") repeat scroll 0 0 transparent;
   border-width: 1px 1px 1px 0;
   border-style: solid;
   border-color: #77BB11 #ddda88 #bbb866;
@@ -75,7 +75,7 @@
 }
 
 .hentry { position: relative; }
-.post { clear:both;  padding-bottom: 25px; background:transparent url(../assets/entry.png) no-repeat scroll center bottom;}
+.post { clear:both;  padding-bottom: 25px; background:transparent url(../assets/images/entry.png) no-repeat scroll center bottom;}
 .cal-date { text-align: center; font-family: Helvetica, Arial, sans-serif; position: absolute; top: 4px; left: 0; width: 65px; padding: 10px 4px; color: #414c58; background: #fff; 
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
@@ -108,7 +108,7 @@
 -moz-background-clip:border;
 -moz-background-inline-policy:continuous;
 -moz-background-origin:padding;
-/*background:transparent url(../assets/entry.png) no-repeat scroll center bottom;*/
+/*background:transparent url(../assets/images/entry.png) no-repeat scroll center bottom;*/
 clear:both;
 /*padding-bottom:5px;
 margin-bottom: 20px;*/ }
@@ -267,7 +267,7 @@ blockquote {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
 	-moz-background-origin:padding;
-	background:transparent url(../assets/quoteme.gif) no-repeat scroll 25px 20px;
+	background:transparent url(../assets/images/quoteme.gif) no-repeat scroll 25px 20px;
 	background-color: #fff;
 /*	margin:0 0 20px;*/
 	padding:15px 25px 5px 65px;
@@ -329,7 +329,7 @@ button, input[type=submit] {
   height: 30px;
   padding: 0 20px;
   cursor: pointer;
-  background: url("/assets/gradient.png/") repeat scroll 0 0 transparent;
+  background: url("/assets/images/gradient.png/") repeat scroll 0 0 transparent;
   border-width: 1px 1px 1px 1px;
   border-style: solid;
   border-color: #ddda88 #ddda88 #bbb866 #ddda88;
@@ -338,7 +338,7 @@ button, input[type=submit] {
 }
 
 button:hover, input[type=submit]:hover {
-  background-image: url("/assets/gradient_green.png");
+  background-image: url("/assets/images/gradient_green.png");
   border-color: #BBEA3E #99cc33 #99cc33 #99cc33;
   text-decoration: none;
 }
@@ -437,7 +437,7 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
             word-wrap: break-word ;}
 
 .outer-enclosed {
-    background: url("/assets/cogs.jpg") repeat-y top right #FFFFCC;
+    background: url("/assets/images/cogs.jpg") repeat-y top right #FFFFCC;
     color: #333;
     padding: 5px 15px 15px 15px;
     word-wrap: break-word;
@@ -449,7 +449,7 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 
 .external-link { padding-top: 0px; padding-right: 13px; padding-bottom: 0px; 
 	padding-left: 0px; text-decoration: none; color: #4f82cb; 
-	background-image: url(../assets/external.png); background-repeat: no-repeat; 
+	background-image: url(../assets/images/external.png); background-repeat: no-repeat; 
 	background-attachment: initial; -webkit-background-clip: initial; -webkit-background-origin: initial;
 	background-color: initial; background-position: 100% 50%; margin: 0px; }
 	
@@ -472,7 +472,7 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 }
 
 .nav li.page_item:hover {
-    background-image: url("/assets/gradient_green.png");
+    background-image: url("/assets/images/gradient_green.png");
     border-width: 0 1px;
     border-style: solid;
     border-color: transparent #99cc33 transparent #99cc33;
@@ -506,7 +506,7 @@ table {
 }
 
 th {
-  background-image: url("/assets/gradient_green.png");
+  background-image: url("/assets/images/gradient_green.png");
   font-size: 120%;
   font-weight: bold;
   height: 30px;
@@ -526,7 +526,7 @@ td.results {
 
 iframe {
   border: 1px dashed #bbb866;
-  background-image: url("/assets/white30.png");
+  background-image: url("/assets/images/white30.png");
 }
 
 ul.list_result {
@@ -536,7 +536,7 @@ ul.list_result {
 
 ul.list_result li {
   padding-left: 16px;
-  background: url("/assets/child.png") no-repeat left top;
+  background: url("/assets/images/child.png") no-repeat left top;
 }
 
 div.breadcrumb {
@@ -581,7 +581,7 @@ a.button {
   line-height: 30px;
   padding: 0px 20px;
   cursor: pointer;
-  background: url("/assets/gradient.png/") repeat scroll 0 0 transparent;
+  background: url("/assets/images/gradient.png/") repeat scroll 0 0 transparent;
   border-width: 1px 1px 1px 1px;
   border-style: solid;
   border-color: #ddda88 #ddda88 #bbb866 #ddda88;
@@ -594,7 +594,7 @@ a.button {
 }
  
 a.button:hover {
-   background-image: url("/assets/gradient_green.png");
+   background-image: url("/assets/images/gradient_green.png");
    border-color: #BBEA3E #99cc33 #99cc33 #99cc33;
    text-decoration: none;
  }
@@ -608,7 +608,7 @@ h4 {
   border: 1px dotted #bbb866;
   padding: 0.5em;
   margin: 1em 0;
-  background-image: url("/assets/white30.png");
+  background-image: url("/assets/images/white30.png");
 }
 
 .index_text {
