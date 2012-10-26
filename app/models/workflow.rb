@@ -75,6 +75,28 @@ class Workflow < ActiveRecord::Base
     end  
     return response
   end 
+  def get_inputs
+    sources = {}
+    descriptions = {}
+    # get the workflow t2flow model
+    model = get_model
+    # collect the sources and their descriptions
+    model.sources().each{|source|
+      example_values = source.example_values
+      if ((!example_values.nil?) && (example_values.size == 1)) then
+        sources[source.name] = example_values[0]
+      else
+        sources[source.name] = ""
+      end
+      description_values = source.descriptions
+      if ((!description_values.nil?) && (description_values.size == 1)) then
+        descriptions[source.name] = description_values[0]
+      else
+        descriptions[source.name] = ""
+      end  
+    }
+    return [sources,descriptions]
+  end
   private 
   #the store wffile method is called after the details are saved    
   def store_wffile

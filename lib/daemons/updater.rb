@@ -20,5 +20,5 @@ while($running) do
   
   Rails.logger.info "This daemon is still running at #{Time.now}.\n"
   
-  sleep 5
+  sleep 10
 end

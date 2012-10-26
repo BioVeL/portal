@@ -25,7 +25,7 @@ var interaction_identifier=""
         window.clearInterval(interaction_probe)
         interaction_probe=""
       } 
-      run_probe=window.setInterval("monitoring_run()",1000)
+      run_probe=window.setInterval("monitoring_run()",5000)
     }else{
         monitor_interaction()
     }
@@ -42,7 +42,7 @@ var interaction_identifier=""
     if(run_probe!=""){
       window.clearInterval(run_probe)
       run_probe=""
-      interaction_probe=window.setInterval("monitoring_interaction()",1000)
+      interaction_probe=window.setInterval("monitoring_interaction()",5000)
     }
   }
   function monitoring_interaction(){

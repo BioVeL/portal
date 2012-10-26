@@ -114,6 +114,7 @@ class Tavernaserv < ActiveRecord::Base
     else
       puts "#TAVSERV SAVE_TO_DB need to save an error: #{value}"
       #next need to copy the file on the error path to the store path. couldn't just copy every file in the out path as it is?'
+      result.result_file = "an error has ocurred"
     end
     puts "#TAVSERV SAVE_TO_DB: #{value}" 
     result.save

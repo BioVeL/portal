@@ -1,0 +1,22 @@
+<div id="wf_inputs_div"class="workflow_part" style="border: 1px solid hsla(80, 90%, 40%, 0.7); display: none;padding: 5px;">
+<% if @sources.count>0 %>
+   <p>
+     <b> This workflow has <%= @sources.count %> Inputs </b>
+   </p>
+   <% @sources.each do |item| %> 
+    <p>
+        <% portname = item[0] %>
+        <b><%= label_tag portname %></b>: 
+        
+        <%= label_tag @descriptions[portname] %> <br/>
+        <b>Example Value:</b> <%= simple_format(@sources[portname]) %>
+    </p>
+    <% end %>
+
+<% else %>  
+  <p>
+    <b> This workflow has no inputs </b>
+  </p>
+<% end %>
+</div>  
+

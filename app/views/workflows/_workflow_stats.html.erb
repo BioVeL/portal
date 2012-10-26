@@ -1,0 +1,11 @@
+<div id="workflowstats">
+  <p>
+    This workflow has been executed <%= @workflow.run_count %> times 
+  </p>
+  <p>
+    Runs in approximately <%=distance_of_time_in_words(0,@workflow.average_run.round(),true)%>
+    (<%=@workflow.average_run.round()%> seconds on average)
+  </p>	
+  <%= button_to 'Create Run', :controller => 'runs', :action => 'new_run', 
+  :id => @workflow %>
+</div>

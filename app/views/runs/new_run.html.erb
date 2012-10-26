@@ -4,8 +4,17 @@
   <% #error_message_tag %>
   <%= hidden_field_tag "workflow_id", @workflow.id %>
   <p>
-    Workflow: <%= @workflow.name %> 
+    Workflow: <%= @workflow.title %> 
   </p>
+    <div id="start_run_div">
+      <p>
+         Provide input values and
+         click the button to execute 
+      </p>
+      <p>
+        <%= submit_tag 'Start Run' %>
+      </p>    	
+    </div>
   <% unless @sources.length()>0%>
     <p>
       Identifier: <%= cookies[:run_identification] %> 
@@ -23,9 +32,8 @@
         <b>Example Value:</b> <%= simple_format(@sources[portname]) %>
     </p>
     <% end %>
-    <p>
-      <%= submit_tag 'Start Run' %>
-    </p>
+
+
   <% end %>
 
 <% end %>

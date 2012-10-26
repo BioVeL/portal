@@ -15,13 +15,12 @@
     </p>
     <p>
       <b>Running time (aprox.):</b>
-        <%= run.end - run.start %> seconds
+        <%= distance_of_time_in_words(0,(run.end - run.start),[:include_seconds=>true]) %> (Exactly <%= (run.end - run.start).round() %> seconds)
     </p>
   <%else workflow = Workflow.find(run.workflow_id)%>
-    <p> The execution will take approximately 
-        <%= workflow.average_run %> seconds to fininsh, 
-        calculated as an average after 
-        <%= workflow.run_count %> runs
+    <p> Estimated time to finish: 
+        <%= distance_of_time_in_words(0,workflow.average_run.round(),true) %> 
+        (<%= workflow.average_run.round() %> seconds on average calculated after <%= workflow.run_count %> runs )
     </p>
   <% end %>
 </div>
