@@ -1,41 +1,41 @@
-<h1>New run</h1>
-
-<%= form_for :file_uploads, :url => {:controller => 'runs', :action => 'new_run'}, :html => {:multipart => true} do |f| %>
+<% content_for :title, "Taverna Lite - Create Run for " + 
+                 @workflow.title + "Workflow"%>
+<h1> Create Run for <%=h @workflow.title%> Workflow</h1>
+<br/>
+<%= form_for :file_uploads, 
+      :url => {:controller => 'runs', :action => 'new_run'}, 
+      :html => {:multipart => true} do |f| %>
   <% #error_message_tag %>
   <%= hidden_field_tag "workflow_id", @workflow.id %>
-  <p>
-    Workflow: <%= @workflow.title %> 
-  </p>
-    <div id="start_run_div">
-      <p>
-         Provide input values and
-         click the button to execute 
-      </p>
-      <p>
-        <%= submit_tag 'Start Run' %>
-      </p>    	
-    </div>
+
+
   <% unless @sources.length()>0%>
     <p>
       Identifier: <%= cookies[:run_identification] %> 
     </p>
   <% else %>
-    <h2>
-      Input Values
-    </h2>
+    <h1>
+      Input Parameters
+    </h1>
     <% @sources.each do |item| %> 
     <p>
-        <% portname = item[0] %>
-        Value for <b><%= label_tag portname %></b>: <%=h f.text_field portname %> or  File <%= f.file_field  "file_for_#{portname}" %><br/> 
-        
-        <%= label_tag @descriptions[portname] %> <br/>
-        <b>Example Value:</b> <%= simple_format(@sources[portname]) %>
+      <% portname = item[0] %>
+      <h3><b><%= label_tag portname %></b></h3> 
+      <%= label_tag @descriptions[portname] %> <br/>
+      <b>Example Value:</b> <br/> 
+      <%= simple_format(@sources[portname]) %>
+      Enter Value: <%=h f.text_field portname %> 
+      or Select File <%= f.file_field  "file_for_#{portname}" %><br/> 
     </p>
     <% end %>
-
-
   <% end %>
-
+  <div style="float:right;position:relative;">
+    <b> 
+      Provide input values and click to execute 
+    </b><br/>
+    <%= submit_tag 'Start Run' %>          	
+  </div>
 <% end %>
-
+<br /><br />
+ 
 

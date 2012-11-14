@@ -1,4 +1,5 @@
-<h1>New workflow</h1>
+<% content_for :title, "Taverna Lite - Add Workflow"%>
+<h1>Add workflow</h1>
 
 <%= form_for(@workflow, 
   :url => {:action => "create"},
@@ -20,7 +21,7 @@
     <%= f.file_field :wf_file %>
   </div>
     <div class="actions">
-    <%= f.submit 'Upload Worflow' %>
+    <%= f.submit 'Upload Workflow' %>
   </div>
 <% end %>
 

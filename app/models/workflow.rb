@@ -3,7 +3,7 @@ require 't2flow/parser'
 require 't2flow/dot'
 
 class Workflow < ActiveRecord::Base
-  attr_accessible :author, :description, :name, :title, :workflow_file, :wf_file
+  attr_accessible :author, :description, :name, :title, :workflow_file, :wf_file, :my_experiment_id
   # a workflow can have many runs
   has_many :runs
   # after the workflow details have been written to the DB

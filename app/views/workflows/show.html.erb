@@ -1,20 +1,21 @@
-<p id="notice"><%= notice %></p>
+<% content_for :title, "Taverna Lite - Workflow: " + @workflow.title %>
+<h1><%= "Details of Workflow: " + @workflow.title %></h1>
+<%= link_to 'myExperiment', @workflow.my_experiment_id %>
+<p />
 
-<p>
-  <b>Title:</b>
-  <%= @workflow.title %>
-</p>
-<p>
-  <b>myExperiment ID:</b>
-  <%= @workflow.my_experiment_id %>
-</p>
-
-<%= render :partial => 'workflow_stats', :locals => {:workflow => @workflow} %>
 
 <%= render :partial => 'workflow_tabs', :locals => {:workflow => @workflow} %>
 <%= render :partial => 'workflow_authors', :locals => {:workflow => @workflow} %>
 <%= render :partial => 'workflow_description', :locals => {:workflow => @workflow} %>
 <%= render :partial => 'workflow_inputs', :locals => {:workflow => @workflow} %>
+<%= render :partial => 'workflow_stats', :locals => {:workflow => @workflow} %>
+
+<div id="createrun" style="float:right;position:relative;">
+  <b>Click to execute workflow</b>
+  <%= button_to 'Create Run', :controller => 'runs', :action => 'new_run', 
+  :id => @workflow %>
+</div>
+<br/><br/>
 <%= javascript_tag do -%>
 $(document).ready(showonlyone('wf_description_div','wf_tab_desc'));
 

@@ -1,11 +1,9 @@
-<div id="workflowstats">
-  <p>
-    This workflow has been executed <%= @workflow.run_count %> times 
-  </p>
-  <p>
+<div id="wf_stats_div" class="workflow_part" style="border: 1px solid hsla(80, 90%, 40%, 0.7); display: none;padding: 5px;">
+  <% unless @workflow.run_count == 0 %>
+    This workflow has been executed <%= @workflow.run_count %> times <br />
     Runs in approximately <%=distance_of_time_in_words(0,@workflow.average_run.round(),true)%>
     (<%=@workflow.average_run.round()%> seconds on average)
-  </p>	
-  <%= button_to 'Create Run', :controller => 'runs', :action => 'new_run', 
-  :id => @workflow %>
+  <%else%>
+    This workflow has not been executed on Taverna Lite 
+  <%end%>
 </div>

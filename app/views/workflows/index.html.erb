@@ -1,23 +1,41 @@
-<h1>Listing workflows</h1>
-
+<% content_for :title, "Taverna Lite - Workflows"%>
+<h1>Workflows</h1>
+<br />
 <table>
   <tr>
     <th>Title</th>
     <th>Author(s)</th>
-    <th colspan="4">Operations</h>
+    <th colspan="3">Operations</h>
   </tr>
 
 <% @workflows.each do |workflow| %>
   <tr>
-    <td title="<%= workflow.description %>" alt="<%= workflow.description %>"><%= workflow.title %></td>
-    <td><%= workflow.author %></td>
-    <td><%= link_to 'Show', workflow %></td>
-    <td><%= link_to 'Destroy', workflow, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
-    <td><%= button_to 'Run', :controller => 'runs', :action => 'new_run', :id => workflow.id %></td>
+    <td title="<%= workflow.description %>" alt="<%= workflow.description %>">
+      <%= workflow.title %>
+    </td>
+    <td>
+      <%= workflow.author %>
+    </td>
+    <td title="Show workflow details" alt="Show see workflow details">
+      <%= link_to 'Show', workflow %>
+    </td>
+    <td title="Remove workflow" alt="Remove workflow">
+      <%= link_to 'Remove', workflow, 
+            :method => :delete, 
+            :data => { :confirm => 'Remove this workflow: ' + 
+                         workflow.title + "?" } %>
+    </td>
+    <td title="Run workflow" alt="Run workflow">
+      <%= link_to 'Run', :controller => 'runs', 
+            :action => 'new_run', :id => workflow.id %>
+    </td>
   </tr>
 <% end %>
 </table>
-
+<%if @workflows.count == 0 %>
+  <br />
+  No workflows available  
+<% end %>
 <br />
 
-<%= link_to 'New Workflow', new_workflow_path %>
+<%= link_to 'Add Workflow', new_workflow_path %>

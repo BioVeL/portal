@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120911160417) do
+ActiveRecord::Schema.define(:version => 20121101085921) do
 
   create_table "credentials", :force => true do |t|
     t.string   "name"
@@ -67,12 +67,12 @@ ActiveRecord::Schema.define(:version => 20120911160417) do
   create_table "workflows", :force => true do |t|
     t.string   "name"
     t.string   "title"
-    t.string   "description"
+    t.text     "description"
     t.string   "author"
     t.string   "workflow_file"
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
-    t.integer  "my_experiment_id", :default => 0
+    t.string   "my_experiment_id", :default => "0"
     t.float    "average_run",      :default => 0.0
     t.integer  "run_count",        :default => 0
   end

@@ -1,15 +1,21 @@
-<h1>Listing runs</h1>
+<% if current_user.admin 
+     content_for :title, "Taverna Lite - Runs for all users "
+   else
+     content_for :title, 
+                  "Taverna Lite - Runs created by " + current_user.name	
+   end -%>
+<h1>Runs</h1>
 
 <table>
   <tr>
     <th>Description</th>
-    <th>Creation</th>
+    <th>Created</th>
     <th>State</th>
     <th>Results</th>
     <% if current_user.admin %>
       <th>User</th>
     <% end %>
-    <th colspan="3">Operations</h>
+    <th colspan="2">Operations</h>
   </tr>
 
 <% @runs.each do |run| %>
@@ -21,13 +27,30 @@
     <% if current_user.admin -%>
       <td><%= User.find(run.user_id).name %></td>	
     <% end -%>
-    <td><%= link_to 'Show', run %></td>
-    <td><%= link_to 'Destroy', run, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
-    <td>Archive</td>
+    <td title="Click to see run details" alt="Click to see run details">
+      <%= link_to 'Show', run %>
+    </td>
+    <td title="Click to delete run" alt="Click to delete run">
+      <%= link_to 'Delete', 
+                  run, 
+                  :method => :delete, 
+                  :data => { :confirm => 'Delete Run ' + 
+                               run.description + 
+                               ' created '+ 
+                               run.creation.strftime("%d/%m/%Y-%H:%M:%S") +
+                               "?"} %>
+    </td>
+    <!--<td>Archive</td>-->
   </tr>
 <% end %>
   
 </table>
+
+<%if @runs.count == 0 %>
+  <br />
+  No runs have been generated  
+<% end %>
+
 <br />
 <%= javascript_tag do -%>
 $(document).ready(
