@@ -1,0 +1,75 @@
+<div id="wf_components_div" class="workflow_part">
+<% if @processors.count>0 %>
+  <p>
+    <b> This workflow has <%= @processors.count %> 
+      <%= "Component".pluralize(@processors.count)%> </b>
+  </p>
+  <% @processors.each do |item| %>
+  <div class="componentcontainer"> 
+    <div class="componentdetails">
+      <% componentname = item.name %>
+        <b>Component: </b><%= componentname %> <br/>
+        <b>Type: </b> <%= item.type %> <br/>
+    </div>
+   
+    <%if !(item.inputs.nil?) && item.inputs.count > 0%>
+      <div class="componentinput">
+        <b><%= "Input".pluralize(item.inputs.count)%> </b> 
+        <ul>
+          <%item.inputs.each do |input|%>
+            <li><%= input %></li>
+          <%end%>
+        </ul>
+      </div>
+    <%end%>
+    <%if !(item.outputs.nil?) && item.outputs.count > 0%>
+      <div class="componentoutput">
+        <b><%= "Output".pluralize(item.outputs.count)%> </b> 
+        <ul>
+          <%item.outputs.each do |output|%>
+            <li><%= output %></li>
+          <%end%>
+        </ul>
+      </div>
+    <%end%>
+     <table>
+      <tr>
+        <th colspan="2"> <b>Ports</b></th>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <th>Output</th>  
+      </tr>
+      <tr>
+        <td>
+        <%if !(item.inputs.nil?) && item.inputs.count > 0%>
+          <ul>
+            <%item.inputs.each do |input|%>
+              <li><%= input %></li>
+            <%end%>
+          </ul>
+        <%end%>
+        </td>
+        <td>
+        <%if !(item.outputs.nil?) && item.outputs.count > 0%>
+          <ul>
+            <%item.outputs.each do |output|%>
+              <li><%= output %></li>
+            <%end%>
+          </ul>
+        <%end%>
+        </td>
+      </tr>
+    </table>     
+    </div><br />
+    
+
+  <% end %>
+
+<% else %>  
+  <p>
+    <b> This workflow has no components </b>
+  </p>
+<% end %>
+</div>  
+

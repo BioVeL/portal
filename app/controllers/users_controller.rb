@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])  
     if @user.save  
       redirect_to root_url, 
-        :notice=>"You are now Registered, Login to start using Taverna Lite!" 
+        :notice=>"You are now Registered, Login to start using Taverna Lite!"  
     else  
       render "new"  
     end  

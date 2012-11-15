@@ -43,12 +43,22 @@ class Tavernaserv < ActiveRecord::Base
     end
   end
   def self.update_workflow_stats(wf_id = 0, running_time = 0)
+    Rails.logger.info "Updating workflow stats at #{Time.now}.\n"
     wf = Workflow.find(wf_id)
     prev_run_count = wf.run_count
     prev_avg_run = wf.average_run
     wf.average_run = ((prev_run_count * prev_avg_run) + running_time ) /
                        (prev_run_count+1)
     wf.run_count = wf.run_count + 1
+    
+    if (wf.fastest_run == 0.0) || (wf.fastest_run > running_time)
+      wf.fastest_run_date = DateTime.now()
+      wf.fastest_run = running_time
+    end
+    if (wf.slowest_run < running_time)
+      wf.slowest_run_date = DateTime.now()
+      wf.slowest_run = running_time
+    end
     wf.save 
   end
   # Scrub sensitive parameters from your log

@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+  <head>
+      <meta charset="utf-8" />
+      <title></title>
+      <style>
+      	html, body { height: 100%; width: 100%; margin: 0; border:0; }
+      	#presentationFrame { height: 95%; width: 95%; margin: 0; border:0; frameborder:0; }
+      </style>
+       <script type="text/javascript" src="http://localhost:8080/webdav/pmrpc.js"></script>
+       
+  </head>
+  <body>
+  
+       <script type="text/javascript">
+
+       var appendError = function(str){
+********************LINE 18 bellow is marked as throwing and error when BIOSTIF interaction is loaded*****************       
+         throw new Error("DEBUG: "+str)
+       }
+
+       function log(str){
+         setTimeout("appendError('"+str+"')", 1)
+       }
+       
+         function createReplyContent(status, results) {
+           date = new Date();
+           msg = "";
+           msg += "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
+           msg += "<entry xmlns=\"http://www.w3.org/2005/Atom\" xmlns:thr=\"http://purl.org/syndication/thread/1.0\">\n";
+           msg += "<title>\"A reply to " + "200dc0543a2d4e6a9463415a8536e8b5" + "\"</title>\n";
+           msg += "<id>" + "200dc0543a2d4e6a9463415a8536e8b5" + "-reply" + "</id>\n";
+           msg += "<content/>\n";
+           msg += "<interaction:run-id xmlns:interaction=\"http://ns.taverna.org.uk/2012/interaction\">" + "c99ebccd-8a43-4d19-962a-01a5983e13b5" + "</interaction:run-id>\n";
+           msg += "<interaction:in-reply-to  xmlns:interaction=\"http://ns.taverna.org.uk/2012/interaction\">" + "200dc0543a2d4e6a9463415a8536e8b5" + "</interaction:in-reply-to>\n";
+           msg += "<interaction:result-status xmlns:interaction=\"http://ns.taverna.org.uk/2012/interaction\">";
+           msg += escape(status);
+           msg += "</interaction:result-status>";
+           msg += "<interaction:result-data xmlns:interaction=\"http://ns.taverna.org.uk/2012/interaction\">\n";
+		   msg += escape(results);
+           msg += "</interaction:result-data>\n";
+           msg += "</entry>\n";
+           return msg;
+         }
+
+       // Copied from http://www.netlobo.com/url_query_string_javascript.html
+       function getParameterValue( name )
+	{
+  	name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  	var regexS = "[\\?&]"+name+"=([^&#]*)";
+  	var regex = new RegExp( regexS );
+  	var results = regex.exec( window.location.href );
+  	if( results == null )
+    	return "";
+  	else
+    	return results[1];
+	}
+
+
+         function reply(status, results) {
+           msg = createReplyContent(status, JSON.stringify(results));
+           xmlhttp = new XMLHttpRequest();
+           xmlhttp.open("POST", "http://localhost:8080/ah/interaction/notifications", true);
+           xmlhttp.onreadystatechange=function() {
+//               alert(xmlhttp.responseText);
+           }
+           xmlhttp.setRequestHeader("Content-Type", "application/atom+xml;type=entry");
+           xmlhttp.setRequestHeader("Content-Length", msg.length);
+           xmlhttp.setRequestHeader("Slug", "200dc0543a2d4e6a9463415a8536e8b5" + "-reply");
+           xmlhttp.send(msg);
+           return false;
+         }
+         
+
+      function registerCalls() {
+			pmrpc.register( {
+         	  publicProcedureName : "reply",
+         	  procedure : function(status, results) {
+         	     reply(status, results);
+         	     return "OK";
+         	  }
+           });
+ 
+ 			pmrpc.register( {
+         	  publicProcedureName : "getParameterValue",
+         	  procedure : function(parameterName) {
+         	     return getParameterValue(parameterName);
+         	  }
+           });
+         
+           pmrpc.register( {
+             publicProcedureName : "getInputData",
+             procedure : function() {
+               log("Returning input data");
+               return JSON.parse('{\"layer\":\"present|biovel_temp:ZC5kJG_20121025_121652_112|false,2050|biovel_temp:cGoKY1_20121025_121652_162|false\",\"label\":\"species points\",\"dataURI\":\"http:\/\/biovel.iais.fraunhofer.de\/workflow\/rest\/data\/XXX-not-a-user-name-XXX\/all_runs\/20121025_121727_644\",\"contentType\":\"csv\"}');
+             }
+           });
+         
+           pmrpc.register( {
+             publicProcedureName : "getWorkflowRunId",
+             procedure : function () {
+               return 'c99ebccd-8a43-4d19-962a-01a5983e13b5';
+             }
+           });
+ 
+         pmrpc.register( {
+         	publicProcedureName : "setTitle",
+         	procedure : function(title) {
+         	   document.title = title;
+         	   return "OK";
+         	}
+         });
+
+         document.getElementById('presentationFrame').src = "http://biovel.iais.fraunhofer.de/biostif/interaction.debug.jsp";
+       }
+       
+       window.onload = function() {
+           log("Interaction loaded");
+           registerCalls();
+           };
+      
+  	   </script>      
+ 
+     <iframe id="presentationFrame" name="presentationFrame" src="about:blank">
+</iframe>
+
+  </body>
+</html>
+

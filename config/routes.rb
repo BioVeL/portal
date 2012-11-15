@@ -1,4 +1,6 @@
 TliteR3::Application.routes.draw do
+  resources :announcements
+
   resources :credentials
 
   #*****************************************************
@@ -8,7 +10,7 @@ TliteR3::Application.routes.draw do
   get "sign_up" => "users#new", :as => "sign_up" 
   
   resources :users  
-  resources :sessions
+  resources :sessions #try deleting this
   #*****************************************************
 
   resources :runs

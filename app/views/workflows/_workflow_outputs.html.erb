@@ -1,0 +1,22 @@
+<div id="wf_outputs_div"class="workflow_part" style="border: 1px solid hsla(80, 90%, 40%, 0.7); display: none;padding: 5px;">
+<% if @sinks.count>0 %>
+   <p>
+     <b> This workflow has <%= @sinks.count %> <%= "Output".pluralize(@sinks.count)%> </b>
+   </p>
+   <% @sinks.each do |item| %> 
+    <p>
+        <% portname = item[0] %>
+        <b><%= label_tag portname %></b>: 
+        
+        <%= label_tag @sink_descriptions[portname] %> <br/>
+        <b>Example Value:</b> <%= simple_format(@sinks[portname]) %>
+    </p>
+    <% end %>
+
+<% else %>  
+  <p>
+    <b> This workflow has no outputs </b>
+  </p>
+<% end %>
+</div>  
+

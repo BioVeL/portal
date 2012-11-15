@@ -5,7 +5,7 @@
                   "Taverna Lite - Runs created by " + current_user.name	
    end -%>
 <h1>Runs</h1>
-
+<br/>
 <table>
   <tr>
     <th>Description</th>
@@ -45,13 +45,12 @@
 <% end %>
   
 </table>
-
+<br />
 <%if @runs.count == 0 %>
   <br />
   No runs have been generated  
 <% end %>
 
-<br />
 <%= javascript_tag do -%>
 $(document).ready(
   function(){

@@ -4,7 +4,9 @@ class WorkflowsController < ApplicationController
   # GET /workflows.json
   def index
     @workflows = Workflow.all
-
+    if (!current_user.admin?)
+      @workflows = Workflow.find_all_by_user_id(current_user.id)
+    end 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @workflows }
@@ -15,7 +17,9 @@ class WorkflowsController < ApplicationController
   # GET /workflows/1.json
   def show
     @workflow = Workflow.find(params[:id])
-    @sources, @descriptions = @workflow.get_inputs
+    @sources, @source_descriptions = @workflow.get_inputs
+    @sinks, @sink_descriptions = @workflow.get_outputs
+    @processors = @workflow.get_processors
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @workflow }
@@ -47,6 +51,7 @@ class WorkflowsController < ApplicationController
       if @workflow.save
         # the model will use t2flow to get the data from the workflow file
         @workflow.get_details_from_model()
+        @workflow.user_id = current_user.id
         @workflow.save
         format.html { redirect_to @workflow, :notice => 'Workflow was successfully created.' }
         format.json { render :json => @workflow, :status => :created, :location => @workflow }

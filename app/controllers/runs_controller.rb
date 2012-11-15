@@ -19,6 +19,7 @@ class RunsController < ApplicationController
   # GET /runs/1.json
   def show
     @run = Run.find(params[:id])
+    @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @run }
@@ -61,7 +62,7 @@ class RunsController < ApplicationController
   # PUT /runs/1.json
   def update
     @run = Run.find(params[:id])
-
+    
     respond_to do |format|
       if @run.update_attributes(params[:run])
         format.html { redirect_to @run, :notice => 'Run was successfully updated.' }
@@ -89,6 +90,7 @@ class RunsController < ApplicationController
   def refresh
     @run = Run.find(params[:id])
     @interaction_id, @interaction_uri = get_interaction(@run.run_identification, @run.start)
+    @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
     respond_to do |format|
       format.js 
     end
@@ -213,65 +215,70 @@ class RunsController < ApplicationController
   #GET /workflows/1/newrun
   def new_run
     cookies[:run_identification]=""
-    puts "number of parameters: #{params.count}"
+    unassigned_inputs = false
+    Rails.logger.info "#NEW RUN (#{Time.now}): number of parameters: #{params.count}"
     unless params[:id].nil?
       get_workflow()
-      puts "Generating new run for: #{@workflow.name}"
+      Rails.logger.info "#NEW RUN (#{Time.now}): Generating new run for: #{@workflow.name}"
     end
-      @sources = {}
-      @descriptions = {}
-      @files = {}
-    unless params[:workflow_id].nil?
-      puts 'using submitted inputs'
-      check_server()    
-      run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
-      cookies[:run_identification] = run.identifier
-      run.input_ports.each_value do |port|
-        input = port.name  
-        input_file =  "file_for_#{port.name}"
-        if params[:file_uploads].include? input
-          puts "1   Actual Input for #{input} as string #{params[input].to_s}"
-          stringinput = params[:file_uploads][input].to_s
-          puts "2   #{stringinput.class}"
-          if stringinput.include?("[") and stringinput.include?("]")
-            puts "3   Input is a list"
-            inputarray = stringinput[1..-2].split(',').collect! {|n| n.to_s}
-            puts '4   Values' 
-            puts inputarray
-            puts inputarray.class
-            port.value = inputarray
+    @sources = {}
+    @descriptions = {}
+    @files = {}
+    unless params[:workflow_id].nil?      
+      if inputs_provided(params)
+        Rails.logger.info "#NEW RUN (#{Time.now}): using submitted inputs"
+        check_server()    
+        run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
+        cookies[:run_identification] = run.identifier
+        run.input_ports.each_value do |port|
+          input = port.name  
+          input_file =  "file_for_#{port.name}"
+          if params[:file_uploads].include? input
+            Rails.logger.info "#NEW RUN (#{Time.now}): 1   Actual Input for #{input} as string #{params[input].to_s}"
+            stringinput = params[:file_uploads][input].to_s
+            Rails.logger.info "#NEW RUN (#{Time.now}): 2   #{stringinput.class}"
+            if stringinput.include?("[") and stringinput.include?("]")
+              Rails.logger.info "#NEW RUN (#{Time.now}): 3   Input is a list"
+              inputarray = stringinput[1..-2].split(',').collect! {|n| n.to_s}
+              Rails.logger.info "#NEW RUN (#{Time.now}): 4   Values"
+              Rails.logger.info "#NEW RUN (#{Time.now}): " + inputarray.to_s
+              Rails.logger.info "#NEW RUN (#{Time.now}): " + inputarray.class.to_s
+              port.value = inputarray
+            else
+              port.value = stringinput
+            end
+            Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to #{port.value}"   
+            Rails.logger.info "#NEW RUN (#{Time.now}): actual value = #{run.input_ports[input].value}       "
+            if run.input_port("name").nil?
+              Rails.logger.info "#NEW RUN (#{Time.now}): no values assigned"
+            end
           else
-            port.value = stringinput
+            Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' has not been set."
+            run.delete
+            exit 1
           end
-          puts "Input '#{input}' set to #{port.value}"   
-          puts "actual value = #{run.input_ports[input].value}       "
-          #if run.input_port("name").nil?
-          #  puts 'no values assigned'
-          #  run.input_port("name").value = "Surprise!!"
-          #end
-        else
-          puts "Input '#{input}' has not been set."
-          run.delete
-          exit 1
+          Rails.logger.info "#NEW RUN (#{Time.now}): Files? #{input_file}"
+          if params[:file_uploads].include? input_file
+            port.file = params[:file_uploads][input_file].tempfile.path
+            Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to use file '#{params[:file_uploads][input_file].original_filename}'"
+          end
         end
-        puts "Files? #{input_file}"
-        if params[:file_uploads].include? input_file
-          port.file = params[:file_uploads][input_file].tempfile.path
-          puts "Input '#{input}' set to use file '#{params[:file_uploads][input_file].original_filename}'"
+        # determine if an rserver is being called
+        if @workflow.connects_to_r_server?
+          rs_cred = Credential.find_by_server_type_and_default_and_in_use("rserver",true,true)
+          run.add_password_credential(rs_cred.url,rs_cred.login,rs_cred.password)
         end
-      end
-      # determine if an rserver is being called
-      if @workflow.connects_to_r_server?
-        rs_cred = Credential.find_by_server_type_and_default_and_in_use("rserver",true,true)
-        run.add_password_credential(rs_cred.url,rs_cred.login,rs_cred.password)
-      end
-      run.start()
+        run.start()
+       else
+      # missing some or all inputs
+         Rails.logger.info "#NEW RUN (#{Time.now}): Cannot start run, missing inputs"
+      end      
     end
     
 
     if !(@workflow.has_parameters?) then 
       # for workflows with no input
-      puts 'no inputs'
+      Rails.logger.info "#NEW RUN no inputs"
       # create a new run
       check_server()    
       run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
@@ -289,7 +296,34 @@ class RunsController < ApplicationController
       save_run(run)
     end   
   end
-  
+  def inputs_provided(params)
+    @sources, @descriptions = @workflow.get_inputs
+    inputs_provided = true
+    @sources.each do |port|
+      input = port[0]
+      input_file = "file_for_#{port[0]}"
+      if  !(params[:file_uploads].include? input) && !(params[:file_uploads].include? input_file)
+        inputs_provided = false
+        Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
+        Rails.logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
+        Rails.logger.info "#NEW RUN (#{Time.now}):         " + input 
+        Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
+        break
+      end
+      value = params[:file_uploads][input].to_s
+      if (value =="") && !(params[:file_uploads].include? input_file)
+       inputs_provided = false
+        Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
+        Rails.logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
+        Rails.logger.info "#NEW RUN (#{Time.now}):           " + input  + ""
+        Rails.logger.info "#NEW RUN (#{Time.now}):Detected:  " + value 
+        Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
+       break
+      end
+      
+    end
+    return inputs_provided
+  end
 
   # Save the new run in the database
   def save_run(run)

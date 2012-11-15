@@ -97,6 +97,37 @@ class Workflow < ActiveRecord::Base
     }
     return [sources,descriptions]
   end
+  def get_outputs
+    sinks = {}
+    descriptions = {}
+    inputs={}
+    outputs={}
+    # get the workflow t2flow model
+    model = get_model
+    # collect the sinks and their descriptions
+    model.sinks().each{|sink|
+      example_values = sink.example_values
+      if ((!example_values.nil?) && (example_values.size == 1)) then
+        sinks[sink.name] = example_values[0]
+      else
+        sinks[sink.name] = ""
+      end
+      description_values = sink.descriptions
+      if ((!description_values.nil?) && (description_values.size == 1)) then
+        descriptions[sink.name] = description_values[0]
+      else
+        descriptions[sink.name] = ""
+      end  
+    }
+    return [sinks,descriptions]
+  end
+  def get_processors
+    wf_processors = {}
+    # get the workflow t2flow model
+    model = get_model
+    # collect the workflow processors and their descriptions
+    return model.processors()
+  end
   private 
   #the store wffile method is called after the details are saved    
   def store_wffile

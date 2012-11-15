@@ -5,7 +5,6 @@
 <%= form_for :file_uploads, 
       :url => {:controller => 'runs', :action => 'new_run'}, 
       :html => {:multipart => true} do |f| %>
-  <% #error_message_tag %>
   <%= hidden_field_tag "workflow_id", @workflow.id %>
 
 
@@ -36,6 +35,6 @@
     <%= submit_tag 'Start Run' %>          	
   </div>
 <% end %>
-<br /><br />
+ <br /><br />
  
 

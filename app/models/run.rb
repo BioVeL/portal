@@ -3,8 +3,19 @@ class Run < ActiveRecord::Base
 
   # every run is linked to a workflow, trough workflow_id
   belongs_to :workflow
+
   # a run can have many results
   has_many :results
+  
+  # Validate that inputs have been provided
+  def validate
+    validate_inputs
+  end  
+  def validate_inputs
+    workflow = Workflow.find(workflow_id)
+    
+  end
+
   def delete_results
     Result.delete_files(id) 
   end

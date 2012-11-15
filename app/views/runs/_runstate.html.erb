@@ -1,5 +1,4 @@
 <div id="runstate">
-
   <p>
     <b>Current State:</b>
     <%= run.state %>
@@ -8,12 +7,12 @@
     <b>The run was started at:</b>
     <%= run.start.strftime("%d/%m/%Y - %H:%M:%S") %>
   </p>
-    <% if run.state == "finished" %>
-      <p>
-        <b>The run finished at:</b>
-          <%= run.end.strftime("%d/%m/%Y - %H:%M:%S") %>
-      </p>    
-    <% end %>
+  <% if run.state == "finished" %>
+    <p>
+      <b>The run finished at:</b>
+        <%= run.end.strftime("%d/%m/%Y - %H:%M:%S") %>
+    </p>    
+  <% end %>
   <% if run.state == "finished" %>
     <div class="run_info">
       <b>Running Time:</b>
@@ -22,18 +21,18 @@
         (approx. <%= distance_of_time_in_words(0,(run.end - run.start),
                    [:include_seconds=>true]) %>)
         <%end%>
-    </div>
+    </div>    
   <%else workflow = Workflow.find(run.workflow_id)%>
     <div class="run_info">
       <% unless workflow.run_count == 0 %>
-        Estimated time to finish:
-          <%= distance_of_time_in_words(0,workflow.average_run.round(),true) %>
-          (<%= workflow.average_run.round() %> seconds on average calculated
+        Estimated time to finish: 
+          <%= distance_of_time_in_words(0,workflow.average_run.round(),true) %> 
+          (<%= workflow.average_run.round() %> seconds on average calculated 
              after <%= workflow.run_count %> runs)
       <% else %>
         This is the first time this workflow is executed in Taverna Lite
       <% end %>
     </div>
-  <%end%>
+  <% end %>
 </div>
 

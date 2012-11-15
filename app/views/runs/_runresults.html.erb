@@ -8,21 +8,35 @@
       </tr>
       <% for result in run.results.each %>
         <tr>
-          <td><%=h result.name %></td>
+          <td><b><%=h result.name %></b></td>
           <td><%=h result.filetype.split(/-*/) %></td>
-          <td><%= button_to 'Download', :controller => 'result', :action => 'download', :id => result.id %></td>
+          <td>
+            <%= button_to 'Download', :controller => 'result', 
+                          :action => 'download', :id => result.id %>
+          </td>
         </tr>
         <tr> 
           <td colspan="3">
+            <b>Value(s)</b><br />
             <% if result.filetype.to_s =~ /text/ %>
               <%= simple_format(IO.read(result.result_filename))%>
             <% elsif result.filetype.to_s =~ /error/ %>
               <%= simple_format(IO.read(result.result_filename))%>
             <% else %>
-              <%= image_tag( result.result_filepath, :height => '100%', :width =>'100%') %>
+              <%= image_tag( result.result_filepath, :height => '100%', 
+                                                     :width =>'100%') %>
             <% end %>
           </td>    
         </tr>
+        <%if !@sink_descriptions[result.name].nil? && 
+             @sink_descriptions[result.name] != ""  %>
+          <tr>
+            <td colspan="3"> 
+              <b>Description</b><br />
+              <%= @sink_descriptions[result.name] %>
+            </td>
+          </tr>
+        <%end%>
       <% end %>
     </table> 
   <%end%>

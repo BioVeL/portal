@@ -1,8 +1,46 @@
-<div id="wf_stats_div" class="workflow_part" style="border: 1px solid hsla(80, 90%, 40%, 0.7); display: none;padding: 5px;">
-  <% unless @workflow.run_count == 0 %>
-    This workflow has been executed <%= @workflow.run_count %> times <br />
-    Runs in approximately <%=distance_of_time_in_words(0,@workflow.average_run.round(),true)%>
-    (<%=@workflow.average_run.round()%> seconds on average)
+<div id="wf_stats_div" class="workflow_part">
+  <% unless @workflow.run_count == 0 %> 
+     <table>
+      <tr>
+      <th colspan="4"> <b>Executed:</b> <%= @workflow.run_count %> times </th>
+      </tr>
+      <tr>
+        <th>Run</th>
+        <th>Approximation</th>
+        <th>Seconds</th>
+        <th>Registered on</th>
+      </tr>
+      <tr>
+        <td>Average</td>
+        <td>
+          <%=distance_of_time_in_words(0,@workflow.average_run.round(),true)%>
+        </td>
+        <td><%=@workflow.average_run.round()%></td>
+        <td>
+          <%= @workflow.updated_at.strftime("%d/%m/%Y - %H:%M:%S") %>
+        </td>
+      </tr>
+      <tr>
+      <td>Fastest</td>
+        <td>
+          <%=distance_of_time_in_words(0,@workflow.fastest_run.round(),true)%>
+        </td>
+        <td><%=@workflow.fastest_run.round()%></td>
+        <td>
+          <%= @workflow.fastest_run_date.strftime("%d/%m/%Y - %H:%M:%S") %>
+        </td>
+      </tr>
+      <tr>
+      <td>Slowest</td>
+        <td>
+          <%=distance_of_time_in_words(0,@workflow.slowest_run.round(),true)%>
+        </td>
+        <td><%=@workflow.slowest_run.round()%></td>
+        <td>
+          <%= @workflow.slowest_run_date.strftime("%d/%m/%Y - %H:%M:%S") %>
+        </td>
+      </tr>
+    </table>
   <%else%>
     This workflow has not been executed on Taverna Lite 
   <%end%>

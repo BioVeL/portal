@@ -5,7 +5,10 @@
   <tr>
     <th>Title</th>
     <th>Author(s)</th>
-    <th colspan="3">Operations</h>
+    <% if current_user.admin %>
+      <th>Owner</th>
+    <% end %>
+    <th colspan="3">Operations</th>
   </tr>
 
 <% @workflows.each do |workflow| %>
@@ -16,6 +19,9 @@
     <td>
       <%= workflow.author %>
     </td>
+    <% if current_user.admin -%>
+      <td><%= User.find(workflow.user_id).name %></td>	
+    <% end -%>
     <td title="Show workflow details" alt="Show see workflow details">
       <%= link_to 'Show', workflow %>
     </td>
@@ -36,6 +42,7 @@
   <br />
   No workflows available  
 <% end %>
+
 <br />
 
 <%= link_to 'Add Workflow', new_workflow_path %>
