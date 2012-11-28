@@ -7,7 +7,10 @@
   :method =>:post}) do |f| %>
   <% if @workflow.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@workflow.errors.count, "error") %> prohibited this workflow from being saved:</h2>
+      <h3>
+        <%= pluralize(@workflow.errors.count, "error") %> 
+        stopped workflow upload
+      </h3>
 
       <ul>
       <% @workflow.errors.full_messages.each do |msg| %>
@@ -16,12 +19,18 @@
       </ul>
     </div>
   <% end %>
+  
   <div class="field">
-    <%= f.label :workflow_file %><br />
-    <%= f.file_field :wf_file %>
+    <p>
+      <b>1.</b> Select a workflow file (t2flow files)<br/>
+      <%= f.file_field :wf_file, :accept => 't2flow' %>
+    </p>
   </div>
-    <div class="actions">
-    <%= f.submit 'Upload Workflow' %>
+  <div class="actions">
+    <p>
+      <b>2.</b> Click to upload the workflow into Taverna Lite<br/>
+      <%= f.submit 'Upload Workflow' %>
+    </p>
   </div>
 <% end %>
 

@@ -75,20 +75,20 @@ ActiveRecord::Schema.define(:version => 20121115113711) do
   create_table "workflows", :force => true do |t|
     t.string   "name"
     t.string   "title"
-    t.string   "description"
+    t.text     "description",      :limit => 255
     t.string   "author"
     t.string   "workflow_file"
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
-    t.string   "my_experiment_id", :default => "0"
-    t.float    "average_run",      :default => 0.0
-    t.integer  "run_count",        :default => 0
-    t.float    "slowest_run",      :default => 0.0
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
+    t.string   "my_experiment_id",                :default => "0"
+    t.float    "average_run",                     :default => 0.0
+    t.integer  "run_count",                       :default => 0
+    t.float    "slowest_run",                     :default => 0.0
     t.datetime "slowest_run_date"
-    t.float    "fastest_run",      :default => 0.0
+    t.float    "fastest_run",                     :default => 0.0
     t.datetime "fastest_run_date"
-    t.integer  "user_id",          :default => 0
-    t.boolean  "shared",           :default => false
+    t.integer  "user_id",                         :default => 0
+    t.boolean  "shared",                          :default => false
   end
 
 end

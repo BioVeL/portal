@@ -1,7 +1,7 @@
 <div id="interactionframe", data-interaction_id ="" >
   <% unless @interaction_uri.nil? %>
     <h2>INTERACTIONS</h2>
-    <iframe src=<%= @interaction_uri %>; width="110%"; height="800" id="interactionframe"></iframe>
+    <iframe src=<%= @interaction_uri %>; width="100%"; height="800" id="interactionframe"></iframe>
   <%else%>
     <% if @run.state == "running" %>
       <h2>Wait....</h2>

@@ -3,14 +3,33 @@ require 't2flow/parser'
 require 't2flow/dot'
 
 class Workflow < ActiveRecord::Base
-  attr_accessible :author, :description, :name, :title, :workflow_file, :wf_file, :my_experiment_id
+  attr_accessible :author, :description, :name, :title, :workflow_file, 
+                  :wf_file, :my_experiment_id, :user_id, :is_shared
   # a workflow can have many runs
   has_many :runs
   # after the workflow details have been written to the DB
   # write the workflow file to the filesystem
   after_save :store_wffile
-  # when data is assigned via the upload, store the data in a local
-  # private variable for later and assing the file name to workflow_file
+  # Validate the workflow file
+  validate :validate_file_is_included, :validate_file_is_t2flow
+  # Validate that there is a file is selected
+  def validate_file_is_included
+    if @file_data.nil?
+      errors.add :workflow_file, 
+                 " missing, please select a file and try again"
+    end
+  end
+  #validate that the file is a workflow
+  def validate_file_is_t2flow
+    if !@file_data.nil? && !get_details_from_model
+      errors.add :workflow_file, 
+                 " \"" + @file_data.original_filename +
+                 "\" is not a valid taverna workflow file (t2flow)"
+    end
+  end
+
+  # when data is assigned via the upload, store the data in a 
+  # variable for later and assing the file name to workflow_file
   def wf_file=(file_data)
     unless file_data.blank?
       # store the uploaded data into a private instance variable
@@ -52,16 +71,41 @@ class Workflow < ActiveRecord::Base
   end
   # get the workflow model
   def get_model
-    T2Flow::Parser.new.parse(File.open(workflow_filename))
+    if FileTest.exists?(workflow_filename)
+      T2Flow::Parser.new.parse(File.open(workflow_filename))
+    else
+      nil
+    end
   end
-  def get_details_from_model  
-      model = T2Flow::Parser.new.parse(File.open(workflow_filename))
-      self.name = model.name
-      self.title = model.annotations.titles.to_s
-      self.author = model.annotations.authors.to_s
-      self.description = model.annotations.descriptions.to_s
-      puts model
-      puts self.name
+  def get_details_from_model(authorname="Undefined")
+    file_OK = false
+    if @file_data
+      begin
+        model = T2Flow::Parser.new.parse(@file_data)
+        @file_data.rewind
+        if !model.nil?
+          self.name = model.name
+          if model.annotations.titles.to_s != ""
+            self.title = model.annotations.titles.to_s
+          else
+            self.title = "No title provided"
+          end
+          if model.annotations.authors.to_s != ""
+            self.author = model.annotations.authors.to_s
+          else
+            self.author = authorname
+          end
+          self.description = model.annotations.descriptions.to_s
+        end
+        file_OK = true
+      rescue
+        puts "Error #{$!}"
+        file_OK = false
+      ensure 
+        @file_data.rewind
+        return file_OK
+      end
+    end
   end 
   def connects_to_r_server?
     response = false

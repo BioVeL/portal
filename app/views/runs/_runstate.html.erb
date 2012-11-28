@@ -12,8 +12,6 @@
       <b>The run finished at:</b>
         <%= run.end.strftime("%d/%m/%Y - %H:%M:%S") %>
     </p>    
-  <% end %>
-  <% if run.state == "finished" %>
     <div class="run_info">
       <b>Running Time:</b>
         <%= (run.end - run.start).round() %> seconds
@@ -32,6 +30,14 @@
       <% else %>
         This is the first time this workflow is executed in Taverna Lite
       <% end %>
+      <%= button_to 'Cancel Run', 
+                  run, 
+                  :method => :delete, 
+                  :data => { :confirm => 'Cancel this Run ' + 
+                               run.description + 
+                               ' created '+ 
+                               run.creation.strftime("%d/%m/%Y-%H:%M:%S") +
+                               "?"} %>
     </div>
   <% end %>
 </div>

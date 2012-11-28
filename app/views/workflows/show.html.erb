@@ -1,6 +1,12 @@
-<% content_for :title, "Taverna Lite - Workflow: " + @workflow.title %>
+<% if @workflow.title.nil?
+     wf_title="No Title"
+   else
+     wf_title = @workflow.title
+   end
+ %>
+<% content_for :title, "Taverna Lite - Workflow: " + wf_title %>
 
-<h1><%= "Details of Workflow: " + @workflow.title %></h1>
+<h1><%= "Details of Workflow: " + wf_title %></h1>
 <%= link_to 'myExperiment', @workflow.my_experiment_id %>
 <p />
 
@@ -10,7 +16,6 @@
 <%= render :partial => 'workflow_description', :locals => {:workflow => @workflow} %>
 <%= render :partial => 'workflow_inputs', :locals => {:workflow => @workflow} %>
 <%= render :partial => 'workflow_outputs', :locals => {:workflow => @workflow} %>
-<% render :partial => 'workflow_components', :locals => {:workflow => @workflow} %>
 <%= render :partial => 'workflow_stats', :locals => {:workflow => @workflow} %>
 <div id="createrun" style="float:right;position:relative;">
   <b>Click to execute workflow</b>

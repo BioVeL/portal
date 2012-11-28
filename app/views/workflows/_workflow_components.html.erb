@@ -8,8 +8,15 @@
   <div class="componentcontainer"> 
     <div class="componentdetails">
       <% componentname = item.name %>
-        <b>Component: </b><%= componentname %> <br/>
-        <b>Type: </b> <%= item.type %> <br/>
+      <% if item.type=="rshell" %>
+        <%= image_tag "Rlogo.jpg", :size => "16x16", :alt => "R-Server" %>
+      <%elsif item.type =="workflow"%>
+        <%= image_tag "taverna-wheel-logo.png", :size => "16x16", :alt => "Workflow" %>
+      <%else%>
+        <b> <%= item.type %> |</b>
+      <% end %>
+        <b> <%= componentname %> </b> 
+         
     </div>
    
     <table>

@@ -20,7 +20,13 @@
       <%= workflow.author %>
     </td>
     <% if current_user.admin -%>
-      <td><%= User.find(workflow.user_id).name %></td>	
+      <td>
+        <% if workflow.user_id !=0 %>
+          <%=User.find(workflow.user_id).name %>
+        <%else%>
+          No user
+        <%end%>
+      </td>	
     <% end -%>
     <td title="Show workflow details" alt="Show see workflow details">
       <%= link_to 'Show', workflow %>
@@ -29,7 +35,7 @@
       <%= link_to 'Remove', workflow, 
             :method => :delete, 
             :data => { :confirm => 'Remove this workflow: ' + 
-                         workflow.title + "?" } %>
+                         workflow.title.to_s + "?" } %>
     </td>
     <td title="Run workflow" alt="Run workflow">
       <%= link_to 'Run', :controller => 'runs', 

@@ -1,4 +1,5 @@
 class CredentialsController < ApplicationController
+  before_filter :admin_required
   # GET /credentials
   # GET /credentials.json
   def index

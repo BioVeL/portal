@@ -86,6 +86,7 @@ class Tavernaserv < ActiveRecord::Base
     else 
       outputs.each do |name, port|
         puts "#TAVSERV SAVE_RESULTS #{name} (port #{port.name} depth #{port.depth})"
+      begin  
         if port.error?
           puts "#TAVSERV SAVE_ERROR Results are errors"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}.error", :error)
@@ -97,6 +98,12 @@ class Tavernaserv < ActiveRecord::Base
           puts "#TAVSERV SAVE_RESULTS path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)                  
         end
+      rescue
+         save_to_db(name, "Error", port.depth, runid, "#{runid}/result/#{name}.error", :error)
+         @error_message="#{$!}"
+         Rails.logger.info "Update Error "
+         Rails.logger.info @error_message
+      end 
       end
     end
     #resultset
@@ -128,5 +135,10 @@ class Tavernaserv < ActiveRecord::Base
     end
     puts "#TAVSERV SAVE_TO_DB: #{value}" 
     result.save
+  end
+  def  self.delete_run(run_identification)
+    check_serv 
+    @server.delete_run(run_identification, 
+                         Credential.get_taverna_credentials)
   end
 end

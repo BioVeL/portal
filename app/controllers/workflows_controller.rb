@@ -30,7 +30,6 @@ class WorkflowsController < ApplicationController
   # GET /workflows/new.json
   def new
     @workflow = Workflow.new
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render :json => @workflow }
@@ -46,17 +45,17 @@ class WorkflowsController < ApplicationController
   # POST /workflows.json
   def create
     @workflow = Workflow.new(params[:workflow])
-    
+    puts "File name:" + @workflow.workflow_filename
     respond_to do |format|
+      @workflow.get_details_from_model
+      @workflow.user_id = current_user.id
       if @workflow.save
         # the model will use t2flow to get the data from the workflow file
-        @workflow.get_details_from_model()
-        @workflow.user_id = current_user.id
         @workflow.save
-        format.html { redirect_to @workflow, :notice => 'Workflow was successfully created.' }
+        format.html { redirect_to @workflow, :notice => 'Workflow was successfully added.' }
         format.json { render :json => @workflow, :status => :created, :location => @workflow }
       else
-        format.html { render :action => "new" }
+        format.html { render :action => "new", :notice => 'Workflow cannot be added.' }
         format.json { render :json => @workflow.errors, :status => :unprocessable_entity }
       end
     end

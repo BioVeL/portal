@@ -13,7 +13,6 @@ class Run < ActiveRecord::Base
   end  
   def validate_inputs
     workflow = Workflow.find(workflow_id)
-    
   end
 
   def delete_results

@@ -78,11 +78,12 @@ class RunsController < ApplicationController
   # DELETE /runs/1.json
   def destroy
     @run = Run.find(params[:id])
+    Tavernaserv.delete_run(@run.run_identification)
     @run.delete_results
     @run.destroy
-
+    
     respond_to do |format|
-      format.html { redirect_to runs_url }
+      format.html { redirect_to runs_url, :notice => 'Run deleted.'  }
       format.json { head :no_content }
     end
   end
