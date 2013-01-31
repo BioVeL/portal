@@ -9,7 +9,7 @@
       <% for result in run.results.each %>
         <tr>
           <td><b><%=h result.name %></b></td>
-          <td><%=h result.filetype.split(/-*/) %></td>
+          <td><%=h result.filetype.split(/-*/).join %></td>
           <td>
             <%= button_to 'Download', :controller => 'result', 
                           :action => 'download', :id => result.id %>
@@ -23,8 +23,7 @@
             <% elsif result.filetype.to_s =~ /error/ %>
               <%= simple_format(IO.read(result.result_filename))%>
             <% else %>
-              <%= image_tag( result.result_filepath, :height => '100%', 
-                                                     :width =>'100%') %>
+              <%= image_tag result.result_filepath %>
             <% end %>
           </td>    
         </tr>

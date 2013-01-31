@@ -30,6 +30,7 @@ class Tavernaserv < ActiveRecord::Base
         runner.end = svrrun.finish_time
         # if run finishes copy run output to outputs dir within run
         if runner.results.count == 0
+          Rails.logger.info "Saving run:#{runner.id} results @ #{Time.now}.\n"  
           #puts "no results recorded for this run"
           outputs = svrrun.output_ports
           save_results(runner.id, outputs)    
@@ -87,19 +88,20 @@ class Tavernaserv < ActiveRecord::Base
       outputs.each do |name, port|
         puts "#TAVSERV SAVE_RESULTS #{name} (port #{port.name} depth #{port.depth})"
       begin  
-        if port.error?
-          puts "#TAVSERV SAVE_ERROR Results are errors"
-          save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}.error", :error)
-        elsif port.value.is_a?(Array)
+        if port.value.is_a?(Array)
           puts "#TAVSERV SAVE_RESULTS partial Results are in a list"
           sub_array = port.value
           save_nested(runid,name,sub_array,port.type[0],port.depth,index="")
+        elsif port.error?
+          puts "#TAVSERV SAVE_ERROR Results are errors"
+          save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}.error", port.error)
         else
           puts "#TAVSERV SAVE_RESULTS path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)                  
         end
       rescue
-         save_to_db(name, "Error", port.depth, runid, "#{runid}/result/#{name}.error", :error)
+         puts "## ERROR CAUGHT\n\n#{$!}\n\n"
+         save_to_db(name, "Error", port.depth, runid, "#{runid}/result/#{name}.error", port.error)
          @error_message="#{$!}"
          Rails.logger.info "Update Error "
          Rails.logger.info @error_message
@@ -108,17 +110,20 @@ class Tavernaserv < ActiveRecord::Base
     end
     #resultset
   end
+
   def self.save_nested(runid, portname, sub_array, porttype, portdepth, index="")
     (0 .. sub_array.length - 1).each do |i|
       value = sub_array[i]
       if value.is_a?(Array) then
         save_nested(runid,portname,value,porttype, portdepth, i.to_s)
       else
+        value = "error" if value.nil?
         puts  "#TAVSERV SAVE_NESTED path #{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i} type: #{porttype} VALUE: #{value}"
         save_to_db(portname, porttype, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
       end
     end 
   end
+
   def self.save_to_db(name,mimetype,depth,run,filepath,value)
     result = Result.new
     result.name = name
@@ -126,16 +131,12 @@ class Tavernaserv < ActiveRecord::Base
     result.depth = depth
     result.run_id = run
     result.filepath = filepath
-    if value != :error
-      result.result_file = value
-    else
-      puts "#TAVSERV SAVE_TO_DB need to save an error: #{value}"
-      #next need to copy the file on the error path to the store path. couldn't just copy every file in the out path as it is?'
-      result.result_file = "an error has ocurred"
-    end
+    result.result_file = value
+
     puts "#TAVSERV SAVE_TO_DB: #{value}" 
     result.save
   end
+
   def  self.delete_run(run_identification)
     check_serv 
     @server.delete_run(run_identification, 

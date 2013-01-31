@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :current_user  
   helper_method :login_required  
+  helper_method :admin_required
 
   private 
   # Identify the user currently logged in 

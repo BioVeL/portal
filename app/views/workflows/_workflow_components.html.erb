@@ -1,62 +1,239 @@
-<div id="wf_components_div" class="workflow_part">
+<div id="wf_components_div" class="workflow_part" >
+
 <% if @processors.count>0 %>
   <p>
     <b> This workflow has <%= @processors.count %> 
       <%= "Component".pluralize(@processors.count)%> </b>
   </p>
-  <% @processors.each do |item| %>
+
+
+<div id="filmstrip">
+  <!-- First draw a box for the inputs -->
+  <%if @sources.count > 0 %>
+    <div class="componentcontainer"> 
+      <div class="componentdetails">
+         <%= image_tag "inputport.png", :size => "64x64", :alt => "input" %>
+         <%= pluralize(@sources.count, "Input")%>
+      </div>
+    </div>
+  <% end %>
+  <% %>
+  <% for i in 1..@ordered_processors.count %>
+  <% item = @ordered_processors[i] %>
   <div class="componentcontainer"> 
     <div class="componentdetails">
       <% componentname = item.name %>
       <% if item.type=="rshell" %>
-        <%= image_tag "Rlogo.jpg", :size => "16x16", :alt => "R-Server" %>
+        <%= image_tag "rlogo.png", :size => "64x64", :alt => "R-Server", 
+            :class=>"componenticon"%>
       <%elsif item.type =="workflow"%>
-        <%= image_tag "taverna-wheel-logo.png", :size => "16x16", :alt => "Workflow" %>
+        <%= image_tag "taverna-component-05.png", :size => "64x64", 
+            :alt => "Workflow", :class=>"componenticon" %>
+      <% elsif item.type=="stringconstant" %>
+        <%= image_tag "stringconstant.png", :size => "64x64", 
+            :alt => "constant", :class=>"componenticon" %>
+      <%elsif item.type =="localworker"%>
+        <%= image_tag "localworker.png", :size => "64x64", :alt => "worker", 
+            :class=>"componenticon" %>
+      <%elsif item.type =="interaction"%>
+        <%= image_tag "interaction.png", :size => "64x64", :alt =>"interaction",
+            :class=>"componenticon" %>
+      <%elsif item.type =="wsdl"%>
+        <%= image_tag "webservice.png", :size => "64x64", :alt => "WS", 
+            :class=>"componenticon" %>
+      <%elsif item.type =="beanshell"%>
+        <%= image_tag "beanshell.png", :size => "64x64", :alt => "WS", 
+            :class=>"componenticon" %>
       <%else%>
         <b> <%= item.type %> |</b>
       <% end %>
         <b> <%= componentname %> </b> 
-         
+    </div>    
+  </div>
+  <% end %>
+  <%if @sinks.count > 0 %>
+    <div class="componentcontainer"> 
+      <div class="componentdetails">
+         <%= image_tag "outputport.png", :size => "64x64", :alt => "output" %>
+         <%=pluralize(@sinks.count, "Output")%>
+      </div>
     </div>
-   
-    <table>
-      <tr>
-        <th colspan="2"> <b>Ports</b></th>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <th>Output</th>  
-      </tr>
-      <tr>
-        <td>
-        <%if !(item.inputs.nil?) && item.inputs.count > 0%>
-          <ul>
-            <%item.inputs.each do |input|%>
-              <li><%= input %></li>
-            <%end%>
-          </ul>
-        <%end%>
-        </td>
-        <td>
-        <%if !(item.outputs.nil?) && item.outputs.count > 0%>
-          <ul>
-            <%item.outputs.each do |output|%>
-              <li><%= output %></li>
-            <%end%>
-          </ul>
-        <%end%>
-        </td>
-      </tr>
-    </table>     
-  </div><br />
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <% end %>
 
+</div>
 <% else %>  
   <p>
     <b> This workflow has no components </b>
   </p>
 <% end %>
-</div>  
+
+</div> 
+<!--<div id="scrollwide"style="height: 80px;
+overflow: auto;
+white-space: nowrap;">
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+<div><img src="/assets/taverna-component-05.png" width="64" ></div>
+</div> 
+ 
+<style type="text/css">       
+#div_1
+{
+
+height: 150px;
+width: 350px;
+margin: auto;
+border: 1px black solid;
+overflow-y: hidden;
+overflow-x: scroll}
+
+#div_3
+{
+float: left;
+height: 150px;
+width: 500px;
+margin: auto;
+border: 1px black solid;
+overflow-y: hidden;
+overflow-x: scroll}
+
+#div_2
+{height: 100px;
+width: 100px;
+border: 1px solid #A2A2A2;
+float: left}
+</style>
+
+</head>
+<body>
+
+<div id="div_1">
+
+<div id="div_3">
+
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+    <div id="div_2"></div>
+
+</div>
+
+</div>
+
+<div style="width: 800px; overflow-x:auto; white-space: nowrap;">
+    <div style="width: 300px; height: 100px; background-color: #f00; display: inline-block;"></div>
+    <div style="width: 300px; height: 100px; background-color: #0f0; display: inline-block;"></div>
+    <div style="width: 300px; height: 100px; background-color: #00f; display: inline-block;"></div>
+    <div style="width: 300px; height: 100px; background-color: #ff0; display: inline-block;"></div>
+<div style="width: 300px; height: 100px; background-color: #f00; display: inline-block;"></div>
+    <div style="width: 300px; height: 100px; background-color: #0f0; display: inline-block;"></div>
+    <div style="width: 300px; height: 100px; background-color: #00f; display: inline-block;"></div>
+    <div style="width: 300px; height: 100px; background-color: #ff0; display: inline-block;"></div>
+</div>
+-->
+
 

@@ -1,54 +1,96 @@
 <% content_for :title, "Taverna Lite - Workflows"%>
-<h1>Workflows</h1>
-<br />
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Author(s)</th>
-    <% if current_user.admin %>
-      <th>Owner</th>
-    <% end %>
-    <th colspan="3">Operations</th>
-  </tr>
+<p>This page the list of workflows that you can execute on Taverna Lite</p>
+<p>
+A workflow is the automation of series of data analysis (steps) to process data (from small to very large-scale), be that from one's own research and/or from existing sources.
+</p>
 
-<% @workflows.each do |workflow| %>
-  <tr>
-    <td title="<%= workflow.description %>" alt="<%= workflow.description %>">
-      <%= workflow.title %>
-    </td>
-    <td>
-      <%= workflow.author %>
-    </td>
-    <% if current_user.admin -%>
+<% if !current_user.nil? && @workflows.count != 0 -%>
+  <h1>Private Workflows</h1>
+  <br />
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Author(s)</th>
+      <% if current_user.admin -%>
+        <th>Owner</th>
+      <% end -%>
+      <th colspan="3">Operations</th>
+      <th>Shared?</th>
+    </tr>
+
+    <% @workflows.each do |workflow| %>
+      <tr>
+        <td title="<%= workflow.description %>" alt="<%= workflow.description %>">
+        <%= workflow.title %>
+      </td>
       <td>
-        <% if workflow.user_id !=0 %>
-          <%=User.find(workflow.user_id).name %>
-        <%else%>
-          No user
-        <%end%>
-      </td>	
-    <% end -%>
-    <td title="Show workflow details" alt="Show see workflow details">
-      <%= link_to 'Show', workflow %>
-    </td>
-    <td title="Remove workflow" alt="Remove workflow">
-      <%= link_to 'Remove', workflow, 
+        <%= workflow.author %>
+      </td>
+      <% if current_user.admin -%>
+        <td>
+          <% if workflow.user_id !=0 %>
+            <%=User.find(workflow.user_id).name %>
+          <%else%>
+            No user
+          <%end%>
+        </td>	
+      <% end -%>
+      <td title="Show workflow details" alt="Show see workflow details">
+        <%= link_to 'Details', workflow %>
+      </td>
+      <td title="Remove workflow" alt="Remove workflow">
+        <%= link_to 'Remove', workflow, 
             :method => :delete, 
             :data => { :confirm => 'Remove this workflow: ' + 
                          workflow.title.to_s + "?" } %>
-    </td>
-    <td title="Run workflow" alt="Run workflow">
-      <%= link_to 'Run', :controller => 'runs', 
+      </td>
+      <td title="Run workflow" alt="Run workflow">
+        <%= link_to 'Run', :controller => 'runs', 
             :action => 'new_run', :id => workflow.id %>
-    </td>
-  </tr>
-<% end %>
-</table>
-<%if @workflows.count == 0 %>
+      </td>
+      <td>
+        <% if workflow.shared? -%>
+          Yes (<%= link_to "Make private", make_private_workflow_path(workflow), :method => :put %>)
+        <% else -%>
+          No (<%= link_to "Make public", make_public_workflow_path(workflow), :method => :put %>)
+        <% end -%>
+      </td>
+    </tr>
+    <% end -%>
+  </table>
+<% end -%>
+
+<% if !current_user.nil? -%>
+  <%= link_to 'Add Workflow', new_workflow_path %>
   <br />
-  No workflows available  
-<% end %>
+<% end -%>
 
-<br />
+<% if @shared_workflows.count != 0 -%>
+  <h1>Public Workflows</h1>
+  <br />
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Author(s)</th>
+      <th colspan="2">Operations</th>
+    </tr>
 
-<%= link_to 'Add Workflow', new_workflow_path %>
+    <% @shared_workflows.each do |workflow| %>
+      <tr>
+        <td title="<%= workflow.description %>" alt="<%= workflow.description %>">
+        <%= workflow.title %>
+      </td>
+      <td>
+        <%= workflow.author %>
+      </td>
+      <td title="Show workflow details" alt="Show see workflow details">
+        <%= link_to 'Details', workflow %>
+      </td>
+      <td title="Run workflow" alt="Run workflow">
+        <%= link_to 'Run', :controller => 'runs', 
+            :action => 'new_run', :id => workflow.id %>
+      </td>
+    </tr>
+    <% end -%>
+  </table>
+<% end -%>

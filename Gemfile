@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.6'
+gem 'rails', '3.2.11'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -47,3 +47,4 @@ gem 'taverna-t2flow'
 gem 'ratom'
 # Daemons for handling background tasks
 gem 'daemons-rails'
+

@@ -3,7 +3,7 @@ module ApplicationHelper
     html=''
     list=button_source.sort
     if list.count > 0
-      html << label (model_name, target_property) << '<br />'
+      html << label(model_name, target_property) << '<br />'
     end
     if list.count < 4
       list.each{|x|

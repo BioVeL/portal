@@ -19,12 +19,17 @@
     <% @sources.each do |item| %> 
     <p>
       <% portname = item[0] %>
-      <h3><b><%= label_tag portname %></b></h3> 
-      <%= label_tag @descriptions[portname] %> <br/>
-      <b>Example Value:</b> <br/> 
-      <%= simple_format(@sources[portname]) %>
+      <h3><%= label_tag portname %></h3> 
+      <p><%= label_tag @descriptions[portname] %></p>
+      <% unless @sources[portname].blank? -%>
+        <b>Example Value:</b><br/> 
+        <%= simple_format(@sources[portname]) %>
+        <p><b>Leave value and file below blank to use the example value as input for this parameter.</b></p>
+      <% end -%>
+      <p>
       Enter Value: <%=h f.text_field portname %> 
-      or Select File <%= f.file_field  "file_for_#{portname}" %><br/> 
+      or Select File <%= f.file_field  "file_for_#{portname}" %>
+      </p>
     </p>
     <% end %>
   <% end %>

@@ -1,10 +1,18 @@
-<% if current_user.admin 
-     content_for :title, "Taverna Lite - Runs for all users "
+<% unless current_user.nil?
+     if current_user.admin
+       content_for :title, "Taverna Lite - Runs for all users"
+     else
+       content_for :title,
+                  "Taverna Lite - Runs created by " + current_user.name
+     end
    else
-     content_for :title, 
-                  "Taverna Lite - Runs created by " + current_user.name	
+     content_for :title, "Taverna Lite - Runs for Guest user"
    end -%>
-<h1>Runs</h1>
+<h1><%= "Guest" if current_user.nil? %> Runs</h1>
+
+<p>This page list the runs that you have submitted using Taverna Lite.</p>
+<p>A run is the execution of a workflow instance.</p>
+
 <br/>
 <table>
   <tr>
@@ -12,7 +20,7 @@
     <th>Created</th>
     <th>State</th>
     <th>Results</th>
-    <% if current_user.admin %>
+    <% if !current_user.nil? && current_user.admin %>
       <th>User</th>
     <% end %>
     <th colspan="2">Operations</h>
@@ -24,12 +32,19 @@
     <td><%= run.creation.strftime("%d/%m/%Y-%H:%M:%S") %></td>
     <td><%= run.state %></td>
     <td><%= run.results.count %></td>
-    <% if current_user.admin -%>
-      <td><%= User.find(run.user_id).name %></td>	
+    <% if !current_user.nil? && current_user.admin -%>
+      <td><%=
+            if run.user_id.nil?
+              'Guest'
+            else    
+              User.find(run.user_id).name 
+            end
+            %></td>	
     <% end -%>
     <td title="Click to see run details" alt="Click to see run details">
-      <%= link_to 'Show', run %>
+      <%= link_to 'Details', run %>
     </td>
+    <% if !current_user.nil? -%>
     <td title="Click to delete run" alt="Click to delete run">
       <%= link_to 'Delete', 
                   run, 
@@ -40,6 +55,7 @@
                                run.creation.strftime("%d/%m/%Y-%H:%M:%S") +
                                "?"} %>
     </td>
+    <% end -%>
     <!--<td>Archive</td>-->
   </tr>
 <% end %>
@@ -53,8 +69,10 @@
 
 <%= javascript_tag do -%>
 $(document).ready(
+/*PENDING: only update if there are running workflows or if a new run is 
+  detected, do not update otherwise*/
   function(){
-      setInterval("location.reload(true);", 5000 );
+      setInterval("location.reload(true);", 15000 );
   });
 <% end -%>
 

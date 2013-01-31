@@ -1,12 +1,11 @@
 class WorkflowsController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required, :except => [:index, :show]
+  before_filter :get_workflows, :only => :index
+  before_filter :get_workflow, :only => :show
+
   # GET /workflows
   # GET /workflows.json
   def index
-    @workflows = Workflow.all
-    if (!current_user.admin?)
-      @workflows = Workflow.find_all_by_user_id(current_user.id)
-    end 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @workflows }
@@ -16,10 +15,10 @@ class WorkflowsController < ApplicationController
   # GET /workflows/1
   # GET /workflows/1.json
   def show
-    @workflow = Workflow.find(params[:id])
     @sources, @source_descriptions = @workflow.get_inputs
     @sinks, @sink_descriptions = @workflow.get_outputs
     @processors = @workflow.get_processors
+    @ordered_processors = @workflow.get_processors_in_order
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @workflow }
@@ -87,6 +86,43 @@ class WorkflowsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to workflows_url }
       format.json { head :no_content }
+    end
+  end
+
+  def make_public
+    @workflow = Workflow.find(params[:id])
+    @workflow.shared = true
+    @workflow.save!
+    redirect_to :back
+  end
+
+  def make_private
+    @workflow = Workflow.find(params[:id])
+    @workflow.shared = false
+    @workflow.save!
+    redirect_to :back
+  end
+
+  private
+
+  def get_workflows
+    @shared_workflows = Workflow.find_all_by_shared(true)
+
+    if !current_user.nil?
+      @workflows = Workflow.all
+      if !current_user.admin
+        @workflows.delete_if {|wkf| wkf.user_id != current_user.id}
+      end
+    end
+  end
+
+  def get_workflow
+    @workflow = Workflow.find(params[:id])
+
+    if current_user.nil?
+      return login_required if !@workflow.shared?
+    else
+      return login_required if @workflow.user_id != current_user.id
     end
   end
 end

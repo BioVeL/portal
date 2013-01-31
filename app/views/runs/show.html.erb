@@ -5,7 +5,7 @@
 <p />
 <p>
   <b>User:</b>
-  <%= User.find(@run.user_id).name %>
+  <%= @run.user_id.nil? ? "Guest" : User.find(@run.user_id).name %>
 </p>
 <%= render :partial => 'runstate', :locals => {:run => @run} %>
 <%= render :partial => 'runresults', :locals => {:run => @run} %>
@@ -19,6 +19,7 @@ var interaction_identifier=""
     function(){
       monitor_run();
     });
+  /*PENDING: do not monitor if run is finished*/
   function monitor_run(){
     if(run_probe==""){
       if(interaction_probe!=""){

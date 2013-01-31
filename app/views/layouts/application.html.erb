@@ -21,13 +21,12 @@
     <% end %>
 
     <%= render :partial=> '/partials/header' %>
-    <%= render :partial=> '/partials/user_log_in' %>
-    <br/>
     <%= render :partial=> '/partials/navigation' %>
     <div class='container' id='container-main'>
       <div id='content'>
         <div class='hfeed' id='primary'>
           <div class='outer-enclosed'>
+            <%= render :partial=> '/partials/user_log_in' %>
             <div class='hentry'>
               <div>
                 <% if flash[:notice] %>

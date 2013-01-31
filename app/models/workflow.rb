@@ -4,17 +4,21 @@ require 't2flow/dot'
 
 class Workflow < ActiveRecord::Base
   attr_accessible :author, :description, :name, :title, :workflow_file, 
-                  :wf_file, :my_experiment_id, :user_id, :is_shared
+                  :wf_file, :my_experiment_id, :user_id, :is_shared,
+                  :slowest_run, :slowest_run_date, :fastest_run, 
+                  :fastest_run_date
+
   # a workflow can have many runs
   has_many :runs
   # after the workflow details have been written to the DB
   # write the workflow file to the filesystem
   after_save :store_wffile
   # Validate the workflow file
-  validate :validate_file_is_included, :validate_file_is_t2flow
+  validate :validate_file_is_included, :on=>:create 
+  validate :validate_file_is_t2flow
   # Validate that there is a file is selected
   def validate_file_is_included
-    if @file_data.nil?
+    if workflow_file.nil? && @file_data.nil?
       errors.add :workflow_file, 
                  " missing, please select a file and try again"
     end
@@ -36,7 +40,7 @@ class Workflow < ActiveRecord::Base
       @file_data = file_data
       # set the value of workflow file to that of the original
       # workflow file name
-      self.workflow_file = file_data.original_filename.downcase
+      self.workflow_file = file_data.original_filename
     end
   end  
   
@@ -166,12 +170,67 @@ class Workflow < ActiveRecord::Base
     return [sinks,descriptions]
   end
   def get_processors
-    wf_processors = {}
     # get the workflow t2flow model
-    model = get_model
+    wf_model = get_model
     # collect the workflow processors and their descriptions
-    return model.processors()
+    return wf_model.processors()
   end
+  def get_processors_in_order
+    # get the workflow t2flow model
+    wf_model = get_model
+    ordered_processors = get_processors_order()
+    ordered_processors.each do |nth_processor|
+      wf_model.processors.each do |a_processor|
+        if a_processor.name == nth_processor[1]
+          ordered_processors[nth_processor[0]] = a_processor
+        end
+      end
+    end    
+    # collect the workflow processors and their descriptions
+    return ordered_processors
+  end
+
+  def get_processors_order
+    # get the workflow t2flow model
+    wf_model = get_model
+    # list should be as long as the number of processors
+    i = wf_model.processors.count
+    ordered_processors ={}
+    # need a list of sources to filter them out
+    wf_sources=[]
+    wf_model.sources.each do |e_sou|
+      wf_sources << e_sou.name
+    end
+    wf_model.sinks.each do |e_sink|
+      wf_model.datalinks.each do |dl|
+        if dl.sink == e_sink.name && 
+             !ordered_processors.has_value?(dl.source.split(':')[0])
+          ordered_processors[i] = dl.source.split(':')[0]
+          i -= 1
+        end
+      end
+    end
+
+    while ordered_processors.count < wf_model.processors.count
+      wf_model.datalinks.each do |lnk|
+        ordered_processors.dup.each do |pr|
+          unless wf_sources.include?(lnk.source.split(':')[0])
+            # processors put processors in order according to data links
+            unless ordered_processors.has_value?(lnk.source.split(':')[0])            
+              if (lnk.sink.split(':')[0] == pr[1])
+                ordered_processors[i] = lnk.source.split(':')[0]
+                i -= 1 
+              end
+            end
+          end
+        end
+      end
+    end
+    
+    #return the list of processors with their orders
+    return ordered_processors
+  end
+
   private 
   #the store wffile method is called after the details are saved    
   def store_wffile
@@ -186,6 +245,5 @@ class Workflow < ActiveRecord::Base
       # ensure that the data is only save once by clearing the cache after savig
       @file_data = nil
     end
-  end
-  
+  end 
 end

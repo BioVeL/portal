@@ -4,7 +4,6 @@
     margin: 0 auto;
     padding-top: 12px;
     position: relative;
-    width: 950px;
 }
 .header{
     height: 60px;
@@ -14,7 +13,7 @@
     border-color: #77BB11 #bbb866;
 }
 
-.container { width: 950px; margin: 0 auto; }
+.container { margin: 0 auto; }
 #content {  }
 
 .biovel-logo { position: relative; float:left; width: 92px; height: 92px; }
@@ -122,7 +121,7 @@ margin-bottom: 20px;*/ }
 
 .homepage .entry-content li { margin-bottom: 2px;}
 
-.hfeed { width: 950px; float: right; padding: 0; }
+.hfeed { padding: 0; }
 #breadcrumbs {  margin-bottom: 5px; /*background: #d3deea; */ }
 #breadcrumbs hr { border-color: #fff; }
 .aside { width: 195px; float: left;  padding: 10px 18px; }
@@ -180,8 +179,8 @@ p, pre, ul, ol, dl, dd, blockquote, address, table, fieldset, form, .gallery-row
 
 /* On :hover, displays all sub items (4 levels deep) */
 .nav li li:hover ul,
-.nav li li.nav-hover ul,
-/*.nav li li li:hover ul,
+.nav li li.nav-hover ul /*,
+.nav li li li:hover ul,
 .nav li li li.nav-hover ul,
 .nav li li li li:hover ul,
 .nav li li li li.nav-hover ul*/ { left: 20em; /* match .nav ul width */ top: -1px; }
@@ -447,12 +446,14 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
     min-height: 400px;
 }
 
+/*
 .external-link { padding-top: 0px; padding-right: 13px; padding-bottom: 0px; 
 	padding-left: 0px; text-decoration: none; color: #4f82cb; 
 	background-image: url(external.png); background-repeat: no-repeat; 
 	background-attachment: initial; -webkit-background-clip: initial; -webkit-background-origin: initial;
 	background-color: initial; background-position: 100% 50%; margin: 0px; }
-	
+*/
+
 /*.cakebake { background: #fff; 	padding: 15px; margin-bottom: 25px; -moz-border-radius: 10px;
 	-webkit-border-radius: 10px;}*/
 	
@@ -624,7 +625,6 @@ h4 {
 #footer {
   background-color: #99cc33;
   padding: 1em;
-  font-weight: bold;
   color: #355710;
   vertical-align: middle;
   border: 1px solid #77BB11;
@@ -653,31 +653,44 @@ h4 {
   border: 1px solid hsla(80, 90%, 40%, 0.7); 
   display: none;
   padding: 5px;
+  height:400px;
+  overflow:auto;
 }
-.componentcontainer {
-  width: 230px;
- // float: left;
-  background-color: #EEE;
+
+#filmstrip{
+  width: 99%; 
+  overflow-x:auto; 
+  white-space: nowrap;
   border: solid 1px #999;
+  padding: 5px
+}
+
+.componentcontainer {
+  width: 250px;
+  white-space:nowrap;
+  background-color: #FFFFFF;
+  border: solid 2px #3300CC;
   padding: 5px 10px;
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
   border-radius: 8px;
   position: relative;
+  display: inline-block;
   margin-right: 10px;
-//  border: 1px solid hsla(80, 90%, 40%, 0.7);
-//  padding: 5px;
-//  display: block;
 }
 
-/*.componentoutput{border: 1px solid hsla(80, 90%, 40%, 0.7);
+.componenticon{
+  width:auto;
+  height:64px;
+}
+.componentoutput{border: 1px solid hsla(80, 90%, 40%, 0.7);
                  padding: 5px;width:40%;
                  float:left;}
 .componentinput{  border: 1px solid hsla(80, 90%, 40%, 0.7);
                   padding: 5px;
                   width:40%;
                    }
-*/
+
 #announcement {
   text-align: center; 
   margin-top: -5px; 
@@ -706,10 +719,69 @@ h4 {
   margin-bottom: 0px; 
   padding: 2px; 
   border: 1px solid hsla(80, 90%, 40%, 0.7); 
-  background: #EEEB99;
   color: rgb(153, 0, 0);
   float: right;
   -moz-border-radius: 8px;
   -webkit-border-radius:  8px;
   border-radius: 8px;
+}
+
+
+.authentications {
+  margin-bottom: 30px;
+}
+
+.authentication {
+  width: 130px;
+  float: left;
+  background-color: #EEE;
+  border: solid 1px #999;
+  padding: 5px 10px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  position: relative;
+  margin-right: 10px;
+}
+
+.authentication .remove {
+  text-decoration: none;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  color: #333;
+  padding: 2px 4px;
+  font-size: 10px;
+}
+
+.authentication .remove:hover {
+  color: #CCC;
+  background-color: #777;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+
+.authentication img {
+  float: left;
+  margin-right: 10px;
+}
+
+.authentication .provider {
+  font-weight: bold;
+}
+
+.authentication .uid {
+  color: #666;
+  font-size: 11px;
+}
+
+.auth_provider img {
+  display: block;
+}
+
+.auth_provider {
+  float: left;
+  text-decoration: none;
+  margin-right: 20px;
+  text-align: center;
+  margin-bottom: 10px;
 }

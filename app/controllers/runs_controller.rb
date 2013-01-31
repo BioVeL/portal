@@ -1,14 +1,21 @@
 gem 'ratom'
 require 'atom'
 class RunsController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required, :except => [:new_run, :show, :refresh, :interaction, :index]
+
   # GET /runs
   # GET /runs.json
   def index  
-    @runs = Run.find(:all, :order =>'start desc') 
-    if (!current_user.admin?)
-      @runs = Run.find_all_by_user_id(current_user.id, :order =>'start desc')
-    end 
+    if current_user.nil?
+      @runs = Run.find_all_by_user_id(nil, :order =>'start desc')
+    else
+      if !current_user.admin?
+        @runs = Run.find_all_by_user_id(current_user.id, :order =>'start desc')
+      else
+        @runs = Run.find(:all, :order =>'start desc')
+      end
+    end
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @runs }
@@ -19,6 +26,8 @@ class RunsController < ApplicationController
   # GET /runs/1.json
   def show
     @run = Run.find(params[:id])
+    return login_required if current_user.nil? && !@run.user_id.nil?
+
     @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
     respond_to do |format|
       format.html # show.html.erb
@@ -90,6 +99,8 @@ class RunsController < ApplicationController
 
   def refresh
     @run = Run.find(params[:id])
+    return login_required if current_user.nil? && !@run.user_id.nil?
+
     @interaction_id, @interaction_uri = get_interaction(@run.run_identification, @run.start)
     @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
     respond_to do |format|
@@ -165,8 +176,11 @@ class RunsController < ApplicationController
   end  
 
   def interaction
-    interactionid = params[:interactionid].to_s
     @run = Run.find(params[:id])
+    return login_required if current_user.nil? && @run.user_id.nil?
+
+    interactionid = params[:interactionid].to_s
+
     @responded = probe_interaction(@run.run_identification, interactionid)
   end
 
@@ -264,6 +278,7 @@ class RunsController < ApplicationController
             Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to use file '#{params[:file_uploads][input_file].original_filename}'"
           end
         end
+
         # determine if an rserver is being called
         if @workflow.connects_to_r_server?
           rs_cred = Credential.find_by_server_type_and_default_and_in_use("rserver",true,true)
@@ -275,7 +290,6 @@ class RunsController < ApplicationController
          Rails.logger.info "#NEW RUN (#{Time.now}): Cannot start run, missing inputs"
       end      
     end
-    
 
     if !(@workflow.has_parameters?) then 
       # for workflows with no input
@@ -297,6 +311,7 @@ class RunsController < ApplicationController
       save_run(run)
     end   
   end
+
   def inputs_provided(params)
     @sources, @descriptions = @workflow.get_inputs
     inputs_provided = true
@@ -304,22 +319,33 @@ class RunsController < ApplicationController
       input = port[0]
       input_file = "file_for_#{port[0]}"
       if  !(params[:file_uploads].include? input) && !(params[:file_uploads].include? input_file)
-        inputs_provided = false
-        Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
-        Rails.logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
-        Rails.logger.info "#NEW RUN (#{Time.now}):         " + input 
-        Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
-        break
+        unless port[1].blank?
+          Rails.logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value #{port[1]}"
+          params[:file_uploads][input] = port[1]
+        else
+          inputs_provided = false
+          Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
+          Rails.logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
+          Rails.logger.info "#NEW RUN (#{Time.now}):         " + input 
+          Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
+          break
+        end
       end
+
       value = params[:file_uploads][input].to_s
       if (value =="") && !(params[:file_uploads].include? input_file)
-       inputs_provided = false
-        Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
-        Rails.logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
-        Rails.logger.info "#NEW RUN (#{Time.now}):           " + input  + ""
-        Rails.logger.info "#NEW RUN (#{Time.now}):Detected:  " + value 
-        Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
-       break
+        unless port[1].blank?
+          Rails.logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value #{port[1]}"
+          params[:file_uploads][input] = port[1]
+        else
+          inputs_provided = false
+          Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
+          Rails.logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
+          Rails.logger.info "#NEW RUN (#{Time.now}):           " + input  + ""
+          Rails.logger.info "#NEW RUN (#{Time.now}):Detected:  " + value 
+          Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
+          break
+        end
       end
       
     end
@@ -339,7 +365,7 @@ class RunsController < ApplicationController
     @run.start = run.start_time
     @run.expiry = run.expiry
     @run.state = run.status
-    @run.user_id = current_user.id
+    @run.user_id = current_user.nil? ? nil : current_user.id
 
     # the run has been started so redirect to it
     respond_to do |format|
