@@ -23,8 +23,12 @@ TliteR3::Application.routes.draw do
   match 'runs/interaction/:id/:interactionid' => 'runs#interaction'
   #*****************************************************
 
-  resources :workflows
-
+  resources :workflows do
+    member do
+      put "make_public"
+      put "make_private"
+    end
+  end
   #*****************************************************
   # mapping for the redirection when checking results
   match 'runs/', :controller => 'runs', :action => 'update_all'
