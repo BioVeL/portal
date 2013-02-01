@@ -1,7 +1,11 @@
 <% content_for :title, "Taverna Lite - Workflows"%>
-<p>This page the list of workflows that you can execute on Taverna Lite</p>
+<p> 
+  This page shows workflows that you can execute on Taverna Lite
+</p>
 <p>
-A workflow is the automation of series of data analysis (steps) to process data (from small to very large-scale), be that from one's own research and/or from existing sources.
+  A workflow is the automation of series of data analysis (steps) to process 
+  data (from small to very large-scale), be that from one's own research and/or 
+  from existing sources.
 </p>
 
 <% if !current_user.nil? && @workflows.count != 0 -%>
@@ -62,12 +66,17 @@ A workflow is the automation of series of data analysis (steps) to process data 
 
 <% if !current_user.nil? -%>
   <%= link_to 'Add Workflow', new_workflow_path %>
-  <br />
 <% end -%>
 
 <% if @shared_workflows.count != 0 -%>
   <h1>Public Workflows</h1>
-  <br />
+<% if current_user.nil? -%>
+  <p>
+    <%= link_to 'Register', sign_up_path%> to upload your own workflows and to
+    search for workflows on 
+    <%= link_to 'my experiment', 'http://www.myexperiment.org' %> 
+  </p>
+<%end%>
   <table>
     <tr>
       <th>Title</th>
