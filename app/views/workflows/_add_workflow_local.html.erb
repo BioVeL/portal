@@ -1,0 +1,34 @@
+<div id="wf_local_div" class="workflow_part" 
+     style="border: 1px solid hsla(80, 90%, 40%, 0.7); 
+            display: none;padding: 5px;"> 
+<%= form_for(@workflow, 
+  :url => {:action => "create"},
+  :html => { :multipart => true,
+  :method =>:post}) do |f| %>
+  <% if @workflow.errors.any? %>
+    <div id="error_explanation">
+      <h3>
+        <%= pluralize(@workflow.errors.count, "error") %> 
+        stopped workflow upload
+      </h3>
+      <ul>
+      <% @workflow.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <p>
+      <b>1.</b> Select a workflow file (t2flow files)<br/>
+      <%= f.file_field :wf_file, :accept => 't2flow' %>
+    </p>
+  </div>
+  <div class="actions">
+    <p>
+      <b>2.</b> Click to upload the workflow into Taverna Lite<br/>
+      <%= f.submit 'Upload Workflow' %>
+    </p>
+  </div>
+<% end %>
+</div>

@@ -47,4 +47,5 @@ gem 'taverna-t2flow'
 gem 'ratom'
 # Daemons for handling background tasks
 gem 'daemons-rails'
-
+# Connect to my Experiment with oauth-plugin
+gem 'oauth-plugin', ">= 0.4.0.pre1"

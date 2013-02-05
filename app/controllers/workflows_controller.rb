@@ -29,6 +29,8 @@ class WorkflowsController < ApplicationController
   # GET /workflows/new.json
   def new
     @workflow = Workflow.new
+    @consumer_tokens=getConsumerTokens
+    @services=OAUTH_CREDENTIALS.keys-@consumer_tokens.collect{|c| c.class.service_name}
     respond_to do |format|
       format.html # new.html.erb
       format.json { render :json => @workflow }
@@ -124,5 +126,9 @@ class WorkflowsController < ApplicationController
     else
       return login_required if @workflow.user_id != current_user.id
     end
+  end
+  def getConsumerTokens
+    MyExperimentToken.all :conditions=>  
+      {:user_id=>current_user.id}
   end
 end

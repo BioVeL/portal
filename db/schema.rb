@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121115113711) do
+ActiveRecord::Schema.define(:version => 20130203103217) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -20,6 +20,17 @@ ActiveRecord::Schema.define(:version => 20121115113711) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "consumer_tokens", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "type",       :limit => 30
+    t.string   "token",      :limit => 1024
+    t.string   "secret"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+  end
+
+  add_index "consumer_tokens", ["token"], :name => "index_consumer_tokens_on_token", :unique => true
 
   create_table "credentials", :force => true do |t|
     t.string   "name"

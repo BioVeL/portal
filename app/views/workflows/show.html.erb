@@ -7,9 +7,12 @@
 <% content_for :title, "Taverna Lite - Workflow: " + wf_title %>
 
 <h1><%= "Details of Workflow: " + wf_title %></h1>
-<%= link_to 'myExperiment', @workflow.my_experiment_id %>
-<p />
-
+<% if active_link?(@workflow.my_experiment_id ) %>
+  <%= link_to( 
+      image_tag("myexperiment.png", :height => "15", :alt => "my experiment"),
+      @workflow.my_experiment_id)  %>
+<% end %>
+<p/>
 
 <%= render :partial => 'workflow_tabs', :locals => {:workflow => @workflow} %>
 <%= render :partial => 'workflow_authors', :locals => {:workflow => @workflow} %>
@@ -18,6 +21,7 @@
 <%= render :partial => 'workflow_outputs', :locals => {:workflow => @workflow} %>
 <%= render :partial => 'workflow_components', :locals => {:workflow => @workflow} %>
 <%= render :partial => 'workflow_stats', :locals => {:workflow => @workflow} %>
+
 <div id="createrun" style="float:right;position:relative;">
   <b>Click to execute workflow</b>
   <%= button_to 'Create Run', :controller => 'runs', :action => 'new_run', 
@@ -55,7 +59,6 @@ function showonlyone(selected_div, selected_tab) {
 }
      
 <% end -%>
-
 
 <%= link_to 'Back', workflows_path %>
 

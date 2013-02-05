@@ -1,8 +1,13 @@
 <% content_for :title, "Taverna Lite - Run of " +
                  @run.description + " Workflow"%>
 <h1> Run of <%=h @run.description%> Workflow</h1>
-<%= link_to 'myExperiment',Workflow.find(@run.workflow_id).my_experiment_id %>
-<p />
+
+<% if active_link?(Workflow.find(@run.workflow_id).my_experiment_id ) %>
+  <%= link_to( 
+      image_tag("myexperiment.png", :height => "15", :alt => "my experiment"),
+      Workflow.find(@run.workflow_id).my_experiment_id)  %>
+<% end %>
+<p/>
 <p>
   <b>User:</b>
   <%= @run.user_id.nil? ? "Guest" : User.find(@run.user_id).name %>

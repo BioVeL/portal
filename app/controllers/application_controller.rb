@@ -3,7 +3,9 @@ class ApplicationController < ActionController::Base
   helper_method :current_user  
   helper_method :login_required  
   helper_method :admin_required
-
+  helper_method :user_signed_in?
+  helper_method :active_link?
+   
   private 
   # Identify the user currently logged in 
   def current_user  
@@ -24,5 +26,21 @@ class ApplicationController < ActionController::Base
       flash[:error] = 'This content is available only for system administrator'
       redirect_to '/log_in'  
     end
+  end
+  
+  def user_signed_in?
+    cu = current_user
+    if cu.nil? then false else true end
+  end
+
+  def active_link?(url)
+    uri = URI.parse(url)
+    response = nil
+    if !uri.host.nil? && !uri.port.nil?
+      Net::HTTP.start(uri.host, uri.port) { |http|
+        response = http.head(uri.path.size > 0 ? uri.path : "/")
+      }  
+    end
+    return response.nil? ? false : true
   end
 end

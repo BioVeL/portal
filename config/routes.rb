@@ -1,6 +1,11 @@
 TliteR3::Application.routes.draw do
-  match '/auth/:provider/callback' => 'authentications#create'
-  resources :authentications
+  resources :oauth_consumers do
+    member do
+      get :callback
+      get :callback2
+      match 'client/*endpoint' => 'oauth_consumers#client'
+    end
+  end
 
   resources :announcements
 

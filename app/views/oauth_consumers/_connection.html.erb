@@ -1,0 +1,26 @@
+<% if @consumer_tokens.empty? %>
+  <p>
+    You are currently not connected
+  </p>
+<% else %>
+  <p>
+    Connected to <%= image_tag "myexperiment.png", :height=>"15"%>
+  </p>
+  <% @consumer_tokens.each do |token| %>   
+    <%= form_tag oauth_consumer_path(token.class.service_name),:method=>:delete do %>
+      <%=submit_tag "Disconnect" %>
+      or
+      <%=submit_tag "Reconnect" %>
+      if you experienced a problem.
+    <% end %> 
+  <% end %>
+<% end %>
+
+<% unless @services.empty? %>
+  Connect to search for workflows
+  <% @services.each do |service| %>
+    <a href=<%= oauth_consumer_path(service)%> class="auth_provider">
+      <%= image_tag "myexperiment.png", :height => "15", :alt => "my experiment" %>
+    </a>
+  <% end %>
+<% end %>
