@@ -1,0 +1,22 @@
+<p>
+  <b>Name:</b>
+  <%= workflow.name %>
+</p>
+<b>Type:</b>
+  <%= workflow.type %>
+</p>
+
+<p>
+  <b>My exp:</b>
+  <%= workflow.my_exp_id %>
+</p>
+
+<p>
+  <b>Description:</b> </br>
+  <%= simple_format(workflow.description) %>
+</p>
+
+<p>
+  <%=link_to "get workflow", workflow.content_uri %>
+</p>
+

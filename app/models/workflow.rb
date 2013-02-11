@@ -44,6 +44,14 @@ class Workflow < ActiveRecord::Base
     end
   end  
   
+  def me_file=(file_data)
+    unless file_data.blank?
+      # store the uploaded data into a private instance variable
+      @file_data = file_data
+    end
+  end   
+
+ 
   WORKFLOW_STORE = Rails.root.join('public', 'workflow_store')
   # define the path where workflow files will be written to:
   def workflow_filename
@@ -89,17 +97,17 @@ class Workflow < ActiveRecord::Base
         @file_data.rewind
         if !model.nil?
           self.name = model.name
-          if model.annotations.titles.to_s != ""
-            self.title = model.annotations.titles.to_s
+          if model.annotations.titles.join.to_s != ""
+            self.title = model.annotations.titles.join.to_s
           else
             self.title = "No title provided"
           end
-          if model.annotations.authors.to_s != ""
-            self.author = model.annotations.authors.to_s
+          if model.annotations.authors.join.to_s != ""
+            self.author = model.annotations.authors.join.to_s
           else
             self.author = authorname
           end
-          self.description = model.annotations.descriptions.to_s
+          self.description = model.annotations.descriptions.join.to_s
         end
         file_OK = true
       rescue

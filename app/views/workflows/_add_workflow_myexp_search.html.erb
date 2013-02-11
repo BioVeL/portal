@@ -1,0 +1,43 @@
+
+<%= form_tag new_workflow_path, :method => 'get' do %>
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+<% end %>
+
+<h1>Search Results</h1>
+  <% if !@me_workflows.nil? %>
+  <table>
+    <tr>
+      <th>Results:  <%= @me_workflows.count %> Workflows found</th>
+    </tr>
+
+  <% @me_workflows.each do |workflow| %>
+    <tr>
+      <td>
+        <div class="headerDiv">
+        <b>Name: </b><%= workflow.name %>
+        <%= link_to "more", 
+          "javascript:showhide('detail#{workflow.my_exp_id.to_s}','switch#{workflow.my_exp_id.to_s}');",
+          :id=>"switch#{workflow.my_exp_id}" -%>
+        <%= link_to "get", workflows_path(:workflow_uri=>workflow.content_uri,
+                                          :workflow_name=>workflow.name,
+                                          :workflow_link=>workflow.uri), 
+                                        :method => :post %>
+        <%= link_to "my experiment", workflow.uri, :id=>workflow.id %>
+        </div>
+        <div style="clear:both;"></div>
+        <div id="<%='detail'+ workflow.my_exp_id.to_s %>" style="display:none" class="contentDiv">
+        <%=render :partial=>'add_workflow_myexp_detail', :locals => {:workflow=>workflow} %>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+  <% else %>
+    <p>No workflows found</p>
+  <%end%>
+
+
+<br />

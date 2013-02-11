@@ -28,14 +28,27 @@ class WorkflowsController < ApplicationController
   # GET /workflows/new
   # GET /workflows/new.json
   def new
+    search_by =""
+    if !params[:search].nil? 
+      search_by = params[:search].strip
+    end
     @workflow = Workflow.new
+    @me_workflows = []
     @consumer_tokens=getConsumerTokens
     @services=OAUTH_CREDENTIALS.keys-@consumer_tokens.collect{|c| c.class.service_name}
-    respond_to do |format|
+    if (!search_by.nil? && search_by!="") 
+     if @consumer_tokens.count > 0
+       # search for my experiment workflows
+       @workflows = getmyExperimentWorkflows(@me_workflows, URI::encode(search_by))
+     end
+   end    
+   respond_to do |format|
       format.html # new.html.erb
       format.json { render :json => @workflow }
     end
   end
+
+
 
   # GET /workflows/1/edit
   def edit
@@ -45,14 +58,22 @@ class WorkflowsController < ApplicationController
   # POST /workflows
   # POST /workflows.json
   def create
+    if(params.count>1)
+      create_from_my_exp(params)
+    else
+      create_from_upload(params)
+    end
+  end
+  def create_from_upload(params)
     @workflow = Workflow.new(params[:workflow])
+    @consumer_tokens=getConsumerTokens
+    @services=OAUTH_CREDENTIALS.keys-@consumer_tokens.collect{|c| c.class.service_name}
     puts "File name:" + @workflow.workflow_filename
     respond_to do |format|
       @workflow.get_details_from_model
       @workflow.user_id = current_user.id
+      # the model uses t2flow to get the data from the workflow file
       if @workflow.save
-        # the model will use t2flow to get the data from the workflow file
-        @workflow.save
         format.html { redirect_to @workflow, :notice => 'Workflow was successfully added.' }
         format.json { render :json => @workflow, :status => :created, :location => @workflow }
       else
@@ -61,7 +82,42 @@ class WorkflowsController < ApplicationController
       end
     end
   end
-
+  def create_from_my_exp(params)
+    @workflow = Workflow.new()
+    content_uri = params[:workflow_uri]
+    wf_name = params[:workflow_name]
+    wf_name = wf_name.downcase.gsub(" ","_").gsub(".", "") + '.t2flow'
+    link_uri = params[:workflow_link]
+    @consumer_tokens=getConsumerTokens
+    @services=OAUTH_CREDENTIALS.keys-@consumer_tokens.collect{|c| c.class.service_name}
+    # get the workflow using token
+    if @consumer_tokens.count > 0
+      token = @consumer_tokens.first.client
+      doc = REXML::Document.new(response.body)
+      response=token.request(:get, content_uri)
+      puts response.body
+      
+      directory = "/tmp"
+      File.open(File.join(directory, wf_name), 'w:ASCII-8BIT') do |f|
+        f.puts response.body
+      end
+    end
+    @workflow.me_file = File.open(File.join(directory, wf_name), 'r')
+    @workflow.workflow_file = wf_name
+    @workflow.my_experiment_id = link_uri
+    respond_to do |format|
+      @workflow.get_details_from_model
+      @workflow.user_id = current_user.id
+      # the model uses t2flow to get the data from the workflow file
+      if @workflow.save
+        format.html { redirect_to @workflow, :notice => 'Workflow was successfully added.' }
+        format.json { render :json => @workflow, :status => :created, :location => @workflow }
+      else
+        format.html { render :action => "new", :notice => 'Workflow cannot be added.' }
+        format.json { render :json => @workflow.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
   # PUT /workflows/1
   # PUT /workflows/1.json
   def update
@@ -130,5 +186,124 @@ class WorkflowsController < ApplicationController
   def getConsumerTokens
     MyExperimentToken.all :conditions=>  
       {:user_id=>current_user.id}
+  end
+  def getmyExperimentWorkflows(workflows=[], search_by)
+    consumer_tokens = getConsumerTokens
+    if consumer_tokens.count > 0
+      token = consumer_tokens.first.client
+      # logger.info "private data: "+token.get("/data/index").body
+      # URI for the packs, will return all the packs for selected page
+      # PROBLEM: how do we know how many pages are there?
+      workflow_uri = "http://www.myexperiment.org/search.xml?query='" + search_by 
+      workflow_uri += "'&type=workflow&num=100&page="
+      # Get the workflows using the request token
+      puts '************************************************************'
+      puts '*  URI: ' + workflow_uri
+      puts '************************************************************'
+      no_workflows = false
+      page = 1
+      begin
+        response=token.request(:get, workflow_uri+ page.to_s)
+        doc = REXML::Document.new(response.body)
+        logger.info 'DEBUG: Workflow XML Elements: ' + doc.elements.count.to_s
+        if doc.elements['search/workflow'].nil? || 
+           doc.elements['search/workflow'].has_elements?
+          no_workflows = true
+        else
+          doc.elements.each('search/workflow') do |p|
+            p.attributes.each do |attrbt|
+              if(attrbt[0]=='resource')
+                nwworkfolw=MeWorkflow.new
+                nwworkfolw.name = p.text
+                nwworkfolw.my_exp_id = attrbt[1].to_s.split('/').last
+                nwworkfolw.id = nwworkfolw.my_exp_id
+                nwworkfolw.uri = attrbt[1]
+                nwworkfolw = get_my_exp_workflow(nwworkfolw)
+                if nwworkfolw.type == "Taverna 2" && nwworkfolw.can_download
+                  workflows << nwworkfolw
+                end
+              end
+            end  
+          end
+          page +=1
+        end
+      end while no_workflows == false
+      logger.info 'DEBUG: Workflow Pages: ' + page.to_s
+    end
+    puts '************************************************************'
+    puts '*  No WFs?  ' + no_workflows.to_s
+    puts '*  WFs page ' + page.to_s
+    puts '************************************************************'
+
+    return workflows
+  end
+  def get_my_exp_workflow(workflow)
+    consumer_tokens=getConsumerTokens
+    if consumer_tokens.count > 0
+      token = consumer_tokens.first.client
+      # logger.info "private data: "+token.get("/data/index").body
+      # URI for the packs, will return all the packs for selected page
+      # PROBLEM: how do we know how many pages are there?
+      workflow_uri = "http://www.myexperiment.org/workflow.xml?id=" +
+                  workflow.id.to_s     
+      # Get the workflow using the request token
+      response=token.request(:get, workflow_uri)
+      doc = REXML::Document.new(response.body)
+      workflow.name = doc.elements['workflow/title'].text
+      workflow.content_uri = get_workflow_content_uri(workflow)
+      workflow.description = doc.elements['workflow/description'].text
+      workflow.type = doc.elements['workflow/type'].text
+      # get permisions
+      permissions = get_workflow_permissions(workflow)
+      puts '-------------------------------------------------------------------'
+      puts permissions
+      workflow.can_download = permissions.include?("download")  
+      puts workflow.can_download.to_s 
+      puts '-------------------------------------------------------------------'
+    end
+    return workflow
+  end
+
+  def get_workflow_content_uri(workflow)
+    consumer_tokens = getConsumerTokens
+    content_uri =""
+    if consumer_tokens.count > 0
+      token = consumer_tokens.first.client
+      # logger.info "private data: "+token.get("/data/index").body
+      # URI for the workflow
+      workflow_uri =  "http://www.myexperiment.org/workflow.xml?id="
+      workflow_uri += workflow.my_exp_id.to_s  
+      workflow_uri += '&elements=content-uri'
+      logger.info "DEBUG: "+ workflow_uri
+      response=token.request(:get, workflow_uri)
+      doc = REXML::Document.new(response.body)
+      doc.elements.each('workflow/content-uri') do |u|
+        content_uri = u.text
+      end
+    end
+    return content_uri
+  end
+  def get_workflow_permissions(workflow)
+    consumer_tokens = getConsumerTokens
+    elements = []
+    if consumer_tokens.count > 0
+      token = consumer_tokens.first.client
+      # logger.info "private data: "+token.get("/data/index").body
+      # URI for the workflow
+      workflow_uri =  "http://www.myexperiment.org/workflow.xml?id="
+      workflow_uri += workflow.my_exp_id.to_s  
+      workflow_uri += '&elements=privileges'
+      logger.info "DEBUG: "+ workflow_uri
+      response=token.request(:get, workflow_uri)
+      doc = REXML::Document.new(response.body)
+      doc.elements.each('workflow/privileges/privilege') do |u|
+        u.attributes.each do |attrbt|
+          if(attrbt[0]=='type')
+            elements << attrbt[1]
+          end
+        end
+      end
+    end
+    return elements
   end
 end
