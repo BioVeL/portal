@@ -58,7 +58,7 @@ class WorkflowsController < ApplicationController
   # POST /workflows
   # POST /workflows.json
   def create
-    if(params.count>1)
+    if(!params[:workflow_name].nil?)
       create_from_my_exp(params)
     else
       create_from_upload(params)
@@ -197,9 +197,6 @@ class WorkflowsController < ApplicationController
       workflow_uri = "http://www.myexperiment.org/search.xml?query='" + search_by 
       workflow_uri += "'&type=workflow&num=100&page="
       # Get the workflows using the request token
-      puts '************************************************************'
-      puts '*  URI: ' + workflow_uri
-      puts '************************************************************'
       no_workflows = false
       page = 1
       begin
@@ -213,14 +210,16 @@ class WorkflowsController < ApplicationController
           doc.elements.each('search/workflow') do |p|
             p.attributes.each do |attrbt|
               if(attrbt[0]=='resource')
-                nwworkfolw=MeWorkflow.new
-                nwworkfolw.name = p.text
-                nwworkfolw.my_exp_id = attrbt[1].to_s.split('/').last
-                nwworkfolw.id = nwworkfolw.my_exp_id
-                nwworkfolw.uri = attrbt[1]
-                nwworkfolw = get_my_exp_workflow(nwworkfolw)
-                if nwworkfolw.type == "Taverna 2" && nwworkfolw.can_download
-                  workflows << nwworkfolw
+                nw_workflow=MeWorkflow.new
+                nw_workflow.my_exp_id = attrbt[1].to_s.split('/').last
+                if get_workflow_permissions(nw_workflow).include?("download")      
+                  nw_workflow.name = p.text           
+                  nw_workflow.id = nw_workflow.my_exp_id
+                  nw_workflow.uri = attrbt[1]
+                  nw_workflow = get_my_exp_workflow(nw_workflow)
+                  if nw_workflow.type == "Taverna 2"
+                    workflows << nw_workflow
+                  end
                 end
               end
             end  
@@ -230,11 +229,6 @@ class WorkflowsController < ApplicationController
       end while no_workflows == false
       logger.info 'DEBUG: Workflow Pages: ' + page.to_s
     end
-    puts '************************************************************'
-    puts '*  No WFs?  ' + no_workflows.to_s
-    puts '*  WFs page ' + page.to_s
-    puts '************************************************************'
-
     return workflows
   end
   def get_my_exp_workflow(workflow)
@@ -255,11 +249,7 @@ class WorkflowsController < ApplicationController
       workflow.type = doc.elements['workflow/type'].text
       # get permisions
       permissions = get_workflow_permissions(workflow)
-      puts '-------------------------------------------------------------------'
-      puts permissions
       workflow.can_download = permissions.include?("download")  
-      puts workflow.can_download.to_s 
-      puts '-------------------------------------------------------------------'
     end
     return workflow
   end

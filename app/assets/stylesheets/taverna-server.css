@@ -802,8 +802,7 @@ font-weight: bold;
 margin: 5px;
 }
 .headerDiv {
-background-color: #0037DB;
-color: #9EB6FF;
+background-color: hsla(80, 90%, 40%, 0.7);
 }
 .contentDiv {
 background-color: #FFE694;
