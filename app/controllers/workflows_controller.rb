@@ -187,7 +187,7 @@ class WorkflowsController < ApplicationController
     MyExperimentToken.all :conditions=>  
       {:user_id=>current_user.id}
   end
-  def getmyExperimentWorkflows(workflows=[], search_by)
+  def getmyExperimentWorkflows(workflows=[], search_by="")
     consumer_tokens = getConsumerTokens
     if consumer_tokens.count > 0
       token = consumer_tokens.first.client
