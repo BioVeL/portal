@@ -30,7 +30,8 @@
       <% else %>
         This is the first time this workflow is executed in Taverna Lite
       <% end %>
-      <%= button_to 'Cancel Run', 
+      <% unless current_user.nil? %>
+        <%= button_to 'Cancel Run', 
                   run, 
                   :method => :delete, 
                   :data => { :confirm => 'Cancel this Run ' + 
@@ -38,6 +39,7 @@
                                ' created '+ 
                                run.creation.strftime("%d/%m/%Y-%H:%M:%S") +
                                "?"} %>
+      <% end %>
     </div>
   <% end %>
 </div>
