@@ -5,7 +5,8 @@ gem 'rails', '3.2.6'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+#gem 'sqlite3'
+gem 'mysql'
 
 gem 'json'
 
@@ -16,7 +17,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platforms => :ruby
+  gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
 
@@ -47,5 +48,8 @@ gem 'taverna-t2flow'
 gem 'ratom'
 # Daemons for handling background tasks
 gem 'daemons-rails'
-# Connect to my Experiment with oauth-plugin
+# Mongrel for dev server
+gem 'mongrel', "1.2.0.pre2"
+
+# Connect to my Experiment using oauth-plugin to gemfile
 gem 'oauth-plugin', ">= 0.4.0.pre1"

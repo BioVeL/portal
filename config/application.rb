@@ -9,6 +9,9 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
+# Workaround critical XML parsing bug.
+ActionDispatch::ParamsParser::DEFAULT_PARSERS.delete(Mime::XML)
+
 module TliteR3
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.

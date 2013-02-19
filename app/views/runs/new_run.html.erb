@@ -21,6 +21,7 @@
       <% portname = item[0] %>
       <h3><%= label_tag portname %></h3> 
       <p><%= label_tag @descriptions[portname] %></p>
+      <% example_value = "" -%>
       <% unless @sources[portname].blank? -%>
         <b>Example Value:</b><br/> 
         <%= simple_format(@sources[portname]) %>
@@ -28,7 +29,7 @@
         <% example_value = @sources[portname] -%>
       <% end -%>
       <p>
-      Enter Value: <%=h f.text_field portname, :value => example_value, :rows => 3, :onclick => '$(this).val("");' %> 
+      Enter Value: <%= f.text_area portname, :value => example_value, :rows => 3, :onclick => '$(this).val("");' %> 
       or Select File <%= f.file_field  "file_for_#{portname}" %>
       </p>
     </p>
