@@ -1,21 +1,25 @@
 <div class='container'>
   <div id="user_log_in">
     <% if !current_user.nil? %> 
-      <img alt='U:' src='/assets/user.png' >
+      <%= image_tag "user.png", 
+          :alt => "U" %>   
       Logged in as <b><%=current_user.name%></b> |
       <a href='/log_out'>
-        <img alt='X:' src='/assets/door_out.png' >
+        <%= image_tag "door_out.png", 
+            :alt => "X" %>
         Log Out
       </a>
     <% else %>
       You are currently a Guest user |
-      <a href='log_in'>
-        <img alt='I:' src='/assets/door_in.png' >
+      <a href='/log_in'>
+        <%= image_tag 'door_in.png', 
+            :alt => 'I' %>
         Log In
       </a>
      |
-      <a href='sign_up'>
-        <img alt='R:' src='/assets/book_open.png' >
+      <a href='/sign_up'>
+        <%= image_tag 'book_open.png', 
+            :alt => 'R' %>
         Register
       </a>
     <%end%>

@@ -1,3 +1,4 @@
+<% unless @consumer_tokens.empty? %>
 <div id="search_my_exp">
   <%= form_tag new_workflow_path, :method => 'get' do %>
     <p>
@@ -41,3 +42,4 @@
       <p>No workflows found</p>
     <%end%>
 </div>
+<%end%>
