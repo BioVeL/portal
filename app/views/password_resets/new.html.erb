@@ -1,0 +1,16 @@
+<h1>Reset Password</h1>
+<p>
+  To reset your password, enter the email you used to register to Taverna Lite. 
+</p>
+<p>
+  This is the email address you associated with your account.
+</p>
+<%= form_tag password_resets_path, :method => :post do %>
+  <div class="field">
+    <%= label_tag :email %> <br />
+    <%= text_field_tag :email, params[:email] %>
+  </div>
+  <br />
+  <div class="actions"><%= submit_tag "Reset Password" %></div>
+<% end %>
+
