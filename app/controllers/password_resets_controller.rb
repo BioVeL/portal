@@ -19,7 +19,7 @@ def update
     if @user.password_reset_sent_at < 2.hours.ago
       flash[:error] = "Password reset token has expired" + 
                       " Please request a new reset email"
-      redirect_to new_password_reset_path, 
+      redirect_to new_password_reset_path 
     elsif @user.update_attributes(params[:user])
       redirect_to root_url, :notice => "Password has been reset"
     else
