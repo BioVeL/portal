@@ -50,7 +50,10 @@ TliteR3::Application.configure do
   # config.assets.precompile += %w( search.js )
 
   # Disable delivery errors, bad email addresses will be ignored
-  # config.action_mailer.raise_delivery_errors = false
+  # Don't care if the mailer can't send
+#  config.action_mailer.raise_delivery_errors = false
+  # need to change this depending on the host where the account is stored 
+  config.action_mailer.default_url_options = { :host => "tavlitedev.biovel.eu" }
 
   # Enable threaded mode
   # config.threadsafe!

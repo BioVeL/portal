@@ -714,8 +714,8 @@ h4 {
 }
 
 #user_log_in {
-  text-align: center; 
-  margin-top: 0px; 
+  position:relative;
+  margin-top: -36px; 
   margin-bottom: 0px; 
   padding: 2px; 
   border: 1px solid hsla(80, 90%, 40%, 0.7); 

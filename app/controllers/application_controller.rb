@@ -9,12 +9,14 @@ class ApplicationController < ActionController::Base
   private 
   # Identify the user currently logged in 
   def current_user  
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]  
+    #@current_user ||= User.find(session[:user_id]) if session[:user_id]  
+    @current_user ||= User.find_by_auth_token( cookies[:auth_token]) if cookies[:auth_token]
   end
 
   # detect if a user is logged in
   def login_required
-    if session[:user_id].nil? 
+    #if session[:user_id].nil?
+    if cookies[:auth_token].nil?  
       flash[:error] = 'This content is available only for registered users'
       redirect_to '/log_in'
     end
@@ -22,8 +24,9 @@ class ApplicationController < ActionController::Base
 
   # detect if a user is logged in as administrator
   def admin_required
-    if session[:user_id].nil? || current_user.nil? || !current_user.admin?
-      flash[:error] = 'This content is available only for system administrator'
+    #if session[:user_id].nil? || current_user.nil? || !current_user.admin?
+    if cookies[:auth_token].nil? || current_user.nil? || !current_user.admin?
+      flash[:error] = 'This content is only for system administrator'
       redirect_to '/log_in'  
     end
   end

@@ -1,4 +1,6 @@
 TliteR3::Application.routes.draw do
+  resources :password_resets
+
   resources :oauth_consumers do
     member do
       get :callback
