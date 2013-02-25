@@ -25,11 +25,17 @@
       <% unless @sources[portname].blank? -%>
         <b>Example Value:</b><br/> 
         <%= simple_format(@sources[portname]) %>
-        <p><b>The example value is automatically entered in the box below. Click to clear it and enter a new value.</b></p>
+        <p>
+          <b>
+            The example value is automatically entered in the box below. 
+            Click on the input box to edit it or enter a new value.
+          </b>
+        </p>
         <% example_value = @sources[portname] -%>
       <% end -%>
       <p>
-      Enter Value: <%= f.text_area portname, :value => example_value, :rows => 3 %> 
+      Enter Value: <%= f.text_area portname, :value => example_value, 
+                     :rows => 3, :onclick => '$(this).select();' %> 
       or Select File <%= f.file_field  "file_for_#{portname}" %>
       </p>
     </p>
