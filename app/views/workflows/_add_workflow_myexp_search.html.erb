@@ -1,3 +1,4 @@
+<%= render :partial => 'oauth_consumers/connection' %>
 <% unless @consumer_tokens.empty? %>
 <div id="search_my_exp">
   <%= form_tag new_workflow_path, :method => 'get' do %>
@@ -7,39 +8,46 @@
     </p>
   <% end %>
 
-  <h1>Search Results</h1>
+
     <% if !@me_workflows.nil? %>
-    <table>
-      <tr>
-        <th>Results:  <%= @me_workflows.count %> Workflows found</th>
-      </tr>
+    <!-- Accordion -->
+    <h2 class="demoHeaders">Results:  <%= @me_workflows.count %> Workflows found</h2>
+    <div id="accordion_results">
       <% @me_workflows.each do |workflow| %>
-      <tr>
-        <td>
-          <div class="headerDiv">
-          <b>Name: </b><%= workflow.name %>
-          <%= link_to "more", 
-            "javascript:showhide('detail#{workflow.my_exp_id.to_s}',
-                                 'switch#{workflow.my_exp_id.to_s}');",
-            :id=>"switch#{workflow.my_exp_id}" -%>
-          <%= link_to "get", workflows_path(:workflow_uri=>workflow.content_uri,
+        <h3>
+          Name: <%= workflow.name %> 
+
+        </h3>
+        <div>
+          <div style="float:right;">          
+            <%= link_to workflows_path(:workflow_uri=>workflow.content_uri,
                                           :workflow_name=>workflow.name,
                                           :workflow_link=>workflow.uri), 
-                                        :method => :post %>
-          <%= link_to "my experiment", workflow.uri, :id=>workflow.id %>
-          </div>
-          <div style="clear:both;"></div>
-          <div id="<%='detail'+ workflow.my_exp_id.to_s %>" 
-               style="display:none" class="contentDiv">
-            <%=render :partial=>'add_workflow_myexp_detail', 
-                      :locals => {:workflow=>workflow} %>
-          </div>
-        </td>
-      </tr>
-      <% end %>
-    </table>
+                                    :method => :post,
+                                    :class=>"link_img"  do %>
+              <%= image_tag "cog_add.png", 
+                :height => "25",:alt=>"get this workflow",
+                :title=>"get this workflow" %>
+              get workflow
+            <% end %>
+            <%= link_to  workflow.uri,:id=>workflow.id,:class=>"link_img" do %>
+              <%= image_tag "myexperiment.png", 
+                :height => "25",:alt=>"view on my experiment",
+                :title=>"view on my experiment",:style=>"aling:middle;" %>
+              more details
+            <% end %>          
+          </div>  
+          <%=render :partial=>'add_workflow_myexp_detail', 
+                    :locals => {:workflow=>workflow} %>
+         
+        </div>
+      <% end %>  
+    </div>
+    
     <% else %>
-      <p>No workflows found</p>
+      <h2>No workflows found</h2>
     <%end%>
 </div>
+
+
 <%end%>

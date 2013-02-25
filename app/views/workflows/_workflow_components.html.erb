@@ -1,4 +1,4 @@
-<div id="wf_components_div" class="workflow_part" >
+<div id="wf_components" style="height:300px;overflow:auto;">
 
 <% if @processors.count>0 %>
   <p>
@@ -27,7 +27,7 @@
         <%= image_tag "rlogo.png", :size => "64x64", :alt => "R-Server", 
             :class=>"componenticon"%>
       <%elsif item.type =="workflow"%>
-        <%= image_tag "taverna-component-05.png", :size => "64x64", 
+        <%= image_tag "nestedwf.png", :size => "64x64", 
             :alt => "Workflow", :class=>"componenticon" %>
       <% elsif item.type=="stringconstant" %>
         <%= image_tag "stringconstant.png", :size => "64x64", 
@@ -43,6 +43,9 @@
             :class=>"componenticon" %>
       <%elsif item.type =="beanshell"%>
         <%= image_tag "beanshell.png", :size => "64x64", :alt => "WS", 
+            :class=>"componenticon" %>
+      <%elsif item.type =="component"%>
+        <%= image_tag "taverna-component-05.png", :size => "64x64", :alt => "WS", 
             :class=>"componenticon" %>
       <%else%>
         <b> <%= item.type %> |</b>

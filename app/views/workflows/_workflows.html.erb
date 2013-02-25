@@ -1,14 +1,15 @@
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Author(s)</th>
-    <% if current_user.admin -%>
-      <th>Owner</th>
-    <% end -%>
-    <th colspan="3">Operations</th>
-    <th>Shared?</th>
-  </tr>
-
+<table id="private_workflows">
+  <thead>  
+    <tr>
+      <th>Title</th>
+      <th>Author(s)</th>
+      <% if current_user.admin -%>
+        <th>Owner</th>
+      <% end -%>
+      <th>Operations</th>
+    </tr>
+  </thead>
+  <tbody>
   <% @workflows.each do |workflow| %>
     <tr>
       <td title="<%= workflow.description %>" alt="<%= workflow.description %>">
@@ -26,26 +27,29 @@
         <%end%>
       </td>	
     <% end -%>
-    <td title="Show workflow details" alt="Show see workflow details">
-      <%= link_to 'Details', workflow %>
-    </td>
-    <td title="Remove workflow" alt="Remove workflow">
-      <%= link_to 'Remove', workflow, 
+    <td>
+    <div title="Show workflow details" alt="Show see workflow details" style="float:left;padding: 2px">
+      <%= link_to 'Details', workflow , :class => "link_img"%>
+    </div>
+    <div title="Remove workflow" alt="Remove workflow" style="float:left;padding: 2px">
+      <%= link_to 'Remove', workflow, :class => "link_img",
           :method => :delete, 
           :data => { :confirm => 'Remove this workflow: ' + 
                        workflow.title.to_s + "?" } %>
-    </td>
-    <td title="Run workflow" alt="Run workflow">
-      <%= link_to 'Run', :controller => 'runs', 
-          :action => 'new_run', :id => workflow.id %>
-    </td>
-    <td>
+    </div>
+    <div title="Run workflow" alt="Run workflow" style="float:left;padding: 2px">
+      <%= link_to 'Run', {:controller => 'runs' , 
+          :action => 'new_run', :id => workflow.id}, :class => "link_img" %>
+    </div>
+    <div title="toggle workflow sharing" alt="toggle workflow sharing" style="float:left;padding: 2px">
       <% if workflow.shared? -%>
-        Yes (<%= link_to "Make private", make_private_workflow_path(workflow), :method => :put %>)
+        <%= link_to "Make private", make_private_workflow_path(workflow), :method => :put, :class => "link_img"%>
       <% else -%>
-        No (<%= link_to "Make public", make_public_workflow_path(workflow), :method => :put %>)
+        <%= link_to "Make public", make_public_workflow_path(workflow), :method => :put, :class => "link_img" %>
       <% end -%>
+    </div>
     </td>
   </tr>
   <% end -%>
+  </tbody>
 </table>

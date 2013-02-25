@@ -1,0 +1,31 @@
+  <table id="public_workflows">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author(s)</th>
+        <th>Operations</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @shared_workflows.each do |workflow| %>
+      <tr>
+        <td title="<%= workflow.description %>" alt="<%= workflow.description %>" >
+        <%= workflow.title %>
+      </td>
+      <td>
+        <%= workflow.author %>
+      </td>
+      <td  >
+        <div title="Show workflow details" alt="Show see workflow details" style="float:left">
+          <%= link_to 'Details', workflow, :class => "link_img" %>
+        </div>
+        <div title="Run workflow" alt="Run workflow" style="float:left">
+          <%= link_to 'Run', {:controller => 'runs', 
+            :action => 'new_run', :id => workflow.id}, :class => "link_img" %>
+        </div>
+      </td>
+    </tr>
+    <% end -%>
+    <tbody>
+  </table>
+

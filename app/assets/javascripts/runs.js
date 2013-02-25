@@ -7,3 +7,21 @@
     };
     reader.readAsText(file);
   }
+
+(function() {
+
+  jQuery(function() {
+    return $('#runs_table').dataTable({
+      //sPaginationType: "full_numbers",
+      "iDisplayLength": 10,
+      "bFilter": false,
+      "bLengthChange": false,
+      "bRetrieve": true,
+      "bJQueryUI": true
+    });
+  });
+
+}).call(this);
+
+
+     

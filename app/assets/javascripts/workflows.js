@@ -1,3 +1,15 @@
+(function() {
+  jQuery(function() {
+    return $('#public_workflows, #private_workflows').dataTable({
+      sPaginationType: "full_numbers",
+      "iDisplayLength": 5,
+      "bFilter": false,
+      "bLengthChange": false,
+      "bJQueryUI": true
+    });
+  });
+
+}).call(this);
   function showonlyone(selected_div, selected_tab) {
       var wf_part_divs = document.getElementsByTagName("div");
             for(var x=0; x<wf_part_divs.length; x++) {

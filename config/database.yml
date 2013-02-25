@@ -7,7 +7,12 @@ development:
   adapter: sqlite3
   database: db/development.sqlite3
   pool: 5
-  timeout: 5000
+  timeout: 10000
+#  adapter: mysql
+#  encoding: utf8
+#  database: tlite_dev
+#  username: biovel
+#  password: B!0v3L-
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -24,5 +29,5 @@ production:
   database: tlite_prod
   username: biovel
   password: B!0v3L-
-  socket: /var/run/mysqld/mysqld.sock
+  #socket: /var/run/mysqld/mysqld.sock
 

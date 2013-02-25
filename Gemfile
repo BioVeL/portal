@@ -6,7 +6,8 @@ gem 'rails', '3.2.6'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
-#gem 'mysql'
+
+gem 'mysql', '~> 2.8.1'
 
 gem 'json'
 
@@ -21,6 +22,8 @@ group :assets do
 
   gem 'uglifier', '>= 1.0.3'
 
+  gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
+  gem 'jquery-ui-rails'
 end
 
 gem 'jquery-rails'

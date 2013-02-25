@@ -156,8 +156,6 @@ class Workflow < ActiveRecord::Base
   def get_outputs
     sinks = {}
     descriptions = {}
-    inputs={}
-    outputs={}
     # get the workflow t2flow model
     model = get_model
     # collect the sinks and their descriptions

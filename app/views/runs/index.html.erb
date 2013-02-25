@@ -21,7 +21,9 @@
     to keep run results for longer. 
   </p>
 <%end%>
-<table>
+<%running=0%>
+<table id="runs_table">
+ <thead>
   <tr>
     <th>Description</th>
     <th>Created</th>
@@ -30,10 +32,15 @@
     <% if !current_user.nil? && current_user.admin %>
       <th>User</th>
     <% end %>
-    <th colspan="2">Operations</h>
+    <th>Operations</h>
   </tr>
+    </thead>
+    <tbody>
 
 <% @runs.each do |run| %>
+  <% if run.state =='running' 
+       running += 1
+     end%>
   <tr>
     <td><%= run.description %></td>
     <td><%= run.creation.strftime("%d/%m/%Y-%H:%M:%S") %></td>
@@ -48,11 +55,12 @@
             end
             %></td>	
     <% end -%>
-    <td title="Click to see run details" alt="Click to see run details">
-      <%= link_to 'Details', run %>
-    </td>
+    <td>
+    <div title="Click to see run details" alt="Click to see run details" style="float:left">
+      <%= link_to 'Details', run, :class => "link_img" %>
+    </div>
     <% if !current_user.nil? -%>
-    <td title="Click to delete run" alt="Click to delete run">
+    <div title="Click to delete run" alt="Click to delete run" style="float:left">
       <%= link_to 'Delete', 
                   run, 
                   :method => :delete, 
@@ -60,13 +68,15 @@
                                run.description + 
                                ' created '+ 
                                run.creation.strftime("%d/%m/%Y-%H:%M:%S") +
-                               "?"} %>
+                               "?"}, :class => "link_img" %>
+    </div>
     </td>
     <% end -%>
-    <!--<td>Archive</td>-->
+
   </tr>
+
 <% end %>
-  
+  <tbody>  
 </table>
 <br />
 <%if @runs.count == 0 %>
@@ -75,11 +85,31 @@
 <% end %>
 
 <%= javascript_tag do -%>
-$(document).ready(
-/*PENDING: only update if there are running workflows or if a new run is 
-  detected, do not update otherwise*/
-  function(){
-      setInterval("location.reload(true);", 15000 );
-  });
+var runs_probe=""
+var runs_count=""
+var runs_running=""
+
+$(document).ready(function() {
+  var oTable = $('#runs_table').dataTable(); 
+  // Sort by date descending (column 1)
+  oTable.fnSort( [ [1,'desc']] );
+} );
+
+  $(document).ready(
+    function(){
+      if(runs_probe==""){
+        runs_probe=window.setInterval("refreshing_runs()",5000)
+      }
+    });
+
+  function refreshing_runs(){
+    $.ajax({
+      url: "runs_refresh_list",
+      data: "runs="+<%= @runs.count.to_s %> + "&running=" + <%= running.to_s %>,
+      type: "GET",
+      dataType: "script"
+    });
+  }
+
 <% end -%>
 

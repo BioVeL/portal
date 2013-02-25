@@ -1,23 +1,28 @@
 <div id="runresults">
   <% if run.results.count > 0 %>
     <h3>Results</h3>
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>Result type</th>
-      </tr>
+    <div id="tabs_results">
+      <ul>
+        <% for result in run.results.each %>
+        <li>
+          <a href="#search_<%= result.name %>" >
+            <%= label_tag result.name %>
+          </a>
+        </li>
+        <% end %>
+      </ul>
       <% for result in run.results.each %>
-        <tr>
-          <td><b><%=h result.name %></b></td>
-          <td><%=h result.filetype.split(/-*/).join %></td>
-          <td>
-            <%= button_to 'Download', :controller => 'result', 
+      <div id="search_<%= result.name %>">
+          <b>Result type</b>
+          <%=h result.filetype.split(/-*/).join %>
+          <%= button_to 'Download', :controller => 'result', 
                           :action => 'download', :id => result.id %>
-          </td>
-        </tr>
-        <tr> 
-          <td colspan="3">
-            <b>Value(s)</b><br />
+        <%if !@sink_descriptions[result.name].nil? && 
+             @sink_descriptions[result.name] != ""  %>
+              <b>Description</b><br />
+              <%= @sink_descriptions[result.name] %>
+        <%end%><br />
+          <b>Value(s)</b><br />
             <% if result.filetype.to_s =~ /text/ %>
               <%= simple_format(IO.read(result.result_filename))%>
             <% elsif result.filetype.to_s =~ /error/ %>
@@ -25,19 +30,10 @@
             <% else %>
               <%= image_tag result.result_filepath %>
             <% end %>
-          </td>    
-        </tr>
-        <%if !@sink_descriptions[result.name].nil? && 
-             @sink_descriptions[result.name] != ""  %>
-          <tr>
-            <td colspan="3"> 
-              <b>Description</b><br />
-              <%= @sink_descriptions[result.name] %>
-            </td>
-          </tr>
-        <%end%>
+
+      </div>
       <% end %>
-    </table> 
+     </div>
   <%end%>
 </div>
 

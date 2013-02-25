@@ -20,13 +20,15 @@
 var run_probe=""
 var interaction_probe=""
 var interaction_identifier=""
-
+var run_state="<%= @run.state.to_s %>"
+  $( "#tabs_results" ).tabs();
   $(document).ready(
     function(){
-      monitor_run();
+      if(run_state=="running"){
+        monitor_run();
+      }
     });
-  /*PENDING: do not monitor if run is finished*/
-  function monitor_run(){
+function monitor_run(){
     if(run_probe==""){
       if(interaction_probe!=""){
         window.clearInterval(interaction_probe)
@@ -63,5 +65,4 @@ var interaction_identifier=""
       dataType: "script"
     }); 
   }
-     
 <% end -%>

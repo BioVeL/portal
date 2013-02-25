@@ -27,30 +27,6 @@
     <%= link_to 'my experiment', 'http://www.myexperiment.org' %> 
   </p>
 <%end%>
-  <table>
-    <tr>
-      <th>Title</th>
-      <th>Author(s)</th>
-      <th colspan="2">Operations</th>
-    </tr>
-
-    <% @shared_workflows.each do |workflow| %>
-      <tr>
-        <td title="<%= workflow.description %>" alt="<%= workflow.description %>">
-        <%= workflow.title %>
-      </td>
-      <td>
-        <%= workflow.author %>
-      </td>
-      <td title="Show workflow details" alt="Show see workflow details">
-        <%= link_to 'Details', workflow %>
-      </td>
-      <td title="Run workflow" alt="Run workflow">
-        <%= link_to 'Run', :controller => 'runs', 
-            :action => 'new_run', :id => workflow.id %>
-      </td>
-    </tr>
-    <% end -%>
-  </table>
+  <%= render 'workflows_public' %>
 <% end -%>
 

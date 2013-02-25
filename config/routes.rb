@@ -25,10 +25,14 @@ TliteR3::Application.routes.draw do
 
   resources :runs
   #*****************************************************
+  # mapping for refreshing runs list
+  get 'runs_refresh_list'  => 'runs#refresh_list'
   # mapping for refreshing results if run has not finished
   match 'runs/refresh/:id'  => 'runs#refresh'
   match 'runs/interaction/:id/:interactionid' => 'runs#interaction'
   #*****************************************************
+
+
 
   resources :workflows do
     member do

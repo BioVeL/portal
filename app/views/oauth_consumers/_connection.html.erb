@@ -1,29 +1,29 @@
-<div id="oauthconnection">
+<div class="authentication">
   <% if @consumer_tokens.empty? %>
     <p>
-      You are currently not connected, Click on the logo to enable searching on my experiment
-    </p>
+      Click on the button to connect and search on my experiment    
+      <% unless @services.empty? %>
+        <% @services.each do |service| %>
+          <%= link_to  oauth_consumer_path(service), :class=>"auth_provider",
+            :style=>"float:right;margin-top:2px" do %>
+            <%= image_tag "myexperiment.png", 
+              :height => "25",:alt=>"connect to my experiment",
+              :title=>"connect to my experiment" %>
+          <% end %>    
+        <% end %>
+      <% end %>
+    </p>  
+
   <% else %>
-    <p>
-      Connected to <%= image_tag "myexperiment.png", :height=>"25"%>
-    </p>
     <% @consumer_tokens.each do |token| %>   
       <%= form_tag oauth_consumer_path(token.class.service_name), 
                    :method=>:delete do %>
-        <%=submit_tag "Disconnect" %>
+        <p><%= image_tag "myexperiment.png", :height=>"25"%>
+        <%=submit_tag "Disconnect" %> 
         or
         <%=submit_tag "Reconnect" %>
-        if you experienced a problem.
+        if you experienced a problem.</p>
       <% end %> 
-    <% end %>
-  <% end %>
-
-  <% unless @services.empty? %>
-    <% @services.each do |service| %>
-      <a href=<%= oauth_consumer_path(service)%> class="auth_provider">
-        <%= image_tag "myexperiment.png", 
-            :height => "25", :alt => "my experiment" %> Connect
-      </a>
     <% end %>
   <% end %>
 </div>

@@ -98,7 +98,7 @@ class WorkflowsController < ApplicationController
       puts response.body
       
       directory = "/tmp"
-      File.open(File.join(directory, wf_name), 'w:ASCII-8BIT') do |f|
+      File.open(File.join(directory, wf_name), 'wb') do |f|
         f.puts response.body
       end
     end

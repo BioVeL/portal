@@ -1,0 +1,22 @@
+.paging_full_numbers .ui-button {
+padding: 2px 6px;
+margin: 1;
+cursor: pointer;
+* cursor: hand;
+}
+.paging_two_button .ui-button {
+padding: 2px 6px;
+margin: 2;
+cursor: pointer;
+* cursor: hand;
+}
+
+div.dataTables_info {
+	width: 40%;
+}
+
+.dataTables_paginate {
+	width: 400px;
+}
+
+

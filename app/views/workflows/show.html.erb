@@ -14,14 +14,7 @@
 <% end %>
 <p/>
 
-<%= render :partial => 'workflow_tabs', :locals => {:workflow => @workflow} %>
-<%= render :partial => 'workflow_authors', :locals => {:workflow => @workflow} %>
-<%= render :partial => 'workflow_description', :locals => {:workflow => @workflow} %>
-<%= render :partial => 'workflow_inputs', :locals => {:workflow => @workflow} %>
-<%= render :partial => 'workflow_outputs', :locals => {:workflow => @workflow} %>
-<% #= render :partial => 'workflow_components', :locals => {:workflow => @workflow} %>
-<%= render :partial => 'workflow_stats', :locals => {:workflow => @workflow} %>
-
+<%= render :partial => 'workflow_tabs'%>
 <div id="createrun" style="float:right;position:relative;">
   <b>Click to execute workflow</b>
   <%= button_to 'Create Run', :controller => 'runs', :action => 'new_run', 
@@ -29,7 +22,7 @@
 </div>
 <br/><br/>
 <%= javascript_tag do -%>
-  $(document).ready(showonlyone('wf_description_div','wf_tab_desc'));
+  $( "#tabs_wf_parts" ).tabs();
 <% end -%>
 
 <%= link_to 'Back', workflows_path %>

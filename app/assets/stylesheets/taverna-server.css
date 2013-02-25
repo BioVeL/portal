@@ -325,15 +325,15 @@ textarea {
 }
 
 button, input[type=submit] {
-  height: 30px;
-  padding: 0 20px;
+  padding: 2 2px;
   cursor: pointer;
   background: url("gradient.png") repeat scroll 0 0 transparent;
   border-width: 1px 1px 1px 1px;
   border-style: solid;
   border-color: #ddda88 #ddda88 #bbb866 #ddda88;
-  border-radius: 0;
-  font-weight: bold;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
 
 button:hover, input[type=submit]:hover {
@@ -635,62 +635,6 @@ h4 {
   vertical-align: middle;
 }
 
-#wf_menu {
-  padding-right: 1px;
-  overflow:  hidden;
-}
-#wf_menu ul {
-  margin-bottom: 0px;
-  width: auto;
-}
-#wf_menu li {
-  margin-bottom: 0px;
-  width: auto;
-  background: url("gradient_green.png") repeat scroll 0 0 transparent;
-  border-right: 1px solid #DDDA88;
-}
-.workflow_part{
-  border: 1px solid hsla(80, 90%, 40%, 0.7); 
-  display: none;
-  padding: 5px;
-  height:400px;
-  overflow:auto;
-}
-
-#filmstrip{
-  width: 99%; 
-  overflow-x:auto; 
-  white-space: nowrap;
-  border: solid 1px #999;
-  padding: 5px
-}
-
-.componentcontainer {
-  width: 250px;
-  white-space:nowrap;
-  background-color: #FFFFFF;
-  border: solid 2px #3300CC;
-  padding: 5px 10px;
-  -moz-border-radius: 8px;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
-  position: relative;
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.componenticon{
-  width:auto;
-  height:64px;
-}
-.componentoutput{border: 1px solid hsla(80, 90%, 40%, 0.7);
-                 padding: 5px;width:40%;
-                 float:left;}
-.componentinput{  border: 1px solid hsla(80, 90%, 40%, 0.7);
-                  padding: 5px;
-                  width:40%;
-                   }
-
 #announcement {
   text-align: center; 
   margin-top: -5px; 
@@ -726,52 +670,24 @@ h4 {
   border-radius: 8px;
 }
 
-
-.authentications {
-  margin-bottom: 30px;
-}
-
 .authentication {
-  width: 130px;
-  float: left;
-  background-color: #EEE;
+  height: 35px;
+  width: 60%;
+  float: right;
+  background:transparent;
   border: solid 1px #999;
-  padding: 5px 10px;
-  -moz-border-radius: 8px;
-  -webkit-border-radius: 8px;
+  padding: 2px 2px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
   position: relative;
-  margin-right: 10px;
-}
-
-.authentication .remove {
-  text-decoration: none;
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  color: #333;
-  padding: 2px 4px;
-  font-size: 10px;
-}
-
-.authentication .remove:hover {
-  color: #CCC;
-  background-color: #777;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  margin-right: 5px;
 }
 
 .authentication img {
+  margin-top: 2px;
   float: left;
-  margin-right: 10px;
-}
-
-.authentication .provider {
-  font-weight: bold;
-}
-
-.authentication .uid {
-  color: #666;
-  font-size: 11px;
+  margin-right: 5px;
 }
 
 .auth_provider img {
@@ -781,39 +697,37 @@ h4 {
 .auth_provider {
   float: left;
   text-decoration: none;
-  margin-right: 20px;
+  margin-right: 2px;
   text-align: center;
-  margin-bottom: 10px;
+  padding: 2px;
+  margin-bottom: 2px;
+  background: url("gradient.png") repeat scroll 0 0 transparent;
+  border-width: 1px 1px 1px 1px;
+  border-style: solid;
+  border-color: #ddda88 #ddda88 #bbb866 #ddda88;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
-/*my experiment search results*/
-.headerDiv, .contentDiv {
-float: left;
-width: 600px;
+
+.link_img img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
-.titleText {
-float: left;
-font-size: 1.1em;
-font-weight: bold;
-margin: 5px;
-}
-.myHeader {
-font-size: 1.1em;
-font-weight: bold;
-margin: 5px;
-}
-.headerDiv {
-background-color: hsla(80, 90%, 40%, 0.7);
-}
-.contentDiv {
-background-color: #FFE694;
-}
-.myContent {
-margin: 5px 10px;
-}
-.headerDiv a {
-float: right;
-margin: 10px 10px 5px 5px;
-}
-.headerDiv a:hover {
-color: #FFFFFF;
+
+.link_img {
+  float: left;
+  text-decoration: none;
+  margin-right: 2px;
+  text-align: center;
+  padding: 2px;
+  margin-bottom: 2px;
+  background: url("gradient.png") repeat scroll 0 0 transparent;
+  border-width: 1px 1px 1px 1px;
+  border-style: solid;
+  border-color: #ddda88 #ddda88 #bbb866 #ddda88;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }

@@ -1,12 +1,11 @@
-<div id="wf_description_div" class="workflow_part" 
-     style="display: block">
-<p>
-  <b>Description:</b>
-  <%= simple_format(@workflow.description) %>
-</p>
+<div id="wf_description" style="height:300px;overflow:auto;">
 <p>
   <b>Workflow file:</b>
   <%= @workflow.workflow_file %>
 </p>	
+<p>
+  <b>Description:</b>
+  <%= simple_format(@workflow.description) %>
+</p>
 </div>
 

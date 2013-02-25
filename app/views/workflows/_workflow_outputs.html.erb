@@ -1,4 +1,4 @@
-<div id="wf_outputs_div"class="workflow_part" style="border: 1px solid hsla(80, 90%, 40%, 0.7); display: none;padding: 5px;">
+<div id="wf_outputs" style="height:300px;overflow:auto;">
 <% if @sinks.count>0 %>
    <p>
      <b> This workflow has <%= @sinks.count %> <%= "Output".pluralize(@sinks.count)%> </b>

@@ -1,14 +1,8 @@
-<div id='wf_menu'>
-  <ul class= 'nav'>
-    <li id="wf_tab_myexp" class="wf_tab">
-      <a href="javascript:showonlyone('wf_myexp_div','wf_tab_myexp')">
-        <span>search in my experiment</span>
-      </a>
-    </li>
-    <li id="wf_tab_local" class="wf_tab">
-      <a href="javascript:showonlyone('wf_local_div','wf_tab_local')">
-        <span>search locally </span>
-      </a>
-    </li>
+<div id="tabs_add_wf">
+  <ul>
+    <li><a href="#search_myexp">search in my experiment</a></li>
+    <li><a href="#search_local">search locally</a></li>
   </ul>
+  <%= render :partial => 'add_workflow_myexperiment', :locals => {:workflow => @workflow} %>
+  <%= render :partial => 'add_workflow_local', :locals => {:workflow => @workflow} %>
 </div>

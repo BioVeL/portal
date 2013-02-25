@@ -1,7 +1,7 @@
 gem 'ratom'
 require 'atom'
 class RunsController < ApplicationController
-  before_filter :login_required, :except => [:new_run, :show, :refresh, :interaction, :index]
+  before_filter :login_required, :except => [:new_run, :show, :refresh, :refresh_list, :interaction, :index]
 
   # GET /runs
   # GET /runs.json
@@ -70,8 +70,7 @@ class RunsController < ApplicationController
   # PUT /runs/1
   # PUT /runs/1.json
   def update
-    @run = Run.find(params[:id])
-    
+    @run = Run.find(params[:id])    
     respond_to do |format|
       if @run.update_attributes(params[:run])
         format.html { redirect_to @run, :notice => 'Run was successfully updated.' }
@@ -107,6 +106,47 @@ class RunsController < ApplicationController
       format.js 
     end
   end
+  
+  def refresh_list
+    run_count = Integer(params[:runs])
+    running_on_client = Integer(params[:running])
+    runs={}
+    running_now=0
+    if current_user.nil?
+      runs = Run.find_all_by_user_id(nil)
+    else
+      if !current_user.admin?
+        runs = Run.find_all_by_user_id(current_user.id, :order =>'start desc')
+      else
+        runs = Run.find(:all, :order =>'start desc')
+      end
+    end
+    if current_user.nil?
+      running_now = Run.find_all_by_user_id_and_state(nil,'running').count
+    else
+      if !current_user.admin?
+        running_now = Run.find_all_by_user_id_and_state(nil,'running', :order =>'start desc').count
+      else
+        running_now = Run.find_all_by_and_state('running', :order =>'start desc').count
+      end
+    end
+    puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    if runs.count != run_count || running_now != running_on_client
+      @runs = runs
+      puts run_count.to_s + " != " + runs.count.to_s
+    else 
+      @runs = {}
+    end
+
+    puts run_count 
+    puts params[:running]
+    puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+    respond_to do |format|
+      format.js 
+    end
+  end
+
 
   $feed_ns = "http://ns.taverna.org.uk/2012/interaction"
   $feed_uri = "http://localhost:8080/ah/interaction/notifications"
