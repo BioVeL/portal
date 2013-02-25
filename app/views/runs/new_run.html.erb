@@ -29,7 +29,7 @@
         <% example_value = @sources[portname] -%>
       <% end -%>
       <p>
-      Enter Value: <%= f.text_area portname, :value => example_value, :rows => 3, :onclick => '$(this).val("");' %> 
+      Enter Value: <%= f.text_area portname, :value => example_value, :rows => 3 %> 
       or Select File <%= f.file_field  "file_for_#{portname}" %>
       </p>
     </p>
