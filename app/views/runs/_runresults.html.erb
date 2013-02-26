@@ -13,27 +13,32 @@
       </ul>
       <% for result in run.results.each %>
       <div id="search_<%= result.name %>">
-          <b>Result type</b>
-          <%=h result.filetype.split(/-*/).join %>
+        <b>Result type</b>
+        <%=h result.filetype.split(/-*/).join %> 
+        <div class="download_button">
           <%= button_to 'Download', :controller => 'result', 
-                          :action => 'download', :id => result.id %>
+                        :action => 'download', :id => result.id %>
+        </div>
+        <br />
         <%if !@sink_descriptions[result.name].nil? && 
-             @sink_descriptions[result.name] != ""  %>
-              <b>Description</b><br />
-              <%= @sink_descriptions[result.name] %>
-        <%end%><br />
-          <b>Value(s)</b><br />
-            <% if result.filetype.to_s =~ /text/ %>
-              <%= simple_format(IO.read(result.result_filename))%>
-            <% elsif result.filetype.to_s =~ /error/ %>
-              <%= simple_format(IO.read(result.result_filename))%>
-            <% else %>
-              <%= image_tag result.result_filepath %>
-            <% end %>
-
+            @sink_descriptions[result.name] != ""  %>
+          <b>Description</b><br />
+          <%= @sink_descriptions[result.name] %>
+        <%end%>
+        <br />
+        <b>Value(s)</b><br />
+        <div class="show_result">
+          <% if result.filetype.to_s =~ /text/ %>
+            <%= simple_format(IO.read(result.result_filename))%>
+          <% elsif result.filetype.to_s =~ /error/ %>
+            <%= simple_format(IO.read(result.result_filename))%>
+          <% else %>
+            <%= image_tag result.result_filepath %>
+          <% end %>
+        </div>
       </div>
       <% end %>
-     </div>
+    </div>
   <%end%>
 </div>
 

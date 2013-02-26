@@ -21,7 +21,7 @@ var run_probe=""
 var interaction_probe=""
 var interaction_identifier=""
 var run_state="<%= @run.state.to_s %>"
-  $( "#tabs_results" ).tabs();
+  $("#tabs_results" ).tabs();
   $(document).ready(
     function(){
       if(run_state=="running"){

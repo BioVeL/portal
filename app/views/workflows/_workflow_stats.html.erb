@@ -1,46 +1,23 @@
 <div id="wf_statistics" style="height:300px;overflow:auto;">
   <% unless @workflow.run_count == 0 %> 
-     <table>
-      <tr>
-      <th colspan="4"> <b>Executed:</b> <%= @workflow.run_count %> times </th>
-      </tr>
-      <tr>
-        <th>Run</th>
-        <th>Approximation</th>
-        <th>Seconds</th>
-        <th>Registered on</th>
-      </tr>
-      <tr>
-        <td>Average</td>
-        <td>
-          <%=distance_of_time_in_words(0,@workflow.average_run.round(),true)%>
-        </td>
-        <td><%=@workflow.average_run.round()%></td>
-        <td>
-          <%= @workflow.updated_at.strftime("%d/%m/%Y - %H:%M:%S") %>
-        </td>
-      </tr>
-      <tr>
-      <td>Fastest</td>
-        <td>
-          <%=distance_of_time_in_words(0,@workflow.fastest_run.round(),true)%>
-        </td>
-        <td><%=@workflow.fastest_run.round()%></td>
-        <td>
-          <%= @workflow.fastest_run_date.strftime("%d/%m/%Y - %H:%M:%S") %>
-        </td>
-      </tr>
-      <tr>
-      <td>Slowest</td>
-        <td>
-          <%=distance_of_time_in_words(0,@workflow.slowest_run.round(),true)%>
-        </td>
-        <td><%=@workflow.slowest_run.round()%></td>
-        <td>
-          <%= @workflow.slowest_run_date.strftime("%d/%m/%Y - %H:%M:%S") %>
-        </td>
-      </tr>
-    </table>
+  <p>
+    <b>Executed:</b> <%= @workflow.run_count %> times 
+  </p>
+  <p>
+    <b>Average Run:</b> <%=@workflow.average_run.round()%> seconds
+    (~<%=distance_of_time_in_words(0,@workflow.average_run.round(),true)%>) 
+    on the <%= @workflow.updated_at.strftime("%d/%m/%Y - %H:%M:%S") %>
+  </p>
+  <p>
+    <b>Fastest Run:</b> <td><%=@workflow.fastest_run.round()%> seconds
+    (~<%=distance_of_time_in_words(0,@workflow.fastest_run.round(),true)%>) 
+    on the <%= @workflow.fastest_run_date.strftime("%d/%m/%Y - %H:%M:%S") %>
+  </p>
+  <p>
+    <b>Slowest Run:</b> <%=@workflow.slowest_run.round()%></td> seconds
+    (~<%=distance_of_time_in_words(0,@workflow.slowest_run.round(),true)%>)
+    on the <%= @workflow.slowest_run_date.strftime("%d/%m/%Y - %H:%M:%S") %>
+  </p>
   <%else%>
     This workflow has not been executed on Taverna Lite 
   <%end%>

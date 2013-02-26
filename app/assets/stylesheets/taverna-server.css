@@ -86,21 +86,6 @@
 .post-entry { margin-left: 92px; width: 520px; }
 .post-entry hr { /*border: 1px dotted #8699af; margin: 4px 0;*/ border-color: #fff; }
 
-/* ALTERNATIVE METHOD IF BUGS ARISE.
-.hentry {
-	overflow: hidden;
-}
-
-.cal-date {
-	width: 75px;
-	float: left;
-}
-
-.post-entry {
-	float: right;
-	width: 550px;
-}*/
-
 /*home page template */
 
 .styled-rule { 
@@ -144,7 +129,7 @@ body { background-color: #EEEB99; }
 
 /* Vertical Rhythm  */
 .entry-meta { margin-bottom: 10px; }
-p, pre, ul, ol, dl, dd, blockquote, address, table, fieldset, form, .gallery-row, .comment-list ul, .comment-list ol { margin-bottom: 20px; }
+p, pre, ul, ol, dl, dd, blockquote, address, fieldset, form, .gallery-row, .comment-list ul, .comment-list ol { margin-bottom: 20px; }
 /*.hentry*/.post, .widget, .comment, .navigation-links { margin-bottom: 40px; }
 /* remove margins from #footer p */
 /*.footer p { margin: 0; }*/
@@ -492,52 +477,9 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 }
 
 
-/* Tables */
-table .even { background: #ddd; }
-
-caption { text-align: left; }
-
-td, th {  padding: 0 10px;}
-
-td, th { border: 1px solid #666;}
-
-table {
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-th {
-  background-image: url("gradient_green.png");
-  font-size: 120%;
-  font-weight: bold;
-  height: 30px;
-}
-
-td {
-  background-color: #fff;
-}
-
-td input[type=submit] {
-  margin-top: 1em;
-}
-
-td.results {
-  text-align: center;
-}
-
 iframe {
   border: 1px dashed #bbb866;
   background-image: url("white30.png");
-}
-
-ul.list_result {
-  list-style-type: none;
-  margin-left: 8px;
-}
-
-ul.list_result li {
-  padding-left: 16px;
-  background: url("child.png") no-repeat left top;
 }
 
 div.breadcrumb {
@@ -730,4 +672,19 @@ h4 {
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
+}
+/*Search results formatting*/
+.show_result{
+  width: 100%;
+  background:transparent;
+  border: solid 1px #999;
+  padding: 2px 2px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  position: relative;
+  margin: 5px;
+}
+.download_button{
+  float: right;
 }
