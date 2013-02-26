@@ -13,18 +13,11 @@
       </ul>
       <% for result in run.results.each %>
       <div id="search_<%= result.name %>">
-        <b>Result type</b>
-        <%=h result.filetype.split(/-*/).join %> 
+        <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
         <div class="download_button">
           <%= button_to 'Download', :controller => 'result', 
                         :action => 'download', :id => result.id %>
         </div>
-        <br />
-        <%if !@sink_descriptions[result.name].nil? && 
-            @sink_descriptions[result.name] != ""  %>
-          <b>Description</b><br />
-          <%= @sink_descriptions[result.name] %>
-        <%end%>
         <br />
         <b>Value(s)</b><br />
         <div class="show_result">
@@ -36,6 +29,15 @@
             <%= image_tag result.result_filepath %>
           <% end %>
         </div>
+        <%if !@sink_descriptions[result.name].nil? && 
+            @sink_descriptions[result.name] != ""  %>
+          <div id="accordion_<%= result.name%>">
+          <h3>Description</h3>
+            <div>
+              <%= simple_format(@sink_descriptions[result.name]) %>
+            </div>
+          </div>
+        <%end%>
       </div>
       <% end %>
     </div>
