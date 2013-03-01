@@ -33,6 +33,7 @@ TliteR3::Application.routes.draw do
   #*****************************************************
 
 
+  put '/workflows/:id/make_private' => 'workflows#make_private', :as => 'make_private'
 
   resources :workflows do
     member do
@@ -40,6 +41,7 @@ TliteR3::Application.routes.draw do
       put "make_private"
     end
   end
+
   #*****************************************************
   # mapping for the redirection when checking results
   match 'runs/', :controller => 'runs', :action => 'update_all'

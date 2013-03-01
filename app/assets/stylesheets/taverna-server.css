@@ -671,3 +671,39 @@ h4 {
 .download_button{
   float: right;
 }
+
+/* for all tables */
+
+.paging_full_numbers .ui-button {
+padding: 2px 6px;
+margin: 2;
+cursor: pointer;
+* cursor: hand;
+}
+.paging_two_button .ui-button {
+padding: 2px 6px;
+margin: 2;
+cursor: pointer;
+* cursor: hand;
+}
+
+div.dataTables_info {
+	width: 40%;
+}
+
+.dataTables_paginate {
+	width: 400px;
+}
+
+table.dataTable thead th div.DataTables_sort_wrapper {
+    position: relative;
+    padding-right: 20px;
+}
+
+table.dataTable thead th div.DataTables_sort_wrapper span {
+    position: absolute;
+    top: 50%;
+    margin-top: -8px;
+    right: 0;
+}
+

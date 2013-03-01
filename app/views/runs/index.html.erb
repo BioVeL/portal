@@ -32,7 +32,7 @@
     <% if !current_user.nil? && current_user.admin %>
       <th>User</th>
     <% end %>
-    <th>Operations</h>
+    <th>Operations</th>
   </tr>
     </thead>
     <tbody>
@@ -92,7 +92,7 @@ var runs_running=""
 $(document).ready(function() {
   var oTable = $('#runs_table').dataTable(); 
   // Sort by date descending (column 1)
-  oTable.fnSort( [ [1,'desc']] );
+  oTable.fnSort( [[1,'desc']] );
 } );
 
   $(document).ready(

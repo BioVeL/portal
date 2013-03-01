@@ -2,6 +2,7 @@
     <thead>
       <tr>
         <th>Title</th>
+        <th>Uploaded</th>
         <th>Author(s)</th>
         <th>Operations</th>
       </tr>
@@ -12,6 +13,7 @@
         <td title="<%= workflow.description %>" alt="<%= workflow.description %>" >
         <%= workflow.title %>
       </td>
+      <td><%= workflow.created_at.strftime("%d/%m/%Y-%H:%M:%S") %></td>
       <td>
         <%= workflow.author %>
       </td>

@@ -1,14 +1,27 @@
 (function() {
   jQuery(function() {
-    return $('#public_workflows, #private_workflows').dataTable({
-      sPaginationType: "full_numbers",
-      "iDisplayLength": 5,
+    return $('#public_workflows').dataTable({
+      //sPaginationType: "full_numbers",
+      "iDisplayLength": 10,
+      "bFilter": false,
+      "bLengthChange": false,
+      "bJQueryUI": true,
+     "aoColumnDefs": [
+        { "bSortable": false, "aTargets": [ -1 ] }
+    ]
+    });
+  });
+}).call(this);
+(function() {
+  jQuery(function() {
+    return $('#private_workflows').dataTable({
+      //sPaginationType: "full_numbers",
+      "iDisplayLength": 10,
       "bFilter": false,
       "bLengthChange": false,
       "bJQueryUI": true
     });
   });
-
 }).call(this);
   function showonlyone(selected_div, selected_tab) {
       var wf_part_divs = document.getElementsByTagName("div");

@@ -2,6 +2,7 @@
   <thead>  
     <tr>
       <th>Title</th>
+      <th>Uploaded</th>
       <th>Author(s)</th>
       <% if current_user.admin -%>
         <th>Owner</th>
@@ -13,8 +14,12 @@
   <% @workflows.each do |workflow| %>
     <tr>
       <td title="<%= workflow.description %>" alt="<%= workflow.description %>">
-      <%= workflow.title %>
+        <dl>
+          <dt><%= workflow.title %></dt>
+          <dd><%= truncate(strip_tags(workflow.description), length: 80) %></dd>
+        </dl>
     </td>
+    <td><%= workflow.created_at.strftime("%d/%m/%Y-%H:%M:%S") %></td>
     <td>
       <%= workflow.author %>
     </td>
@@ -28,20 +33,20 @@
       </td>	
     <% end -%>
     <td>
-    <div title="Show workflow details" alt="Show see workflow details" style="float:left;padding: 2px">
+    <div title="Show workflow details" alt="Show see workflow details" style="float:left">
       <%= link_to 'Details', workflow , :class => "link_img"%>
     </div>
-    <div title="Remove workflow" alt="Remove workflow" style="float:left;padding: 2px">
+    <div title="Remove workflow" alt="Remove workflow" style="float:left">
       <%= link_to 'Remove', workflow, :class => "link_img",
           :method => :delete, 
           :data => { :confirm => 'Remove this workflow: ' + 
                        workflow.title.to_s + "?" } %>
     </div>
-    <div title="Run workflow" alt="Run workflow" style="float:left;padding: 2px">
+    <div title="Run workflow" alt="Run workflow" style="float:left">
       <%= link_to 'Run', {:controller => 'runs' , 
           :action => 'new_run', :id => workflow.id}, :class => "link_img" %>
     </div>
-    <div title="toggle workflow sharing" alt="toggle workflow sharing" style="float:left;padding: 2px">
+    <div title="toggle workflow sharing" alt="toggle workflow sharing" style="float:left">
       <% if workflow.shared? -%>
         <%= link_to "Make private", make_private_workflow_path(workflow), :method => :put, :class => "link_img"%>
       <% else -%>

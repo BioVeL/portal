@@ -21,11 +21,8 @@ var run_probe=""
 var interaction_probe=""
 var interaction_identifier=""
 var run_state="<%= @run.state.to_s %>"
-  <% for result in @run.results.each %>
-    $("#accordion_<%= result.name%>").accordion({ active: false, collapsible: true });
-  <% end %>
-
   $("#tabs_results" ).tabs();
+
   $(document).ready(
     function(){
       if(run_state=="running"){

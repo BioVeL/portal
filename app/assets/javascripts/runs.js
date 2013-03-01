@@ -17,7 +17,10 @@
       "bFilter": false,
       "bLengthChange": false,
       "bRetrieve": true,
-      "bJQueryUI": true
+      "bJQueryUI": true,
+      "aoColumnDefs": [
+        { "bSortable": false, "aTargets": [ -1 ] }
+    ]
     });
   });
 

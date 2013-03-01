@@ -12,7 +12,7 @@
         <% end %>
       </ul>
       <% for result in run.results.each %>
-      <div id="search_<%= result.name %>">
+      <div id="search_<%= result.name %>"  style="height:400px;overflow:auto;" >
         <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
         <div class="download_button">
           <%= button_to 'Download', :controller => 'result', 
@@ -30,12 +30,12 @@
           <% end %>
         </div>
         <%if !@sink_descriptions[result.name].nil? && 
-            @sink_descriptions[result.name] != ""  %>     
+            @sink_descriptions[result.name] != ""  %>
           <h3>Description</h3>
           <div class="show_result">
             <%= simple_format(@sink_descriptions[result.name]) %>
           </div>
-        <%end%>
+         <%end%>
       </div>
       <% end %>
     </div>
