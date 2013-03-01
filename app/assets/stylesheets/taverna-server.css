@@ -658,7 +658,7 @@ h4 {
 }
 /*Run results formatting*/
 .show_result {
-  float: right
+  float: right;
   width: 100%;
   background:transparent;
   border: solid 1px #999;

@@ -1,5 +1,5 @@
 class WorkflowsController < ApplicationController
-  before_filter :login_required, :except => [:index, :show]
+  before_filter :login_required, :except => [:index, :show, :download]
   before_filter :get_workflows, :only => :index
   before_filter :get_workflow, :only => :show
 

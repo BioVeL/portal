@@ -43,7 +43,7 @@
      end%>
   <tr>
     <td><%= run.description %></td>
-    <td><%= run.creation.strftime("%d/%m/%Y-%H:%M:%S") %></td>
+    <td><%= run.creation.strftime("%Y/%m/%d-%H:%M:%S") %></td>
     <td><%= run.state %></td>
     <td><%= run.results.count %></td>
     <% if !current_user.nil? && current_user.admin -%>
