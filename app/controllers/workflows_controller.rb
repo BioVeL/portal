@@ -147,6 +147,13 @@ class WorkflowsController < ApplicationController
     end
   end
 
+  def download
+    @workflow = Workflow.find(params[:id])
+    path = @workflow.workflow_filename
+    filetype = 'application/xml'
+    send_file path, :type=>filetype , :name => @workflow.name
+  end
+
   def make_public
     @workflow = Workflow.find(params[:id])
     @workflow.shared = true

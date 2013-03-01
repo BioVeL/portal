@@ -46,6 +46,10 @@
       <%= link_to 'Run', {:controller => 'runs' , 
           :action => 'new_run', :id => workflow.id}, :class => "link_img" %>
     </div>
+    <div title="Download workflow" alt="Download workflow" style="float:left">
+      <%= link_to 'Download', {:controller => 'workflows' , 
+          :action => 'download', :id => workflow.id}, :class => "link_img" %>
+    </div>
     <div title="toggle workflow sharing" alt="toggle workflow sharing" style="float:left">
       <% if workflow.shared? -%>
         <%= link_to "Make private", make_private_workflow_path(workflow), :method => :put, :class => "link_img"%>
