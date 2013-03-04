@@ -6,10 +6,13 @@
    <% @sinks.each do |item| %> 
     <p>
         <% portname = item[0] %>
-        <b><%= label_tag portname %></b>: 
-        
-        <%= label_tag @sink_descriptions[portname] %> <br/>
-        <b>Example Value:</b> <%= simple_format(@sinks[portname]) %>
+        <b><%= label_tag portname %></b> 
+        <%= simple_format(@sink_descriptions[portname]) %> 
+        <% unless @sinks[portname].nil? || @sinks[portname]=="" %>
+          <b>Example Value:</b> 
+          <%= simple_format(@sinks[portname]) %>
+        <%end%>      
+
     </p>
     <% end %>
 

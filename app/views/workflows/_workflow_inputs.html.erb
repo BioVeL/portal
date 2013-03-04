@@ -6,10 +6,11 @@
    <% @sources.each do |item| %> 
     <p>
         <% portname = item[0] %>
-        <b><%= label_tag portname %></b>: 
-        
-        <%= label_tag @source_descriptions[portname] %> <br/>
-        <b>Example Value:</b> <%= simple_format(@sources[portname]) %>
+        <b><%= label_tag portname %></b> 
+        <%= simple_format( @source_descriptions[portname] )%>
+        <% unless @sources[portname].nil?|| @sinks[portname]=="" %>
+          <b>Example Value:</b> <%= simple_format(@sources[portname]) %>
+        <%end%>
     </p>
     <% end %>
 
