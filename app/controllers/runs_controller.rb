@@ -194,7 +194,7 @@ class RunsController < ApplicationController
       else 
         puts "respose to interaction: " + r_id.to_s + " for run: "+ run_id
         if !replies_for_run.include?(r_id.to_s)
-          replies_for_run.push r_id.to_s
+          replies_for_run.push r_id.join.to_s
         end
       end 
       if feed_datetime < run_date
@@ -250,14 +250,17 @@ class RunsController < ApplicationController
       puts "Found equal #{entry_run_id} to #{run_id}"
       r_id = entry[$feed_ns, "in-reply-to"]
       puts "interaction id: " + interaction_id
-      puts "response to: " + r_id.to_s
+      puts "response to: " + r_id.join.to_s
       if r_id.empty? && interaction_id == entry[$feed_ns, "id"][0] 
         #the interaction has not been responded
         puts "Found interaction not completed yet"
         return false;
       end
-      if r_id.to_s == interaction_id.to_s
+      if r_id.join.to_s == interaction_id.to_s
         puts "respose sent for " + run_id
+        return true;
+      elsif r_id.to_s=="[]"
+        puts "response sent, no run ID"
         return true;
       end
       break
