@@ -127,7 +127,7 @@ class RunsController < ApplicationController
       if !current_user.admin?
         running_now = Run.find_all_by_user_id_and_state(nil,'running', :order =>'start desc').count
       else
-        running_now = Run.find_all_by_and_state('running', :order =>'start desc').count
+        running_now = Run.find_all_by_state('running', :order =>'start desc').count
       end
     end
     puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -217,10 +217,7 @@ class RunsController < ApplicationController
 
   def interaction
     @run = Run.find(params[:id])
-    return login_required if current_user.nil? && @run.user_id.nil?
-
     interactionid = params[:interactionid].to_s
-
     @responded = probe_interaction(@run.run_identification, interactionid)
   end
 
