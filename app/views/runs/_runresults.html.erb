@@ -28,10 +28,10 @@
           <% else %>
             <%= image_tag result.result_filepath %>
           <% end %>
-        </div>
+        </div><br />
         <%if !@sink_descriptions[result.name].nil? && 
             @sink_descriptions[result.name] != ""  %>
-          <h3>Description</h3>
+          <b>Description</b>
           <div class="show_result">
             <%= simple_format(@sink_descriptions[result.name]) %>
           </div>
