@@ -47,9 +47,11 @@ TliteR3::Application.routes.draw do
   #*****************************************************
   # mapping for the redirection when creating a new run
   match 'workflows/:id/newrun/', :controller => 'runs', :action => 'new_run'
-  match 'workflows/:id/download/', :controller => 'workflows', :action => 'download'
+
   #*****************************************************
-  
+  # mapping for the redirection when downloading a workflow
+  match 'workflows/:id/download/', :controller => 'workflows', :action => 'download'
+  #*****************************************************  
 
 
   #*****************************************************

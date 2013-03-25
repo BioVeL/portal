@@ -64,17 +64,6 @@ pre {
   font-size: 11px;
 }
 
-a {
-  color: #000;
-  &:visited {
-    color: #666;
-  }
-  &:hover {
-    color: #fff;
-    background-color: #000;
-  }
-}
-
 div {
   &.field, &.actions {
     margin-bottom: 10px;
@@ -112,14 +101,15 @@ div {
     font-size: 12px;
     list-style: square;
   }
+}
 /*simple tables*/
   table, td, th
   {
-    border:1px solid green;
+    border:0px solid green;
   }
   th
   {
-    background-color:green;
+    background-color:#2E8B57;
     color:white;
   }
-}
+

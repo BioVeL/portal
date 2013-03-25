@@ -204,7 +204,7 @@ class RunsController < ApplicationController
     interaction = nil
     puts run_id
     puts feed.entries.count
-    # Go through all the entries in reverse order and return the first which
+    # Go through all the entries in reverse order and return the first which   
     # does not have a reply.
     feed.each_entry do |entry|
       entry_run_id = entry[$feed_ns, "run-id"]
@@ -219,14 +219,14 @@ class RunsController < ApplicationController
       end
 
       puts "Found equal #{entry_run_id} to #{run_id}"
-      r_id = entry[$feed_ns, "in-reply-to"]
+       in_reply_to_int_id = entry[$feed_ns, "in-reply-to"]
       puts "Run Date: " + run_date.to_s
       feed_datetime = entry.updated
       puts feed_datetime
       
-      puts "reply ID: " + r_id.to_s
+      puts "reply ID: " +  in_reply_to_int_id.to_s
       puts "Stored Replies: " + replies_for_run.to_s
-      if r_id.empty?
+      if  in_reply_to_int_id.empty?
         if replies_for_run.include?(entry[$feed_ns, "id"][0].to_s)
           puts "This interaction has been responded already"
           next
@@ -236,9 +236,9 @@ class RunsController < ApplicationController
           break
         end      
       else 
-        puts "respose to interaction: " + r_id.to_s + " for run: "+ run_id
-        if !replies_for_run.include?(r_id.to_s)
-          replies_for_run.push r_id.join.to_s
+        puts "respose to interaction: " +  in_reply_to_int_id.to_s + " for run: "+ run_id
+        if !replies_for_run.include?( in_reply_to_int_id.to_s)
+          replies_for_run.push  in_reply_to_int_id.join.to_s
         end
       end 
       if feed_datetime < run_date
@@ -289,18 +289,18 @@ class RunsController < ApplicationController
       end
 
       puts "Found equal #{entry_run_id} to #{run_id}"
-      r_id = entry[$feed_ns, "in-reply-to"]
+       in_reply_to_int_id = entry[$feed_ns, "in-reply-to"]
       puts "interaction id: " + interaction_id
-      puts "response to: " + r_id.join.to_s
-      if r_id.empty? && interaction_id == entry[$feed_ns, "id"][0] 
+      puts "response to: " +  in_reply_to_int_id.join.to_s
+      if  in_reply_to_int_id.empty? && interaction_id == entry[$feed_ns, "id"][0] 
         #the interaction has not been responded
         puts "Found interaction not completed yet"
         return false;
       end
-      if r_id.join.to_s == interaction_id.to_s
+      if  in_reply_to_int_id.join.to_s == interaction_id.to_s
         puts "respose sent for " + run_id
         return true;
-      elsif r_id.to_s=="[]"
+      elsif  in_reply_to_int_id.to_s=="[]"
         puts "response sent, no run ID"
         return true;
       end
