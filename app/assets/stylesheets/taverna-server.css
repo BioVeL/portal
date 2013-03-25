@@ -488,7 +488,7 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 }
 
 .nav li.page_item:hover {
-    /*background-image: url("gradient_green.png");*/
+    background-image: url("gradient_green.png");
     border-width: 0 1px;
     border-style: solid;
     border-color: transparent #99cc33 transparent #99cc33;
