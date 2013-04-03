@@ -313,9 +313,11 @@ class RunsController < ApplicationController
 
   #GET /workflows/1/newrun
   def new_run
+    
     cookies[:run_identification]=""
     unassigned_inputs = false
     Rails.logger.info "#NEW RUN (#{Time.now}): number of parameters: #{params.count}"
+
     unless params[:id].nil?
       get_workflow()
       Rails.logger.info "#NEW RUN (#{Time.now}): Generating new run for: #{@workflow.name}"
@@ -326,49 +328,53 @@ class RunsController < ApplicationController
     unless params[:workflow_id].nil?      
       if inputs_provided(params)
         Rails.logger.info "#NEW RUN (#{Time.now}): using submitted inputs"
-        check_server()    
-        run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
-        cookies[:run_identification] = run.identifier
-        run.input_ports.each_value do |port|
-          input = port.name  
-          input_file =  "file_for_#{port.name}"
-          if params[:file_uploads].include? input
-            Rails.logger.info "#NEW RUN (#{Time.now}): 1   Actual Input for #{input} as string #{params[input].to_s}"
-            stringinput = params[:file_uploads][input].to_s
-            Rails.logger.info "#NEW RUN (#{Time.now}): 2   #{stringinput.class}"
-            if stringinput.include?("[") and stringinput.include?("]")
-              Rails.logger.info "#NEW RUN (#{Time.now}): 3   Input is a list"
-              inputarray = stringinput[1..-2].split(',').collect! {|n| n.to_s}
-              Rails.logger.info "#NEW RUN (#{Time.now}): 4   Values"
-              Rails.logger.info "#NEW RUN (#{Time.now}): " + inputarray.to_s
-              Rails.logger.info "#NEW RUN (#{Time.now}): " + inputarray.class.to_s
-              port.value = inputarray
+        check_server()
+        unless $server.nil?     
+          run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
+          cookies[:run_identification] = run.identifier
+          run.input_ports.each_value do |port|
+            input = port.name  
+            input_file =  "file_for_#{port.name}"
+            if params[:file_uploads].include? input
+              Rails.logger.info "#NEW RUN (#{Time.now}): 1   Actual Input for #{input} as string #{params[input].to_s}"
+              stringinput = params[:file_uploads][input].to_s
+              Rails.logger.info "#NEW RUN (#{Time.now}): 2   #{stringinput.class}"
+              if stringinput.include?("[") and stringinput.include?("]")
+                Rails.logger.info "#NEW RUN (#{Time.now}): 3   Input is a list"
+                inputarray = stringinput[1..-2].split(',').collect! {|n| n.to_s}
+                Rails.logger.info "#NEW RUN (#{Time.now}): 4   Values"
+                Rails.logger.info "#NEW RUN (#{Time.now}): " + inputarray.to_s
+                Rails.logger.info "#NEW RUN (#{Time.now}): " + inputarray.class.to_s
+                port.value = inputarray
+              else
+                port.value = stringinput
+              end
+              Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to #{port.value}"   
+              Rails.logger.info "#NEW RUN (#{Time.now}): actual value = #{run.input_ports[input].value}       "
+              if run.input_port("name").nil?
+                Rails.logger.info "#NEW RUN (#{Time.now}): no values assigned"
+              end
             else
-              port.value = stringinput
+              Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' has not been set."
+              run.delete
+              exit 1
             end
-            Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to #{port.value}"   
-            Rails.logger.info "#NEW RUN (#{Time.now}): actual value = #{run.input_ports[input].value}       "
-            if run.input_port("name").nil?
-              Rails.logger.info "#NEW RUN (#{Time.now}): no values assigned"
+            Rails.logger.info "#NEW RUN (#{Time.now}): Files? #{input_file}"
+            if params[:file_uploads].include? input_file
+              port.file = params[:file_uploads][input_file].tempfile.path
+              Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to use file '#{params[:file_uploads][input_file].original_filename}'"
             end
-          else
-            Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' has not been set."
-            run.delete
-            exit 1
           end
-          Rails.logger.info "#NEW RUN (#{Time.now}): Files? #{input_file}"
-          if params[:file_uploads].include? input_file
-            port.file = params[:file_uploads][input_file].tempfile.path
-            Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to use file '#{params[:file_uploads][input_file].original_filename}'"
-          end
-        end
 
-        # determine if an rserver is being called
-        if @workflow.connects_to_r_server?
-          rs_cred = Credential.find_by_server_type_and_default_and_in_use("rserver",true,true)
-          run.add_password_credential(rs_cred.url,rs_cred.login,rs_cred.password)
-        end
-        run.start()
+          # determine if an rserver is being called
+          if @workflow.connects_to_r_server?
+            rs_cred = Credential.find_by_server_type_and_default_and_in_use("rserver",true,true)
+            run.add_password_credential(rs_cred.url,rs_cred.login,rs_cred.password)
+          end
+          run.start()
+        else
+          redirect_to root_url, :notice => "Server Busy, try again later"
+        end 
        else
       # missing some or all inputs
          Rails.logger.info "#NEW RUN (#{Time.now}): Cannot start run, missing inputs"
@@ -379,15 +385,19 @@ class RunsController < ApplicationController
       # for workflows with no input
       Rails.logger.info "#NEW RUN no inputs"
       # create a new run
-      check_server()    
-      run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
-      cookies[:run_identification] = run.identifier
-      if @workflow.connects_to_r_server?
-        rs_cred = Credential.find_by_server_type_and_default_and_in_use("rserver",true,true)
-        run.add_password_credential(rs_cred.url,rs_cred.login,rs_cred.password)
+      check_server()
+      unless $server.nil?     
+        run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
+        cookies[:run_identification] = run.identifier
+        if @workflow.connects_to_r_server?
+          rs_cred = Credential.find_by_server_type_and_default_and_in_use("rserver",true,true)
+          run.add_password_credential(rs_cred.url,rs_cred.login,rs_cred.password)
+        end
+        run.start()
+        save_run(run)
+      else
+        redirect_to root_url, :notice => "Server Busy, try again later"
       end
-      run.start()
-      save_run(run)
     elsif cookies[:run_identification]=="" 
       # if workflow has inputs
       @sources, @descriptions = @workflow.get_inputs
@@ -493,6 +503,7 @@ class RunsController < ApplicationController
       end
     end 
   end
+
   def save_to_db(name,mimetype,depth,run,filepath,value)
     result = Result.new
     result.name = name
@@ -518,16 +529,18 @@ class RunsController < ApplicationController
   # filter_parameter_logging :password
   def check_server()
     if (!defined?($server) || ($server == nil)) #then
-      #settings = YAML.load(IO.read(File.join(File.dirname(__FILE__), "config.yaml")))      #if settings
-      #  $server_uri = settings['server_uri']
-        begin
-         $server = T2Server::Server.new(Credential.get_taverna_uri)
-        rescue Exception => e  
-          $server = nil
-          redirect_to '/no_configuration'
-        end
-      #else
-      #  redirect_to '/no_configuration'
+      begin
+        $server = T2Server::Server.new(Credential.get_taverna_uri)
+        req = Net::HTTP.new($server.uri.host, $server.uri.port)
+        res = req.request_head($server.uri.path)
+      rescue Exception => e  
+        Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}):" 
+        #email if server is not responding
+        credential = Credential.find_by_server_type_and_default_and_in_use("ts",true,true)
+        AdminMailer.server_unresponsive(credential).deliver
+        $server = nil
+        
+      end
     end
   end
 

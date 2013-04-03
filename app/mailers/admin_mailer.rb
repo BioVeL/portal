@@ -1,4 +1,3 @@
-<%
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -32,8 +31,7 @@
 # 
 # Authors
 #     Abraham Nieva de la Hidalga
-#     Robert Haines
-#      
+# 
 # Synopsis 
 # 
 # BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
@@ -43,38 +41,20 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-%>
-<% content_for :title, "Taverna Lite - Workflows"%>
-<p> 
-  This page shows workflows that you can execute on Taverna Lite
-</p>
-<p>
-  A workflow is the automation of series of data analysis (steps) to process 
-  data (from small to very large-scale), be that from one's own research and/or 
-  from existing sources.
-</p>
+class AdminMailer < ActionMailer::Base
+  default :from => "support@biovel.eu"
 
-<% if !current_user.nil? && @workflows.count != 0 -%>
-  <h1>Private Workflows</h1>
-  <br />
-  <div id="workflows"><%= render 'workflows' %></div>
-<% end -%>
-
-<% if !current_user.nil? -%>
-  <div title="Add a new workflow" alt="Add a new workflow" style="float:right; padding:10px;">
-    <%= link_to 'Add Workflow', new_workflow_path, :class => "link_img" %>
-  </div>
-<% end -%>
-
-<% if @shared_workflows.count != 0 -%>
-  <h1>Public Workflows</h1>
-<% if current_user.nil? -%>
-  <p>
-    <%= link_to 'Register', sign_up_path%> to upload your own workflows and to
-    search for workflows on 
-    <%= link_to 'my experiment', 'http://www.myexperiment.org' %> 
-  </p>
-<%end%>
-  <%= render 'workflows_public' %>
-<% end -%>
-
+  # Subject can be set in your I18n file at config/locales/en.yml
+  # with the following lookup:
+  #
+  #   en.admin_mailer.server_unresponsive.subject
+  #
+  def server_unresponsive(credential)
+    @greeting = "Hi"
+    admins = User.find_all_by_admin(true) 
+    @credential = credential
+    admins.each do |user|
+      mail :to => user.email, :subject => "Server not responding!"
+    end
+  end
+end

@@ -68,7 +68,7 @@ while($running) do
     Tavernaserv.run_update
   rescue
      @error_message="#{$!}"
-     Rails.logger.info "Update Error "
+     Rails.logger.info "Updater Daemon Error. "
      Rails.logger.info @error_message
   ensure
     sleep 10
