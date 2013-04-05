@@ -43,7 +43,9 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 %>
-<div id="wf_components" style="height:300px;overflow:auto;">
+<div id="wf_components" style="min-height:300px;
+     			       height:auto !important;
+                               height:300px; ">
 
 <% if @processors.count>0 %>
   <p>
@@ -95,7 +97,7 @@
       <%else%>
         <b> <%= item.type %> |</b>
       <% end %>
-        <b> <%= componentname %> </b> 
+        <b> <%= label_tag componentname %> </b> 
     </div>    
   </div>
   <% end %>

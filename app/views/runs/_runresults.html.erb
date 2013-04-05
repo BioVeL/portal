@@ -58,7 +58,9 @@
         <% end %>
       </ul>
       <% for result in run.results.each %>
-      <div id="search_<%= result.name %>"  style="height:400px;overflow:auto;" >
+      <div id="search_<%= result.name %>"  style="min-height:300px;
+     						height:auto !important;
+                                                height:300px; " >
         <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
         <div class="download_button">
           <%= button_to 'Download', :controller => 'result', 

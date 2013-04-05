@@ -46,7 +46,6 @@
 <% content_for :title, "Taverna Lite - Add Workflow"%>
 <h1>Add workflow</h1>
 <%= render :partial => 'add_workflow_tabs', :locals => {:workflow => @workflow} %>
-<%= link_to 'Back', workflows_path %>
 <%= javascript_tag do -%>
   $( "#tabs_add_wf" ).tabs();
   $( "#accordion_results" ).accordion({ active: false, collapsible: true });

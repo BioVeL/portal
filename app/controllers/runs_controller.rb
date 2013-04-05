@@ -336,7 +336,7 @@ class RunsController < ApplicationController
             input = port.name  
             input_file =  "file_for_#{port.name}"
             if params[:file_uploads].include? input
-              Rails.logger.info "#NEW RUN (#{Time.now}): 1   Actual Input for #{input} as string #{params[input].to_s}"
+              Rails.logger.info "#NEW RUN (#{Time.now}): 1 Actual Input for #{input} as string #{params[input].to_s}"
               stringinput = params[:file_uploads][input].to_s
               Rails.logger.info "#NEW RUN (#{Time.now}): 2   #{stringinput.class}"
               if stringinput.include?("[") and stringinput.include?("]")
@@ -373,7 +373,9 @@ class RunsController < ApplicationController
           end
           run.start()
         else
-          redirect_to root_url, :notice => "Server Busy, try again later"
+          Rails.logger.info 
+            "#NEW RUN (#{Time.now}): Server Down - Redirected to back"    
+          redirect_to :back, :notice => "Server Busy, try again later"
         end 
        else
       # missing some or all inputs
@@ -396,7 +398,9 @@ class RunsController < ApplicationController
         run.start()
         save_run(run)
       else
-        redirect_to root_url, :notice => "Server Busy, try again later"
+        Rails.logger.info 
+          "#NEW RUN (#{Time.now}): Server Down - Redirected to back"    
+        redirect_to :back, :notice => "Server Busy, try again later"
       end
     elsif cookies[:run_identification]=="" 
       # if workflow has inputs
@@ -418,10 +422,14 @@ class RunsController < ApplicationController
           params[:file_uploads][input] = port[1]
         else
           inputs_provided = false
-          Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
-          Rails.logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
-          Rails.logger.info "#NEW RUN (#{Time.now}):         " + input 
-          Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
+          Rails.logger.info 
+            "#NEW RUN (#{Time.now}):*****************************************"
+          Rails.logger.info 
+            "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
+          Rails.logger.info 
+            "#NEW RUN (#{Time.now}):          " + input 
+          Rails.logger.info 
+            "#NEW RUN (#{Time.now}):*****************************************"
           break
         end
       end

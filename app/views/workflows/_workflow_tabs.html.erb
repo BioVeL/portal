@@ -46,16 +46,14 @@
 <div id="tabs_wf_parts">
   <ul>
     <li><a href="#wf_description">Description</a></li>
-    <li><a href="#wf_authors">Author(s)</a></li>
     <li><a href="#wf_inputs">Inputs</a></li>
     <li><a href="#wf_outputs">Outputs</a></li>
-    <li><a href="#wf_components">Components</a></li>
     <li><a href="#wf_statistics">Statistics</a></li>
+    <li><a href="#wf_components">Edit Workflow</a></li>
   </ul>
   <%= render :partial => 'workflow_description', :locals => {:workflow => @workflow} %>
-  <%= render :partial => 'workflow_authors', :locals => {:workflow => @workflow} %>
   <%= render :partial => 'workflow_inputs', :locals => {:workflow => @workflow} %>
   <%= render :partial => 'workflow_outputs', :locals => {:workflow => @workflow} %>
-  <%= render :partial => 'workflow_components', :locals => {:workflow => @workflow} %>
   <%= render :partial => 'workflow_stats', :locals => {:workflow => @workflow} %>
+  <%= render :partial => 'workflow_components', :locals => {:workflow => @workflow} %>
 </div>

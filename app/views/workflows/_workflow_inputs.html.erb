@@ -43,7 +43,9 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 %>
-<div id="wf_inputs" style="height:300px;overflow:auto;">
+<div id="wf_inputs" style=" min-height:300px;
+     		            height:auto !important;
+                            height:300px; ">
 <% if @sources.count>0 %>
    <p>
      <b> This workflow has <%= @sources.count %> <%= "Input".pluralize(@sources.count)%> </b>
