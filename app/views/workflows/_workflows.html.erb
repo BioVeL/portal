@@ -82,12 +82,7 @@
     <div title="Show workflow details" alt="Show see workflow details" style="float:left">
       <%= link_to 'Details', workflow , :class => "link_img"%>
     </div>
-    <div title="Remove workflow" alt="Remove workflow" style="float:left">
-      <%= link_to 'Remove', workflow, :class => "link_img",
-          :method => :delete, 
-          :data => { :confirm => 'Remove this workflow: ' + 
-                       workflow.title.to_s + "?" } %>
-    </div>
+
     <div title="Run workflow" alt="Run workflow" style="float:left">
       <%= link_to 'Run', {:controller => 'runs' , 
           :action => 'new_run', :id => workflow.id}, :class => "link_img" %>
@@ -103,7 +98,12 @@
         <%= link_to "Make public", make_public_workflow_path(workflow), :method => :put, :class => "link_img" %>
       <% end -%>
     </div>
-    </td>
+    <div title="Remove workflow" alt="Remove workflow" style="float:left">
+      <%= link_to 'Remove', workflow, :class => "link_img_rem",
+          :method => :delete, 
+          :data => { :confirm => 'Remove this workflow: ' + 
+                       workflow.title.to_s + "?" } %>
+    </div>    </td>
   </tr>
   <% end -%>
   </tbody>

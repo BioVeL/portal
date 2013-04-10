@@ -44,47 +44,22 @@
 # through the grant agreement number 283359. 
 %>
 
-<div id="runresults">
-  <% if run.results.count > 0 %>
-    <h3>Results</h3>
-    <div id="tabs_results">
-      <ul>
-        <% for result in run.results.each %>
-        <li>
-          <a href="#search_<%= result.name %>" >
-            <%= label_tag result.name %>
-          </a>
-        </li>
-        <% end %>
-      </ul>
-      <% for result in run.results.each %>
-        <div id="search_<%= result.name %>"  class= "clearfix" style="min-height:300px;
-                                          	height:auto !important;
-                                                height:300px; " >
-        <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
-        <div class="download_button">
-          <%= button_to 'Download', :controller => 'results', 
-                        :action => 'download', :id => result.id %>
-        </div>
-        <div class="show_result">
-          <% if result.filetype.to_s =~ /text/ %>
-            <%= simple_format(IO.read(result.result_filename))%>
-          <% elsif result.filetype.to_s =~ /error/ %>
-            <%= simple_format(IO.read(result.result_filename))%>
-          <% else %>
-            <%= image_tag result.result_filepath %>
-          <% end %>
-        </div>
-        <%if !@sink_descriptions[result.name].nil? && 
-            @sink_descriptions[result.name] != ""  %>
-          <b>Description</b>
-          <div class="show_description">
-            <%= simple_format(@sink_descriptions[result.name]) %>
-          </div>
-         <%end%>
-      </div>
-       <% end %>
-    </div>
-  <%end%>
-</div>
+<div id="search_<%= @result.name %>"  class= "clearfix" style="min-height:300px;
+                                       	height:auto !important;
+                                        height:300px; " >
+  <b><%= @result.name %></b> (<%=h @result.filetype.split(/-*/).join %>)
+  <div class="download_button">
+    <%= button_to 'Download', :controller => 'results', 
+                    :action => 'download', :id => @result.id %>
+  </div>
+  <div class="show_result">
+    <% if @result.filetype.to_s =~ /text/ %>
+      <%= simple_format(IO.read(@result.result_filename))%>
+    <% elsif @result.filetype.to_s =~ /error/ %>
+      <%= simple_format(IO.read(@result.result_filename))%>
+    <% else %>
+      <%= image_tag @result.result_filepath %>
+    <% end %>
+  </div>
+
 

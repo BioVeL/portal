@@ -113,3 +113,18 @@ div {
     color:white;
   }
 
+/* new clearfix */
+/* from http://perishablepress.com/new-clearfix-hack/ */
+/* lonked from:  
+   http://stackoverflow.com/questions/6681768/how-to-not-use-div-class-clear-in-markup */
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+    }
+* html .clearfix             { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
+

@@ -45,26 +45,37 @@
 %>
 <h1>Listing announcements</h1>
 
-<table>
+<table id="announcements_table">
+  <thead>
   <tr>
     <th>Message</th>
     <th>Starts at</th>
     <th>Ends at</th>
-    <th></th>
-    <th></th>
-    <th></th>
+    <th>Operations</th>
   </tr>
-
-<% @announcements.each do |announcement| %>
-  <tr>
-    <td><%= announcement.message %></td>
-    <td><%= announcement.starts_at %></td>
-    <td><%= announcement.ends_at %></td>
-    <td><%= link_to 'Show', announcement %></td>
-    <td><%= link_to 'Edit', edit_announcement_path(announcement) %></td>
-    <td><%= link_to 'Destroy', announcement, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
-  </tr>
-<% end %>
+  </thead>
+  <tbody>
+  <% @announcements.each do |announcement| %>
+    <tr>
+      <td><%= announcement.message %></td>
+      <td><%= announcement.starts_at %></td>
+      <td><%= announcement.ends_at %></td>
+      <td>
+        <div title="See announcement" alt="See announcement" style="float:left">        
+          <%= link_to 'Show', announcement, :class => "link_img"%>
+        </div>
+        <div title="Edit announcement" alt="Edit announcement" style="float:left">        
+          <%= link_to 'Edit', edit_announcement_path(announcement), 
+            :class => "link_img"%>
+        </div>
+        <div title="Delete announcement" alt="Delete announcement" style="float:left">        
+          <%= link_to 'Delete', announcement, :method => :delete, 
+            :data => { :confirm => 'Are you sure?' }, :class => "link_img_rem"%>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
 </table>
 
 <br />

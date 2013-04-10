@@ -1,4 +1,6 @@
 TliteR3::Application.routes.draw do
+  resources :results
+
   resources :password_resets
 
   resources :oauth_consumers do
@@ -24,6 +26,7 @@ TliteR3::Application.routes.draw do
   #*****************************************************
 
   resources :runs
+
   #*****************************************************
   # mapping for refreshing runs list
   get 'runs_refresh_list'  => 'runs#refresh_list'
@@ -56,7 +59,7 @@ TliteR3::Application.routes.draw do
 
   #*****************************************************
   # mapping for the redirection when downloading a result
-  match 'results/:id/download/', :controller => 'result', :action => 'download'
+  match 'results/:id/download/', :controller => 'results', :action => 'download'
   #*****************************************************
 
 

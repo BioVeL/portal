@@ -1,3 +1,4 @@
+<%
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -41,11 +42,40 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
-class ResultController < ApplicationController
-  def download
-    @result = Result.find(params[:id])
-    path = @result.result_filename
-    filetype = @result.filetype
-    send_file path, :type=>filetype , :name => @result.name
-  end
-end
+%>
+<% content_for :title, "Taverna Lite - Registered Server Settings"%>
+
+<h1>Results</h1>
+
+<table id="results_table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>File Type</th>
+      <th>Depth</th>
+      <th>Run ID</th>
+      <th>Run Desc</th>
+      <th>Filepath</th>
+      <th>Operations</h>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @results.each do |result| %>
+    <tr>
+      <td><%= result.name %></td>
+      <td><%= result.filetype %></td>
+      <td><%= result.depth %></td>
+      <td><%= result.run_id %></td>
+      <td><%= Run.find(result.run_id).description %></td>
+      <td><%= result.filepath %></td>
+      <td>
+        <%= link_to 'Show', result, :class => "link_img" %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br />
+

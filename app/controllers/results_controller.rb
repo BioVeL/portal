@@ -1,4 +1,3 @@
-<%
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -42,47 +41,18 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
-%>
-<% content_for :title, "Taverna Lite - Registered Server Settings"%>
-
-<h1>Server Settings</h1>
-
-<table id="servers_table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Url</th>
-      <th>Login</th>
-      <th>Use</th>
-      <th>Default</th>
-      <th>Type</th>
-      <th>Operations</h>
-    </tr>
-  </thead>
-  <tbody>
-  <% @credentials.each do |credential| %>
-    <tr>
-      <td><%= credential.name %></td>
-      <td><%= credential.description %></td>
-      <td><%= credential.url %></td>
-      <td><%= credential.login %></td>
-      <td><%= credential.in_use %></td>
-      <td><%= credential.default %></td>
-      <td><%= credential.server_type %></td>
-      <td>
-        <%= link_to 'Show', credential, :class => "link_img" %>
-        <%= link_to 'Edit', edit_credential_path(credential), 
-          :class => "link_img" %>
-        <%= link_to 'Delete', credential, :method => :delete, 
-            :data => { :confirm => 'Delete settings for server: ' + 
-                         credential.name + "?"}, :class => "link_img_rem" %>
-      </td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
-
-<br />
-
-<%= link_to 'New Credential', new_credential_path %>
+class ResultsController < ApplicationController
+  before_filter :admin_required, :except => [:download]
+  def index
+    @results = Result.all
+  end
+  def show
+    @result = Result.find(params[:id])
+  end
+  def download
+    @result = Result.find(params[:id])
+    path = @result.result_filename
+    filetype = @result.filetype
+    send_file path, :type=>filetype , :name => @result.name
+  end
+end
