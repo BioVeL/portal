@@ -67,7 +67,13 @@
       <td><%= result.filetype %></td>
       <td><%= result.depth %></td>
       <td><%= result.run_id %></td>
-      <td><%= Run.find(result.run_id).description %></td>
+      <td>
+        <%= if Run.exists?(result.run_id)
+              Run.find(result.run_id).description
+            else
+              'run deleted'
+            end %>
+      </td>
       <td><%= result.filepath %></td>
       <td>
         <%= link_to 'Show', result, :class => "link_img" %>
