@@ -80,6 +80,8 @@ class Tavernaserv < ActiveRecord::Base
           running_time = runner.end - runner.start
           # update workflow statistics after the run has finished
           update_workflow_stats(runner.workflow_id, running_time)
+          # delete the run after outputs and stats have been collected
+          @server.delete_run(runner.run_identification, Credential.get_taverna_credentials)
         ## what if the run has finished but there are no results?
         end
       end
