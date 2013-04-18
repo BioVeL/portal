@@ -375,7 +375,7 @@ class RunsController < ApplicationController
         else
           Rails.logger.info 
             "#NEW RUN (#{Time.now}): Server Down - Redirected to back"    
-          redirect_to :back, :notice => "Server Busy, try again later"
+          redirect_to :back,  :flash => {:error => "Server Busy, try again later"}
         end 
        else
       # missing some or all inputs
@@ -388,7 +388,7 @@ class RunsController < ApplicationController
       Rails.logger.info "#NEW RUN no inputs"
       # create a new run
       check_server()
-      unless $server.nil?     
+      unless $server.nil?      
         run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
         cookies[:run_identification] = run.identifier
         if @workflow.connects_to_r_server?
@@ -400,7 +400,7 @@ class RunsController < ApplicationController
       else
         Rails.logger.info 
           "#NEW RUN (#{Time.now}): Server Down - Redirected to back"    
-        redirect_to :back, :notice => "Server Busy, try again later"
+        redirect_to :back,  :flash => {:error => "Server Busy, try again later"}
       end
     elsif cookies[:run_identification]=="" 
       # if workflow has inputs
@@ -535,19 +535,28 @@ class RunsController < ApplicationController
 
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
+  $error_code = 0 # 0 no error, 1 server busy, 2 server down
+  
   def check_server()
     if (!defined?($server) || ($server == nil)) #then
       begin
         $server = T2Server::Server.new(Credential.get_taverna_uri)
+        max_runs = $server.run_limit(Credential.get_taverna_credentials)
+        running_now = $server.runs(Credential.get_taverna_credentials).count 
+        puts "#CHECK SERVER (#{Time.now}): Server Limit" + max_runs.to_s
+        puts "#CHECK SERVER (#{Time.now}): Server Runs" + running_now.to_s
+        if running_now == max_runs
+          $server = nil 
+          Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server full" 
+        end
         req = Net::HTTP.new($server.uri.host, $server.uri.port)
         res = req.request_head($server.uri.path)
       rescue Exception => e  
-        Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}):" 
+        Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server down" 
         #email if server is not responding
         credential = Credential.find_by_server_type_and_default_and_in_use("ts",true,true)
         AdminMailer.server_unresponsive(credential).deliver
-        $server = nil
-        
+        $server = nil   
       end
     end
   end

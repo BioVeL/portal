@@ -79,9 +79,13 @@
             <div>
               <% if flash[:notice] %>
                 <p style="color: green"><%= flash[:notice]%></p>
-              <% else %>
-                <p style="color: red"><%= flash[:error]%></p>
+              <% elsif flash[:error] %>
+                <p></p>
+                <div id="error_explanation">
+                  <p style="color: red"><%= flash[:error]%></p>
+                </div>   
               <% end %>
+              
               <%= yield %>
             </div>
           </div>
