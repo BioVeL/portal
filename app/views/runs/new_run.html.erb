@@ -49,7 +49,7 @@
 <br/>
 <%= form_for :file_uploads, 
       :url => {:controller => 'runs', :action => 'new_run'}, 
-      :html => {:multipart => true} do |f| %>
+      :html => {:multipart => true}, :disable_with => "Initialising Run" do |f| %>
   <%= hidden_field_tag "workflow_id", @workflow.id %>
 
 

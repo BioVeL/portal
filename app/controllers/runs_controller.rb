@@ -541,14 +541,6 @@ class RunsController < ApplicationController
     if (!defined?($server) || ($server == nil)) #then
       begin
         $server = T2Server::Server.new(Credential.get_taverna_uri)
-        max_runs = $server.run_limit(Credential.get_taverna_credentials)
-        running_now = $server.runs(Credential.get_taverna_credentials).count 
-        puts "#CHECK SERVER (#{Time.now}): Server Limit" + max_runs.to_s
-        puts "#CHECK SERVER (#{Time.now}): Server Runs" + running_now.to_s
-        if running_now == max_runs
-          $server = nil 
-          Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server full" 
-        end
         req = Net::HTTP.new($server.uri.host, $server.uri.port)
         res = req.request_head($server.uri.path)
       rescue Exception => e  
@@ -558,6 +550,12 @@ class RunsController < ApplicationController
         AdminMailer.server_unresponsive(credential).deliver
         $server = nil   
       end
+    end
+    max_runs = $server.run_limit(Credential.get_taverna_credentials)
+    running_now = $server.runs(Credential.get_taverna_credentials).count 
+    if running_now == max_runs
+      $server = nil 
+      Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server full" 
     end
   end
 
