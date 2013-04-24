@@ -1,0 +1,57 @@
+<%= form_for(@workflow_port) do |f| %>
+  <% if @workflow_port.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@workflow_port.errors.count, "error") %> prohibited this workflow_port from being saved:</h2>
+
+      <ul>
+      <% @workflow_port.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :workflow_id %><br />
+    <%= f.number_field :workflow_id %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :display_name %><br />
+    <%= f.text_field :display_name %>
+  </div>
+  <div class="field">
+    <%= f.label :display_description %><br />
+    <%= f.text_field :display_description %>
+  </div>
+  <div class="field">
+    <%= f.label :order %><br />
+    <%= f.number_field :order %>
+  </div>
+  <div class="field">
+    <%= f.label :port_value_type %><br />
+    <%= f.number_field :port_value_type %>
+  </div>
+  <div class="field">
+    <%= f.label :sample_value %><br />
+    <%= f.text_field :sample_value %>
+  </div>
+  <div class="field">
+    <%= f.label :sample_file %><br />
+    <%= f.text_field :sample_file %>
+  </div>
+  <div class="field">
+    <%= f.label :show %><br />
+    <%= f.check_box :show %>
+  </div>
+  <div class="field">
+    <%= f.label :display_control_id %><br />
+    <%= f.number_field :display_control_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

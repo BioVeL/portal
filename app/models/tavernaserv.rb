@@ -81,7 +81,7 @@ class Tavernaserv < ActiveRecord::Base
           # update workflow statistics after the run has finished
           update_workflow_stats(runner.workflow_id, running_time)
           # delete the run after outputs and stats have been collected
-          @server.delete_run(runner.run_identification, Credential.get_taverna_credentials)
+          #@server.delete_run(runner.run_identification, Credential.get_taverna_credentials)
         ## what if the run has finished but there are no results?
         end
       end
@@ -161,7 +161,11 @@ class Tavernaserv < ActiveRecord::Base
       if value.is_a?(Array) then
         save_nested(runid,portname,value,porttype, portdepth, i.to_s)
       else
-        value = "error" if value.nil?
+        if value.nil? 
+          svrrun = @server.run(Run.find(runid).run_identification,
+                                   Credential.get_taverna_credentials)
+          value = svrrun.get_output(portname).join.to_s
+        end  
         puts  "#TAVSERV SAVE_NESTED path #{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i} type: #{porttype} VALUE: #{value}"
         save_to_db(portname, porttype, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
       end

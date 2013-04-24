@@ -1,0 +1,5 @@
+<h3> Running: <%=h @run.description%> </h3>
+<b>User:</b>
+<%= @run.user_id.nil? ? "Guest" : User.find(@run.user_id).name %>
+<%= render :partial => 'interactionframe'%>
+<%= render :partial => 'runstate', :locals => {:run => @run} %>

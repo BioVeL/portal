@@ -57,26 +57,26 @@
     <% @shared_workflows.each do |workflow| %>
       <tr>
         <td title="<%= workflow.description %>" alt="<%= workflow.description %>" >
-        <%= workflow.title %>
-      </td>
-      <td><%= workflow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
-      <td>
-        <%= workflow.author %>
-      </td>
-      <td  >
-        <div title="Show workflow details" alt="Show see workflow details" style="float:left">
-          <%= link_to 'Details', workflow, :class => "link_img" %>
-        </div>
-        <div title="Run workflow" alt="Run workflow" style="float:left">
-          <%= link_to 'Run', {:controller => 'runs', 
-            :action => 'new_run', :id => workflow.id}, :class => "link_img" %>
-        </div>
-        <div title="Download workflow" alt="Download workflow" style="float:left">
-          <%= link_to 'Download', {:controller => 'workflows' , 
-              :action => 'download', :id => workflow.id}, :class => "link_img" %>
-        </div>
-      </td>
-    </tr>
+          <dl class="wf_snip">
+            <dt><%= link_to workflow.title, workflow  %></dt>
+            <dd><%= workflow.description[0,79]+"..." %></dd>
+          </dl>
+        </td>
+        <td><%= workflow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+        <td>
+          <%= workflow.author %>
+        </td>
+        <td  >
+          <div title="Run workflow" alt="Run workflow" style="float:left">
+            <%= link_to 'Run', {:controller => 'runs', 
+              :action => 'new_run', :id => workflow.id}, :class => "link_img" %>
+          </div>
+          <div title="Download workflow" alt="Download workflow" style="float:left">
+            <%= link_to 'Download', {:controller => 'workflows' , 
+                :action => 'download', :id => workflow.id}, :class => "link_img" %>
+          </div>
+        </td>
+      </tr>
     <% end -%>
     <tbody>
   </table>

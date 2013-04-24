@@ -1,4 +1,6 @@
 TliteR3::Application.routes.draw do
+  resources :workflow_ports
+
   resources :results
 
   resources :password_resets
@@ -41,6 +43,7 @@ TliteR3::Application.routes.draw do
     member do
       put "make_public"
       put "make_private"
+      post "save_workflow_ports"
     end
   end
   #*****************************************************

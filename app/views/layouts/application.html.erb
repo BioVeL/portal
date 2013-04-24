@@ -57,19 +57,17 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class='upper-wrap'>
-    <% unless current_announcements.empty? %>
+      <% unless current_announcements.empty? %>
       <div id="announcement">
         <% for announcement in current_announcements %>
           <%=h announcement.message %><br/>
         <% end %>
       </div>
     <% end %>
+ 
 
     <%= render :partial=> '/partials/header' %>
     <%= render :partial=> '/partials/navigation' %>
-    
-  </div>
   <div class='container' id='container-main'>
     <div id='content'>
       <div class='hfeed' id='primary'>
@@ -85,7 +83,6 @@
                   <p style="color: red"><%= flash[:error]%></p>
                 </div>   
               <% end %>
-              
               <%= yield %>
             </div>
           </div>

@@ -45,6 +45,7 @@
 # through the grant agreement number 283359.
 %>
 <% content_for :title, "Taverna Lite - Workflows"%>
+<h1>Workflows</h1>
 <p> 
   This page shows workflows that you can execute on Taverna Lite
 </p>
@@ -54,20 +55,16 @@
   from existing sources.
 </p>
 
-<% if !current_user.nil? && @workflows.count != 0 -%>
-  <h1>Private Workflows</h1>
-  <br />
-  <div id="workflows"><%= render 'workflows' %></div>
-<% end -%>
-
-<% if !current_user.nil? -%>
+<% if !current_user.nil? %> 
   <div title="Add a new workflow" alt="Add a new workflow" style="float:right; padding:10px;">
     <%= link_to 'Add Workflow', new_workflow_path, :class => "link_img" %>
   </div>
+  <h2>Private</h2>
+  <%= render 'workflows' %>
 <% end -%>
 
 <% if @shared_workflows.count != 0 -%>
-  <h1>Public Workflows</h1>
+  <h2>Public</h2>
 <% if current_user.nil? -%>
   <p>
     <%= link_to 'Register', sign_up_path%> to upload your own workflows and to

@@ -1,0 +1,41 @@
+<h1>Listing workflow_ports</h1>
+
+<table>
+  <tr>
+    <th>Workflow</th>
+    <th>Name</th>
+    <th>Display name</th>
+    <th>Display description</th>
+    <th>Order</th>
+    <th>Port value type</th>
+    <th>Sample value</th>
+    <th>Sample file</th>
+    <th>Show</th>
+    <th>Display control</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @workflow_ports.each do |workflow_port| %>
+  <tr>
+    <td><%= workflow_port.workflow_id %></td>
+    <td><%= workflow_port.name %></td>
+    <td><%= workflow_port.display_name %></td>
+    <td><%= workflow_port.display_description %></td>
+    <td><%= workflow_port.order %></td>
+    <td><%= workflow_port.port_value_type %></td>
+    <td><%= workflow_port.sample_value %></td>
+    <td><%= workflow_port.sample_file %></td>
+    <td><%= workflow_port.show %></td>
+    <td><%= workflow_port.display_control_id %></td>
+    <td><%= link_to 'Show', workflow_port %></td>
+    <td><%= link_to 'Edit', edit_workflow_port_path(workflow_port) %></td>
+    <td><%= link_to 'Destroy', workflow_port, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Workflow port', new_workflow_port_path %>

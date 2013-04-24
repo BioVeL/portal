@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  workflow_id: 1
+  name: MyString
+  display_name: MyString
+  display_description: MyString
+  order: 1
+  port_value_type: 1
+  sample_value: MyString
+  sample_file: MyString
+  show: false
+  display_control_id: 1
+
+two:
+  workflow_id: 1
+  name: MyString
+  display_name: MyString
+  display_description: MyString
+  order: 1
+  port_value_type: 1
+  sample_value: MyString
+  sample_file: MyString
+  show: false
+  display_control_id: 1

@@ -92,6 +92,20 @@
         }
       }
   }
+  function showdiv(selected_div) {
+    var wf_part_divs = document.getElementsByTagName("div");
+      for(var x=0; x<wf_part_divs.length; x++) {
+                  name = wf_part_divs[x].getAttribute("class");
+                  if (name == 'workflow_part') {
+                        if (wf_part_divs[x].id == selected_div) {
+                        wf_part_divs[x].style.display = 'block';
+                  }
+                  else {
+                        wf_part_divs[x].style.display = 'none';
+                  }
+      }
+    }
+  }
   function showhide(showHideDiv, switchTextDiv) {
 	var ele = document.getElementById(showHideDiv);
 	var text = document.getElementById(switchTextDiv);

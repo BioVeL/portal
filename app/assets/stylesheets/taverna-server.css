@@ -53,26 +53,28 @@
     position: relative;
 }
 .header{
-    height: 60px;
-    margin-bottom: 10px;
+    height: 50px;
+    margin-bottom: 	0px;
     border-style: solid;
     border-width: 1px;
     border-color: #77BB11 #bbb866;
 }
-
+.header{ background-color: #BBEA3E; }
 .container { margin: 0 auto; }
 #content {  }
 
-.biovel-logo { position: relative; float:left; width: 92px; height: 92px; }
-.biovel-logo img {position: absolute; top: -8px; left: 10px; }
+/* Logo */
 
-.taverna-logo { position: relative; float: right; width: 92px; height: 92px; }
-.taverna-logo img {position: absolute; top: -8px; right: 10px; }
+.biovel-logo { position: relative; float:left; width: 92px; height: 50px; }
+.biovel-logo img {position: absolute; top: 0px; left: 10px; }
+.taverna-logo { position: relative; float: right; width: 92px; height: 50px; }
+.taverna-logo img {position: absolute; top: 0px; right: 10px; }
 
-.header-title { float: left; margin: 14px 0 0 3px; font-weight: bolder;}
-
-.omii-uk-logo { float: right; height: 56px;/* background: #8699af;*/ padding: 29px 9px; }
-.mygrid-logo { float: right; margin-top: 6px; margin-right: 20px;}
+.header-title { float: left; margin: 10px 0 0 3px; font-weight: bold;}
+#logo, .header-title { font-size: 30px; line-height: 20px; color: #287621; }
+.header-title:hover { text-decoration: none; }
+.logomaj{color: black;}
+#tagline { color: #333; }
 
 .menu {
   padding-right: 1px;
@@ -176,15 +178,12 @@ body { background-color: #EEEB99; }
 
 /* Vertical Rhythm  */
 .entry-meta { margin-bottom: 10px; }
-p, pre, ul, ol, dl, dd, blockquote, address, fieldset, form, .gallery-row, .comment-list ul, .comment-list ol { margin-bottom: 20px; }
+p, pre, ul, ol, blockquote, address, fieldset, form, .gallery-row, .comment-list ul, .comment-list ol { margin-bottom: 20px; }
 /*.hentry*/.post, .widget, .comment, .navigation-links { margin-bottom: 40px; }
 /* remove margins from #footer p */
 /*.footer p { margin: 0; }*/
 
-/* Logo */
-#logo, .header-title { font-size: 36px; line-height: 30px; color: #287621; /*font-weight: bold;*/ }
-.header-title:hover { text-decoration: none; }
-#tagline { color: #333; }
+
 
 /* Menu */
 .nav { font-size: 17px; font-family: Helvetica, Arial, sans-serif; float: left; line-height: 1; color: #287621; width: 100%; }
@@ -254,12 +253,13 @@ a:hover { text-decoration: underline; }
 .entry-content a.more-link:hover { text-decoration: none; }
 
 /* Headings */
-h1, h2, h4, h5, h6 { font-weight: normal; clear: both; }
-h1 { font-size: 22px; line-height: 26px; padding: 5px 0px; font-family: Helvetica,Arial,sans-serif; font-weight: bold; }
-h2 { font-size: 20px; line-height: 22px; padding: 5px 0px; font-family: Helvetica,Arial,sans-serif; font-weight: bold; }
-h4 { font-size: 14px; line-height: 18px; padding: 5px 0px; }
-h5 { font-size: 12px; line-height: 18px; padding: 5px 0px; }
-h6 { font-size: 10px; line-height: 16px; }
+h1, h2, h3, h4, h5, h6 { font-weight: normal; clear: both; }
+h1 { font-size: 18px; line-height: 18px; padding: 5px 0px; font-family: Helvetica,Arial,sans-serif; font-weight: bold; }
+h2 { font-size: 16px; line-height: 16px; padding: 5px 0px; font-family: Helvetica,Arial,sans-serif; font-weight: bold; }
+h3 { font-size: 14px; line-height: 14px; padding: 5px 0px; font-family: Helvetica,Arial,sans-serif; font-weight: bold; }
+h4 { font-size: 14px; line-height: 14px; padding: 5px 0px; }
+h5 { font-size: 12px; line-height: 12px; padding: 5px 0px; }
+h6 { font-size: 10px; line-height: 10px; }
 
 /* Side bar */
 .aside { font-family: Arial, Helvetica, sans-serif; }
@@ -270,7 +270,7 @@ h6 { font-size: 10px; line-height: 16px; }
 .entry-title, .entry-title a { color: #414c58; font-size: 26px; line-height: 28px; /*font-size: 24px; line-height: 28px;*/ }
 .entry-title a:hover { /*color: #2361a1;*/ text-decoration: underline; }
 
-.entry-content { font-size: 15px; }
+.entry-content { font-size: 12px; }
 
 /* Text Elements */
 address { font-style: italic; }
@@ -309,7 +309,7 @@ pre { white-space: pre; overflow: auto; padding: 10px; border: 1px solid #ddd; c
 code { padding: 0px 3px; }
 
 /* Lists: (ul, ol, dl) */
-ul, ol, dl { margin-left: 15px; }
+ul, ol, { margin-left: 15px; }
 .nav { margin-left: 0px; }
 .entry-content ul, .entry-content ol, #search-query { margin-left: 25px; }
 
@@ -322,7 +322,7 @@ ul { list-style-type: disc; }
 ul ul { list-style-type: circle; }
 ul ul ul { list-style-type: square; }
 
-dt { font-weight: bold; }
+
 
 .fat li { margin-bottom: 10px; }
 
@@ -332,7 +332,7 @@ input, textarea, button {
   border: 1px solid #bbb866;
   border-radius: 5px;
   color: #444;
-  font-size: 14px;
+  font-size: 12px;
   padding: 3px;
 }
 textarea {
@@ -405,7 +405,7 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 
 /* ************************ from css/screen.css ********************* */
 .upper-wrap { background-color: #ffffcc; }
-.header{ background-color: #BBEA3E; }
+
 
 #container-main { 
     margin-bottom: 5px;
@@ -481,7 +481,7 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 
 
 .nav .page_item {
-    width: 8em;
+    
     border-width: 0 1px;
     border-style: solid;
     border-color: transparent #ffffcc transparent #ddda88;
@@ -561,7 +561,7 @@ a.button {
   border-radius: 0;
   font-weight: bold;
   color: black;
-  font-size: 14px;
+  font-size: 12px;
   display: inline-block;
   margin-left: 1em;
 }
@@ -615,7 +615,7 @@ h4 {
   border: 1px solid hsla(80, 90%, 40%, 0.7); 
   background: #EEEB99;
   color: rgb(153, 0, 0);
-  font-size: 108%;
+  font-size: 100%;
 }
 
 #error_explanation {
@@ -626,13 +626,14 @@ h4 {
   border: 1px solid hsla(80, 90%, 40%, 0.7); 
   background: #EEEB99;
   color: rgb(153, 0, 0);
-  font-size: 108%;
+  font-size: 100%;
 }
 
 #user_log_in {
   position:relative;
-  margin-top: -36px; 
+  margin-top: -70px; 
   margin-bottom: 0px; 
+  margin-right: 50px; 
   padding: 2px; 
   border: 1px solid hsla(80, 90%, 40%, 0.7); 
   color: rgb(153, 0, 0);

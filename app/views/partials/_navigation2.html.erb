@@ -1,0 +1,44 @@
+<form style="margin-top: -1.5em;">
+  <div id="radioset" align="center">
+    <input type="radio" id="radio1" name="radio">
+      <label for="radio1">
+        <a href='/'>
+          <img alt='Home' src='/assets/biovel.png' width="18" height="18">
+          Home
+        </a>
+      </label>
+    <input type="radio" id="radio2" name="radio" checked="checked">
+      <label for="radio2">
+        <a href='/workflows'>
+          <img alt='Workflows' src='/assets/cog.png'>
+          Workflows
+        </a>
+      </label>
+    <input type="radio" id="radio3" name="radio">
+      <label for="radio3">
+        <a href='/runs'>
+          <img alt='Workflow Runs' src='/assets/table.png'>
+          Runs
+        </a>
+      </label>
+    <% if !current_user.nil? && current_user.admin %>
+    <input type="radio" id="radio4" name="radio">
+      <label for="radio4">
+          <a href='/credentials'>
+            <img alt='Home' src='/assets/taverna-server-logo92x92.png' width="18" height="18">
+            Settings
+          </a>
+        </label>
+            <input type="radio" id="radio5" name="radio">
+      <label for="radio5">
+            <a href='/announcements'>
+              <img alt='Announcement' src='/assets/transmit.png' width="18" height="18">
+              Notices
+            </a>
+        </label>
+      <% end %>
+  </div>
+</form>
+<%= javascript_tag do -%>
+  $( "#radioset" ).buttonset();
+<% end -%>

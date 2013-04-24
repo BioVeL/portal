@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Workflow:</b>
+  <%= @workflow_port.workflow_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @workflow_port.name %>
+</p>
+
+<p>
+  <b>Display name:</b>
+  <%= @workflow_port.display_name %>
+</p>
+
+<p>
+  <b>Display description:</b>
+  <%= @workflow_port.display_description %>
+</p>
+
+<p>
+  <b>Order:</b>
+  <%= @workflow_port.order %>
+</p>
+
+<p>
+  <b>Port value type:</b>
+  <%= @workflow_port.port_value_type %>
+</p>
+
+<p>
+  <b>Sample value:</b>
+  <%= @workflow_port.sample_value %>
+</p>
+
+<p>
+  <b>Sample file:</b>
+  <%= @workflow_port.sample_file %>
+</p>
+
+<p>
+  <b>Show:</b>
+  <%= @workflow_port.show %>
+</p>
+
+<p>
+  <b>Display control:</b>
+  <%= @workflow_port.display_control_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_workflow_port_path(@workflow_port) %> |
+<%= link_to 'Back', workflow_ports_path %>

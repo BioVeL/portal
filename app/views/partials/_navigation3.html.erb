@@ -1,0 +1,33 @@
+  <button id="home_button">
+    <a href='/'>
+      <img alt='Home' src='/assets/biovel.png' width="18" height="18">
+      Home
+    </a>
+  </button>
+  <button id="workflows_button">
+         <a href='/workflows'>
+          <img alt='Workflows' src='/assets/cog.png'>
+          Workflows
+        </a>
+  </button>
+  <button id="runs_button">
+        <a href='/runs'>
+          <img alt='Workflow Runs' src='/assets/table.png'>
+          Runs
+        </a>
+  </button>
+  <% if !current_user.nil? && current_user.admin %>
+    <button id="settings_button">
+          <a href='/credentials'>
+            <img alt='Home' src='/assets/taverna-server-logo92x92.png' width="18" height="18">
+            Settings
+          </a>
+    </button>
+    <button id="announcements_button">
+            <a href='/announcements'>
+              <img alt='Announcement' src='/assets/transmit.png' width="18" height="18">
+              Notices
+            </a>
+    </button>
+  <% end %>
+

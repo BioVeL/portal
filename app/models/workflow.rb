@@ -55,6 +55,8 @@ class Workflow < ActiveRecord::Base
 
   # a workflow can have many runs
   has_many :runs
+  # a workflow can have many ports
+  has_many :workflow_ports
   # after the workflow details have been written to the DB
   # write the workflow file to the filesystem
   after_save :store_wffile
@@ -221,12 +223,14 @@ class Workflow < ActiveRecord::Base
     return [sinks,descriptions]
   end
   def get_processors
+    return nil
     # get the workflow t2flow model
     wf_model = get_model
     # collect the workflow processors and their descriptions
     return wf_model.processors()
   end
   def get_processors_in_order
+    return nil
     # get the workflow t2flow model
     wf_model = get_model
     ordered_processors = get_processors_order()
@@ -238,7 +242,9 @@ class Workflow < ActiveRecord::Base
       end
     end    
     # collect the workflow processors and their descriptions
-    return ordered_processors
+    #return ordered_processors 
+    # temporarily disable this because it creates infinite loop
+    return wf_model.processors()
   end
 
   def get_processors_order

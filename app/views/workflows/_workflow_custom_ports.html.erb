@@ -32,7 +32,7 @@
 # 
 # Authors
 #     Abraham Nieva de la Hidalga
-#     Alan Williams 
+#      
 # Synopsis 
 # 
 # BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
@@ -41,48 +41,39 @@
 # For more details see http://www.biovel.eu
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
-# through the grant agreement number 283359. 
+# through the grant agreement number 283359.
 %>
-<div class='container'>
-  <div class='menu'>
-    <ul class='nav'>
-      <li class='page_item' style='width: 6em;'>
-      <a></a>
-      </li>
-
-      <li class='page_item'>
-        <a href='/'>
-          <img alt='Home' src='/assets/biovel.png' width="18" height="18">
-          Home
-        </a>
-      </li>    
-      <li class='page_item'>
-        <a href='/workflows'>
-          <img alt='Workflows' src='/assets/cog.png'>
-          Workflows
-        </a>
-      </li>
-      <li class='page_item'>
-        <a href='/runs'>
-          <img alt='Workflow Runs' src='/assets/table.png'>
-          Runs
-        </a>
-      </li>
-      <% if !current_user.nil? && current_user.admin %>
-        <li class='page_item'>
-          <a href='/credentials'>
-            <img alt='Home' src='/assets/taverna-server-logo92x92.png' width="18" height="18">
-            Settings
+<div id="wf_custom_ports" style="min-height:300px;
+     			       height:auto !important;
+                               height:300px; " >
+  <form>
+    <div id="radioset" align= center>
+      <input type="radio" id="custom_input_ports" name="radio">
+        <label for="custom_input_ports">
+          <a href="javascript:showdiv('wf_custom_inputs')">
+            <img alt='I' src='/assets/inputport.png' width="18" height="18">
+            <span>Inputs</span>
           </a>
-        </li>
-        <li class='page_item'>
-            <a href='/announcements'>
-              <img alt='Announcement' src='/assets/transmit.png' width="18" height="18">
-              Notices
-            </a>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-</div>
-  
+        </label>
+      <input type="radio" id="custom_output_ports" name="radio">
+        <label for="custom_output_ports">
+          <a href="javascript:showdiv('wf_custom_outputs')">
+            <img alt='I' src='/assets/outputport.png' width="18" height="18">
+            <span>Outputs</span>
+          </a>
+        </label>
+    </div>
+  </form> 
+
+  <%= render :partial => 'workflow_custom_inputs', :locals => {:workflow => @workflow} %>
+  <%= render :partial => 'workflow_custom_outputs', :locals => {:workflow => @workflow} %>
+ </div>
+ 
+<%= javascript_tag do -%>
+  $("#radioset").buttonset();
+<% end -%>
+
+
+
+
+

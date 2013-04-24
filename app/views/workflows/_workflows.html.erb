@@ -60,9 +60,9 @@
   <% @workflows.each do |workflow| %>
     <tr>
       <td title="<%= workflow.description %>" alt="<%= workflow.description %>">
-        <dl>
-          <dt><%= workflow.title %></dt>
-          <dd><%= truncate(strip_tags(workflow.description), :length => 80) %></dd>
+        <dl class="wf_snip">
+          <dt><%= link_to workflow.title, workflow  %></dt>
+          <dd><%= workflow.description[0,79]+"..." %></dd>
         </dl>
     </td>
     <td><%= workflow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
@@ -79,10 +79,6 @@
       </td>	
     <% end -%>
     <td>
-    <div title="Show workflow details" alt="Show see workflow details" style="float:left">
-      <%= link_to 'Details', workflow , :class => "link_img"%>
-    </div>
-
     <div title="Run workflow" alt="Run workflow" style="float:left">
       <%= link_to 'Run', {:controller => 'runs' , 
           :action => 'new_run', :id => workflow.id}, :class => "link_img" %>

@@ -45,8 +45,8 @@
 %>
 <% content_for :title, "Taverna Lite - Create Run for " + 
                  @workflow.title + "Workflow"%>
-<h1> Create Run for <%=h @workflow.title%> Workflow</h1>
-<br/>
+<h2> Create Run for <%=h @workflow.title%> Workflow</h2>
+
 <%= form_for :file_uploads, 
       :url => {:controller => 'runs', :action => 'new_run'}, 
       :html => {:multipart => true}, :disable_with => "Initialising Run" do |f| %>
@@ -93,6 +93,6 @@
     <%= submit_tag 'Start Run' %>          	
   </div>
 <% end %>
- <br /><br />
+
  
 

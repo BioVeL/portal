@@ -128,3 +128,26 @@ div {
 * html .clearfix             { zoom: 1; } /* IE6 */
 *:first-child+html .clearfix { zoom: 1; } /* IE7 */
 
+.wf_snip dl,dt, dd {font-weight: normal; clear: both;}
+.wf_snip dt {
+ width:100%; 
+ font-weight: bold; 
+}
+
+
+dl {
+ width:100%;
+ overflow:hidden;
+}
+dt {
+ font-weight: bold; 
+ font-size: 12px; 
+ float:left;
+ width:20%; /* adjust the width; make sure the total of both is 100% */
+;
+}
+dd {
+ font-size: 12px; 
+ float:left;
+ width:80%; /* adjust the width; make sure the total of both is 100% */
+}
