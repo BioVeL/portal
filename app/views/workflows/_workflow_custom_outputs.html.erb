@@ -47,22 +47,38 @@
      			    height:auto !important;
                             height:300px; display:none;">
 <% if @sinks.count>0 %>
+<%= form_for :file_uploads, 
+      :url => {:controller => 'runs', :action => 'new_run'}, 
+      :html => {:multipart => true}, :disable_with => "Initialising Run" do |f| %>
+  <%= hidden_field_tag "workflow_id", @workflow.id %>
    <p>
      <b> This workflow has <%= @sinks.count %> <%= "Output".pluralize(@sinks.count)%> </b>
    </p>
    <% @sinks.each do |item| %> 
     <p>
-        <% portname = item[0] %>
-        <b><%= label_tag portname %></b> 
-        <%= simple_format(@sink_descriptions[portname]) %> 
-        <% unless @sinks[portname].nil? || @sinks[portname]=="" %>
-          <b>Example Value:</b> 
-          <%= simple_format(@sinks[portname]) %>
-        <%end%>      
-
+      <% portname = item[0] %>
+      <h3><%= label_tag portname %></h3> 
+      <p><%= label_tag @sink_descriptions[portname] %></p>
+      <% example_value = "" -%>
+      <% unless @sinks[portname].blank? -%>
+        <b>Example Value:</b><br/> 
+        <%= simple_format(@sinks[portname]) %>
+        <p>
+          <b>
+            The example value is automatically entered in the box below. 
+            Click to edit it or enter a new value.
+          </b>
+        </p>
+        <% example_value = @sinks[portname] -%>
+      <% end -%>
+      <p>
+      Enter Value: <%= f.text_area portname, :value => example_value, 
+                     :rows => 3, :onclick => '$(this).select();' %> 
+      or Select File <%= f.file_field  "file_for_#{portname}" %>
+      </p>
     </p>
     <% end %>
-
+<% end -%>
 <% else %>  
   <p>
     <b> This workflow has no outputs </b>

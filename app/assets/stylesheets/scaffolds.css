@@ -128,26 +128,24 @@ div {
 * html .clearfix             { zoom: 1; } /* IE6 */
 *:first-child+html .clearfix { zoom: 1; } /* IE7 */
 
-.wf_snip dl,dt, dd {font-weight: normal; clear: both;}
-.wf_snip dt {
- width:100%; 
- font-weight: bold; 
-}
+ dl.wf_snip,dt.wf_snip, dd.wf_snip {font-weight: normal; clear: both;}
+ dt.wf_snip { width:100%;  font-weight: bold; }
 
-
-dl {
+dl.list_any {
  width:100%;
  overflow:hidden;
 }
-dt {
+dt.list_title  {
  font-weight: bold; 
  font-size: 12px; 
  float:left;
  width:20%; /* adjust the width; make sure the total of both is 100% */
-;
 }
-dd {
+dd.list_description  {
  font-size: 12px; 
  float:left;
  width:80%; /* adjust the width; make sure the total of both is 100% */
 }
+
+
+

@@ -118,3 +118,4 @@
 		text.innerHTML = "less";
 	}
   }
+

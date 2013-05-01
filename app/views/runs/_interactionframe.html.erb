@@ -45,11 +45,11 @@
 %>
 <div id="interactionframe", data-interaction_id ="" >
   <% unless @interaction_uri.nil? %>
-    <h2>INTERACTIONS</h2>
+    <h3>Action Required</h3>
     <iframe src=<%= @interaction_uri %>; width="100%"; height="800" id="interactionframe"></iframe>
   <%else%>
     <% if @run.state == "running" %>
-      <h2>Wait....</h2>
+      <h3>Wait....</h3>
       <img alt='Processing' src='/assets/spinner.gif' width="18" height="18">
     <% end %>
   <% end %>

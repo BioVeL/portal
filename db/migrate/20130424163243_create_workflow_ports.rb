@@ -2,6 +2,7 @@ class CreateWorkflowPorts < ActiveRecord::Migration
   def change
     create_table :workflow_ports do |t|
       t.integer :workflow_id
+      t.integer :port_type
       t.string :name
       t.string :display_name
       t.string :display_description

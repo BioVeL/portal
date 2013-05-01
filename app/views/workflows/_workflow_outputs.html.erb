@@ -51,16 +51,21 @@
      <b> This workflow has <%= @sinks.count %> <%= "Output".pluralize(@sinks.count)%> </b>
    </p>
    <% @sinks.each do |item| %> 
-    <p>
-        <% portname = item[0] %>
-        <b><%= label_tag portname %></b> 
-        <%= simple_format(@sink_descriptions[portname]) %> 
-        <% unless @sinks[portname].nil? || @sinks[portname]=="" %>
-          <b>Example Value:</b> 
-          <%= simple_format(@sinks[portname]) %>
-        <%end%>      
+    <% portname = item[0] %>
+    <% example_value = @sinks[portname].blank? ? "": @sinks[portname] -%>
+    <h3> <%= label_tag portname %></h3>
+    <dl class='list_any'>
+      <dt class='list_title'>Description:</dt>
+      <dd class='list_description'>
+        <%=@sink_descriptions[portname].blank? ? "Not Provided" : @sink_descriptions[portname] -%>
+      </dd>
+       <dt class='list_title'>Example Value:</dt>
+       <dd class='list_description'>
+         <%= render :partial => 'partials/preview_and_detail', 
+           :locals => {:content_label => portname, :content => example_value } %>
+      </dd>
+    </dl>
 
-    </p>
     <% end %>
 
 <% else %>  

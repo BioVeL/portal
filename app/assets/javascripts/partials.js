@@ -1,4 +1,4 @@
-<% 
+/* 
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -32,8 +32,6 @@
 # 
 # Authors
 #     Abraham Nieva de la Hidalga
-#     Finn Baccall
-#     Robert Haines
 # 
 # Synopsis 
 # 
@@ -44,38 +42,24 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
-%>
-<% content_for :title, "Taverna Lite"%>
-<div style="float:left;width:65%">
-<h1>Welcome to BioVeL Taverna Lite</h1>
-</br>
-<p>
-  Taverna Lite allows uploading, searching, reviewing and running Workflows
- without the need of installing or configuring additional software. 
+*/
 
-</p>
-<p>
-The main features of Taverna Lite include:
-<ul>
-<li>Uploading your own workflows</li>
-<li>Searching for workflows on 
-  <a href="http://www.myexperiment.org">my experiment</a>
-</li>
-<li>Reviewing workflow features</li>
-<li>Running workflows</li>
-<li>Downloading workflows</li>
-<li>Viewing Results</li>
-<li>Downloading Results</li>
-</ul>
-</p>
-<p>
-You will be able to experiment using your own data and share your workflows with
-the BioVeL community.
-</p>
-<p>
-If you require further processing or modifications, you can download existing
-workflows and customise them using 
-<a href="http://www.taverna.org.uk/download/workbench/">Taverna Workbench</a>.
-</p>
-</div>
-<%= render :partial => 'partials/notice' %>
+/*Script for the control that togles showing preview and full text */
+  function snip_full(full_content, snip_content, toggle_link) {
+	var ele = document.getElementById(full_content);
+        var ele2 = document.getElementById(snip_content);
+	var button = document.getElementById(toggle_link);
+	if(ele.style.display == "block") {
+    		ele.style.display = "none";
+                ele2.style.display = "block"
+		button.innerHTML = "more";
+                button.title = "show all";
+                button.alt = "show all";   	}
+	else {
+		ele.style.display = "block";
+                ele2.style.display = "none"
+		button.innerHTML = "less";
+                button.title = "show less";
+                button.alt = "show less";                  
+	}
+  }

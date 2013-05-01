@@ -47,7 +47,7 @@ require 'atom'
 class RunsController < ApplicationController
   before_filter :login_required, :except => [:new_run, :show, :refresh, 
                                              :refresh_list, :interaction, 
-                                             :index]
+                                             :index, :destroy]
 
   # GET /runs
   # GET /runs.json
@@ -322,6 +322,7 @@ class RunsController < ApplicationController
       get_workflow()
       Rails.logger.info "#NEW RUN (#{Time.now}): Generating new run for: #{@workflow.name}"
     end
+    run_name = params[:run_name].nil? ? @workflow.name : :params[:run_name]
     @sources = {}
     @descriptions = {}
     @files = {}
@@ -396,7 +397,7 @@ class RunsController < ApplicationController
           run.add_password_credential(rs_cred.url,rs_cred.login,rs_cred.password)
         end
         run.start()
-        save_run(run)
+        save_run(run, run_name)
       else
         Rails.logger.info 
           "#NEW RUN (#{Time.now}): Server Down - Redirected to back"    
@@ -406,7 +407,7 @@ class RunsController < ApplicationController
       # if workflow has inputs
       @sources, @descriptions = @workflow.get_inputs
     else
-      save_run(run)
+      save_run(run, run_name)
     end   
   end
 
@@ -455,13 +456,13 @@ class RunsController < ApplicationController
   end
 
   # Save the new run in the database
-  def save_run(run)
+  def save_run(run, run_name)
     @run = Run.new
     puts "CREATE gets called after the new form is presented"
     puts "CREATE #{params}" 
     puts "CREATE run identifier #{cookies[:run_identification]}"
     @run.workflow_id = @workflow.id
-    @run.description = @workflow.title
+    @run.description = run_name
     @run.run_identification = run.identifier
     @run.creation = run.create_time
     @run.start = run.start_time

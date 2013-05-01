@@ -62,7 +62,10 @@ class WorkflowsController < ApplicationController
   # GET /workflows/1.json
   def show
     @sources, @source_descriptions = @workflow.get_inputs
+    @custom_inputs = @workflow.get_custom_inputs
+    @custom_outputs = @workflow.get_custom_outputs
     @sinks, @sink_descriptions = @workflow.get_outputs
+    @custom_outputs = WorkflowPort.get_custom_ports(@workflow.id, 2)
     @processors = @workflow.get_processors
     @ordered_processors = @workflow.get_processors_in_order
     respond_to do |format|
@@ -93,8 +96,6 @@ class WorkflowsController < ApplicationController
       format.json { render :json => @workflow }
     end
   end
-
-
 
   # GET /workflows/1/edit
   def edit
@@ -168,7 +169,7 @@ class WorkflowsController < ApplicationController
   # PUT /workflows/1.json
   def update
     @workflow = Workflow.find(params[:id])
-
+     
     respond_to do |format|
       if @workflow.update_attributes(params[:workflow])
         format.html { redirect_to @workflow, :notice => 'Workflow was successfully updated.' }
@@ -214,6 +215,65 @@ class WorkflowsController < ApplicationController
     redirect_to :back
   end
 
+  def save_custom_inputs
+    @workflow = Workflow.find(params[:id])
+    @inputs, @input_desc = @workflow.get_inputs
+    @input_desc.each do |indiv_in| 
+      i_name = indiv_in[0]
+      file_for_i = "file_for_"+i_name
+      customise_i = "customise_"+i_name
+      display_i = "display_for_"+i_name
+      if ((params[:file_uploads].include? i_name) &&
+          params[:file_uploads][customise_i] == "1") &&
+          ((params[:file_uploads].include? file_for_i) || 
+           (params[:file_uploads][i_name] != "")) 
+        # verify if customised input exists
+        wfps = WorkflowPort.where("port_type = ? and name = ?", "1", i_name)
+        if wfps.empty? 
+          @wfp = WorkflowPort.new()
+          puts "New Port"
+        else 
+          @wfp = wfps[0] 
+          puts "Old Port"
+        end
+        #get values for customised input 
+        @wfp.workflow_id = @workflow.id
+        @wfp.port_type = 1 # 1 = input
+        @wfp.name = i_name
+        case params[:file_uploads][display_i]
+          when "file"
+            @wfp.display_control_id = 3
+          when "value"
+            @wfp.display_control_id = 2
+          else # default value and file
+            @wfp.display_control_id = 1  
+        end
+        if params[:file_uploads].include? file_for_i
+          #save file 
+          @wfp.file_content = File.open( params[:file_uploads][file_for_i].tempfile, 'r')
+          @wfp.sample_file =  params[:file_uploads][file_for_i].original_filename
+        end
+        if params[:file_uploads][i_name] != ""
+          #save value
+          @wfp.sample_value = params[:file_uploads][i_name]
+        end 
+        #save the customisation
+        @wfp.save
+      else 
+        puts "Port is not being customised " + i_name
+      end
+    end
+    respond_to do |format|
+      if @workflow.update_attributes(params[:workflow])
+        format.html { redirect_to @workflow, :notice => 'Workflow inputs updated' }
+        format.json { head :no_content }
+      else
+        format.html { render :action => "edit" }
+        format.json { render :json => @workflow.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
   def get_workflows
@@ -240,6 +300,7 @@ class WorkflowsController < ApplicationController
     MyExperimentToken.all :conditions=>  
       {:user_id=>current_user.id}
   end
+
   def getmyExperimentWorkflows(workflows=[], search_by="")
     consumer_tokens = getConsumerTokens
     if consumer_tokens.count > 0
@@ -349,4 +410,6 @@ class WorkflowsController < ApplicationController
     end
     return elements
   end
+
+
 end

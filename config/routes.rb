@@ -43,7 +43,7 @@ TliteR3::Application.routes.draw do
     member do
       put "make_public"
       put "make_private"
-      post "save_workflow_ports"
+      post "save_custom_inputs"
     end
   end
   #*****************************************************

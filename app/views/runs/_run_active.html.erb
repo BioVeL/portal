@@ -1,5 +1,11 @@
-<h3> Running: <%=h @run.description%> </h3>
-<b>User:</b>
-<%= @run.user_id.nil? ? "Guest" : User.find(@run.user_id).name %>
-<%= render :partial => 'interactionframe'%>
-<%= render :partial => 'runstate', :locals => {:run => @run} %>
+<h3> Running: <%=h @run.description -%> </h3>
+<% if current_user.admin  -%>
+  <dl class='list_any'>
+    <dt class='list_title'>User:</dt>
+    <dd class='list_description'>
+      <%= @run.user_id.nil? ? "Guest" : User.find(@run.user_id).name -%>
+    </dd>
+  </dl>
+<% end -%>
+<%= render :partial => 'interactionframe' -%>
+<%= render :partial => 'run_state', :locals => {:run => @run} -%>

@@ -1,24 +1,31 @@
-<h3> Run: <%=h @run.description%> Workflow</h3>
+<div class='run_state'>
+<h3> Run: <%=h @run.description%></h3>
 <% if active_link?(Workflow.find(@run.workflow_id).my_experiment_id ) %>
   <%= link_to( 
       image_tag("myexperiment.png", :height => "15", :alt => "my experiment"),
       Workflow.find(@run.workflow_id).my_experiment_id)  %>
 <% end %>
 <%= render :partial => 'run_results', :locals => {:run => @run} %>
- <dl>
-   <dt>User:</dt>
-   <dd><%= @run.user_id.nil? ? "Guest" : User.find(@run.user_id).name %></dd>
-   <dt>Current State:</dt>
-   <dd><%= run.state %></dd>
-   <dt>The run was started at:</dt>
-   <dd><%= run.start.strftime("%d/%m/%Y - %H:%M:%S") %></dd>
-   <dt>The run finished at:</dt>
-   <dd><%= run.end.strftime("%d/%m/%Y - %H:%M:%S") %></dd>
-   <dt>Running Time:</dt>
-   <dd><%= (run.end - run.start).round() %> seconds
-        <%unless (run.end - run.start).round()<60%>
+  <dl class='list_any'>
+    <dt class='list_title'>User:</dt>
+    <dd class='list_description'>
+      <%= @run.user_id.nil? ? "Guest" : User.find(@run.user_id).name %></dd>
+    <dt class='list_title'>Current State:</dt>
+    <dd class='list_description' ><%= run.state %></dd>
+    <dt class='list_title'>The run was started at:</dt>
+    <dd class='list_description' >
+      <%= run.start.strftime("%d/%m/%Y - %H:%M:%S") %></dd>
+    <dt class='list_title'>The run finished at:</dt>
+    <dd class='list_description' >
+      <%= run.end.strftime("%d/%m/%Y - %H:%M:%S") %></dd>
+    <dt class='list_title'>Running Time:</dt>
+    <dd class='list_description' >
+      <%= (run.end - run.start).round() %> seconds
+      <%unless (run.end - run.start).round()<60%>
         (approx. <%= distance_of_time_in_words(0,(run.end - run.start),
                    [:include_seconds=>true]) %>)
-        <%end%></dd>
+      <%end%></dd>
  </dl> 
+</div>
+
 
