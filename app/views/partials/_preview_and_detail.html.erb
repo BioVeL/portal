@@ -1,5 +1,5 @@
 <div id="<%='snip_'+ content_label %>" class="contentdiv">
-  <%=content.blank? ? "Not Provided" : simple_format(content[0,79]+(content.length > 80 ? "..." : "") ) -%>
+  <%=content.blank? ? "Not Provided" : content[0,79]+(content.length > 80 ? "..." : "")  -%>
 </div>
 <% if content.length > 80 -%>
   <div id="<%='dialog_'+ content_label %>" style="display:none" class="contentdiv">

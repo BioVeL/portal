@@ -41,6 +41,7 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
+require 'mime/types'
 class ResultsController < ApplicationController
   before_filter :admin_required, :except => [:download]
   def index
@@ -52,7 +53,7 @@ class ResultsController < ApplicationController
   def download
     @result = Result.find(params[:id])
     path = @result.result_filename
-    filetype = @result.filetype
-    send_file path, :type=>filetype , :name => @result.name
+    filetype = MIME::Types.type_for(path)
+    send_file path, filetype, :name => @result.name
   end
 end

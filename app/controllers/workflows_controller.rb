@@ -240,14 +240,7 @@ class WorkflowsController < ApplicationController
         @wfp.workflow_id = @workflow.id
         @wfp.port_type = 1 # 1 = input
         @wfp.name = i_name
-        case params[:file_uploads][display_i]
-          when "file"
-            @wfp.display_control_id = 3
-          when "value"
-            @wfp.display_control_id = 2
-          else # default value and file
-            @wfp.display_control_id = 1  
-        end
+        @wfp.display_control_id = params[:file_uploads][display_i]
         if params[:file_uploads].include? file_for_i
           #save file 
           @wfp.file_content = File.open( params[:file_uploads][file_for_i].tempfile, 'r')

@@ -80,10 +80,10 @@
         </li>
       </ol> 
     </p>   
-   <% @sources.each do |item| %>
-     <% portname = item[0] %>
+   <% @custom_inputs.each do |item| %>
+     <% portname = item.name %>
+     <!-- Use sources to get the original sample and descriptio values -->
      <% example_value = @sources[portname].blank? ? "": @sources[portname] -%>  
-     <!-- Load saved customisation -->
      <h2> <%= label_tag portname %></h2>
      <dl class='list_any'>
        <dt class='list_title'>Description:</dt>
@@ -98,8 +98,10 @@
      </dl>
      <h3> 
        Customise <%= label_tag portname %>   
-       <%= f.check_box  "customise_#{portname}"%>
+       <%= f.check_box  "customise_#{portname}", :checked => !item.id.nil? -%>
      </h3>
+     <% example_value = !item.id.nil? ? item.sample_value : example_value -%>
+     <!-- Use custom_inputs to load saved customisation values -->
      <dl class='list_any'>
        <dt class='list_title'>Enter Value:</dt>
        <dd class='list_description'>
@@ -108,17 +110,19 @@
        </dd>
        <dt class='list_title'>Select File:</dt>
        <dd class='list_description'>
-         <%= f.file_field  "file_for_#{portname}", :style =>'width:95%'%>
+         <%= f.file_field  "file_for_#{portname}" %>
+         <%= item.sample_file.nil? ? "No sample" : "Current: " + item.sample_file -%> 
        </dd>      
        <dt class='list_title'>Input type:</dt>
        <dd class='list_description'>
          <%= f.select "display_for_#{portname}", 
-           options_for_select([["value or file (Default)", "default"],
-                               ["file", "file"], 
-                               ["value", "value"]]) %>
+           options_for_select([["value or file (Default)", 1],
+                               ["value", 2], ["file", 3]], item.display_control_id) %>
        </dd>      
        <!-- Add a preview that shows how data will be displayed according with 
             the selected input control-->
+       <!-- Create a control for displaying file contents on demand -->
+       <!-- If file is present add a button link to it -->
      </dl>    
    <% end %>
    <div title="Save Input Changes" alt="Save Input Changes" style="float:right; padding:10px;"> 

@@ -64,39 +64,78 @@
     <h2>
       Input Parameters
     </h2>
-    <% @sources.each do |item| %> 
-      <% portname = item[0] %>
+    <% @custom_inputs.each do |item| %> 
+      <% portname = item.name %>
       <% example_value = @sources[portname].blank? ? "": @sources[portname] -%>  
       <h3><%= label_tag portname %></h3> 
-      <dl class='list_any'>
-        <dt class='list_title'>Description:</dt>
-        <dd class='list_description'>
-          <%=@descriptions[portname].blank? ? "Not Provided" : simple_format(@descriptions[portname]) -%>
-        </dd>
-        <dt class='list_title'>Example Value:</dt>
-        <dd class='list_description'>
-          <%= render :partial => 'partials/preview_and_detail', 
-            :locals => {:content_label => "cit_"+ portname, :content => example_value } %>
-        </dd>
-        <dt class='list_title'> </dt>
-        <dd class='list_description'>
-        <b>  
-          The example value is automatically entered in the box below. 
-          Click to edit it or enter a new value.
-        </b> 
-        </dd>       
-      </dl>
-     <dl class='list_any'>
-       <dt class='list_title'>Enter Value:</dt>
-       <dd class='list_description'>
-         <%= f.text_area portname, :value => example_value, :rows => 1, 
-           :onclick => '$(this).select();', :style =>'width:95%' %> 
-       </dd>
-       <dt class='list_title'>Select File:</dt>
-       <dd class='list_description'>
-         <%= f.file_field  "file_for_#{portname}", :style =>'width:95%'%>
-       </dd>           
-     </dl>    
+      <% if item.id.nil? then -%> 
+        <!-- If not customised show default view -->
+        <dl class='list_any'>
+          <dt class='list_title'>Description:</dt>
+          <dd class='list_description'>
+            <%=@descriptions[portname].blank? ? "Not Provided" : simple_format(@descriptions[portname]) -%>
+          </dd>
+          <dt class='list_title'>Example Value:</dt>
+          <dd class='list_description'>
+            <%= render :partial => 'partials/preview_and_detail', 
+              :locals => {:content_label => "cit_"+ portname, :content => example_value } %>
+          </dd>
+          <dt class='list_title'> </dt>
+          <dd class='list_description'>
+          <b>  
+            The example value is automatically entered in the box below. 
+            Click to edit it or enter a new value.
+          </b> 
+          </dd>       
+        </dl>
+        <dl class='list_any'>
+          <dt class='list_title'>Enter Value:</dt>
+          <dd class='list_description'>
+            <%= f.text_area portname, :value => example_value, :rows => 1, 
+              :onclick => '$(this).select();', :style =>'width:95%' %> 
+          </dd>
+          <dt class='list_title'>Select File:</dt>
+          <dd class='list_description'>
+            <%= f.file_field  "file_for_#{portname}", :style =>'width:95%'%>
+          </dd>           
+        </dl>            
+      <% else -%>
+      <!-- If customised show custom sample and/or file -->
+        <dl class='list_any'>
+          <dt class='list_title'>Description:</dt>
+          <dd class='list_description'>
+            <%=@descriptions[portname].blank? ? "Not Provided" : simple_format(@descriptions[portname]) -%>      
+          </dd>
+        <% if (item.display_control_id == 1) || item.display_control_id == 2 then -%>
+        <!-- get input from value field -->
+          <dt class='list_title'>Example Value:</dt>
+          <dd class='list_description'>
+            <%= render :partial => 'partials/preview_and_detail', 
+              :locals => {:content_label => portname, :content => item.sample_value } %>
+          </dd>
+          <dt class='list_title'>Enter Value:</dt>
+          <dd class='list_description'>
+            <%= f.text_area portname, :value => example_value, :rows => 1, 
+              :onclick => '$(this).select();', :style =>'width:95%' %> 
+          </dd>
+        <% end -%>
+        <% if (item.display_control_id == 1) || item.display_control_id == 3 then -%>
+         <!-- get input from file field -->
+          <dt class='list_title'>Example File (<%=item.sample_file%>) content:</dt>
+          <% example_file_text = IO.read(item.sample_file_path)%>
+          <dd class='list_description'>
+            <%= render :partial => 'partials/preview_and_detail', 
+              :locals => {:content_label => portname, :content => example_file_text } %>       
+          </dd>
+          <%= f.hidden_field portname, :value => "need_file" %>
+          <%= f.hidden_field "default_file_for_#{portname}", :value => item.sample_file_path %> 
+          <dt class='list_title'>Select File:</dt>
+          <dd class='list_description'>
+            <%= f.file_field  "file_for_#{portname}", :style =>'width:95%'%>
+          </dd> 
+        <% end -%>
+        </dl>
+      <% end -%> 
     <% end %>
   <% end %>
   <div style="float:right;position:relative;">

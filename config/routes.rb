@@ -1,6 +1,10 @@
 TliteR3::Application.routes.draw do
-  resources :workflow_ports
-
+  resources :workflow_ports do
+    member do
+      get "download"
+    end
+  end
+ 
   resources :results
 
   resources :password_resets

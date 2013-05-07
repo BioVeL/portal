@@ -316,16 +316,19 @@ class RunsController < ApplicationController
     
     cookies[:run_identification]=""
     unassigned_inputs = false
-    Rails.logger.info "#NEW RUN (#{Time.now}): number of parameters: #{params.count}"
+    Rails.logger.info "#NEW RUN (#{Time.now}): number of parameters: #{params.count}" #- 1
 
     unless params[:id].nil?
       get_workflow()
-      Rails.logger.info "#NEW RUN (#{Time.now}): Generating new run for: #{@workflow.name}"
+      Rails.logger.info "#NEW RUN (#{Time.now}): Generating new run for: #{@workflow.name}" # -2
     end
-    run_name = params[:run_name].nil? ? @workflow.name : :params[:run_name]
+    if !params[:file_uploads].nil?
+      run_name = params[:file_uploads][:run_name].nil? ? @workflow.title : params[:file_uploads][:run_name]
+    end
     @sources = {}
     @descriptions = {}
     @files = {}
+    @custom_inputs = nil
     unless params[:workflow_id].nil?      
       if inputs_provided(params)
         Rails.logger.info "#NEW RUN (#{Time.now}): using submitted inputs"
@@ -336,6 +339,7 @@ class RunsController < ApplicationController
           run.input_ports.each_value do |port|
             input = port.name  
             input_file =  "file_for_#{port.name}"
+            default_input_file =  "default_file_for_#{port.name}"
             if params[:file_uploads].include? input
               Rails.logger.info "#NEW RUN (#{Time.now}): 1 Actual Input for #{input} as string #{params[input].to_s}"
               stringinput = params[:file_uploads][input].to_s
@@ -352,7 +356,7 @@ class RunsController < ApplicationController
               end
               Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to #{port.value}"   
               Rails.logger.info "#NEW RUN (#{Time.now}): actual value = #{run.input_ports[input].value}       "
-              if run.input_port("name").nil?
+              if run.input_port(input).nil?
                 Rails.logger.info "#NEW RUN (#{Time.now}): no values assigned"
               end
             else
@@ -361,9 +365,15 @@ class RunsController < ApplicationController
               exit 1
             end
             Rails.logger.info "#NEW RUN (#{Time.now}): Files? #{input_file}"
+
+            puts "#NEW RUN (#{Time.now}): Default Files? #{params[:file_uploads][default_input_file]}"
+
             if params[:file_uploads].include? input_file
               port.file = params[:file_uploads][input_file].tempfile.path
               Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to use file '#{params[:file_uploads][input_file].original_filename}'"
+            elsif params[:file_uploads].include? default_input_file
+              port.file = params[:file_uploads][default_input_file].to_s
+              puts "#NEW RUN (#{Time.now}): Input '#{input}' set to use default file '#{params[:file_uploads][default_input_file].to_s}'"
             end
           end
 
@@ -374,7 +384,7 @@ class RunsController < ApplicationController
           end
           run.start()
         else
-          Rails.logger.info 
+          puts 
             "#NEW RUN (#{Time.now}): Server Down - Redirected to back"    
           redirect_to :back,  :flash => {:error => "Server Busy, try again later"}
         end 
@@ -384,28 +394,10 @@ class RunsController < ApplicationController
       end      
     end
 
-    if !(@workflow.has_parameters?) then 
-      # for workflows with no input
-      Rails.logger.info "#NEW RUN no inputs"
-      # create a new run
-      check_server()
-      unless $server.nil?      
-        run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
-        cookies[:run_identification] = run.identifier
-        if @workflow.connects_to_r_server?
-          rs_cred = Credential.find_by_server_type_and_default_and_in_use("rserver",true,true)
-          run.add_password_credential(rs_cred.url,rs_cred.login,rs_cred.password)
-        end
-        run.start()
-        save_run(run, run_name)
-      else
-        Rails.logger.info 
-          "#NEW RUN (#{Time.now}): Server Down - Redirected to back"    
-        redirect_to :back,  :flash => {:error => "Server Busy, try again later"}
-      end
-    elsif cookies[:run_identification]=="" 
+   if cookies[:run_identification]=="" 
       # if workflow has inputs
       @sources, @descriptions = @workflow.get_inputs
+      @custom_inputs = @workflow.get_custom_inputs
     else
       save_run(run, run_name)
     end   
@@ -417,19 +409,20 @@ class RunsController < ApplicationController
     @sources.each do |port|
       input = port[0]
       input_file = "file_for_#{port[0]}"
+      default_input_file =  "default_file_for_#{port[0]}"
       if  !(params[:file_uploads].include? input) && !(params[:file_uploads].include? input_file)
         unless port[1].blank?
           Rails.logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value #{port[1]}"
           params[:file_uploads][input] = port[1]
         else
           inputs_provided = false
-          Rails.logger.info 
+          puts 
             "#NEW RUN (#{Time.now}):*****************************************"
-          Rails.logger.info 
+          puts 
             "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
-          Rails.logger.info 
+          puts 
             "#NEW RUN (#{Time.now}):          " + input 
-          Rails.logger.info 
+          puts 
             "#NEW RUN (#{Time.now}):*****************************************"
           break
         end
@@ -484,16 +477,16 @@ class RunsController < ApplicationController
     #resultset = {}
     "#SAVE_RESULTS"
     if outputs.empty?
-      puts "#SAVE_RESULTS: The workflow has no output ports"    
+      Rails.logger.info "#SAVE_RESULTS: The workflow has no output ports"    
     else 
       outputs.each do |name, port|
-        puts "#SAVE_RESULTS: #{name} (depth #{port.depth})"
+        Rails.logger.info "#SAVE_RESULTS: #{name} (depth #{port.depth})"
         if port.value.is_a?(Array)
-          puts "#SAVE_RESULTS:  partial Results are in a list"
+          Rails.logger.info "#SAVE_RESULTS:  partial Results are in a list"
           sub_array = port.value
           save_nested(runid,name,sub_array,port.type[0],port.depth,index="")
         else
-          puts "#SAVE_RESULTS: path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
+          Rails.logger.info "#SAVE_RESULTS: path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)                  
         end
       end
@@ -521,7 +514,7 @@ class RunsController < ApplicationController
     result.run_id = run
     result.filepath = filepath
     result.result_file = value
-    puts "#SAVE_TO_DB: #{value}" 
+    Rails.logger.info "#SAVE_TO_DB: #{value}" 
     #result.user_id = current_user.id
     #puts "USER: #{current_user.id} #{current_user.login}"
     result.save

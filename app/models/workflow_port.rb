@@ -49,6 +49,8 @@ class WorkflowPort < ActiveRecord::Base
   belongs_to :workflow
   after_save :store_file
 
+  WORKFLOW_STORE = Rails.root.join('public', 'workflow_store')
+
   # get a list of all worflow ports
   # type:
   #      1 Inputs
@@ -58,22 +60,29 @@ class WorkflowPort < ActiveRecord::Base
                                         workflow_id, type)
     return @custom_ports
   end
-
+ 
   def file_content=(file_data)
     unless file_data.blank?
       # store the uploaded data into a private instance variable
       @file_data = file_data
     end
   end   
-  WORKFLOW_STORE = Rails.root.join('public', 'workflow_store')
+  
+  def sample_file_path
+    port_dir = File.join WORKFLOW_STORE, "#{workflow_id}/#{name}"
+    port_filename = File.join port_dir, "#{sample_file}"
+    return port_filename
+  end
+
   private
+  # ****************************************************************************
   # verify if there is actually a file to be saved
   def store_file
     if @file_data
       # create the WORKFLOW_STORE Folder if it does not exist
       port_dir = File.join WORKFLOW_STORE, "#{workflow_id}/#{name}"
       FileUtils.mkdir_p port_dir
-      port_filename = File.join port_dir, "#{sample_file}"
+      
       # create the file and write the data to the file system
       File.open(port_filename, 'wb') do |f|   
         f.write(@file_data.read)

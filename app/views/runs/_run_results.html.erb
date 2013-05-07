@@ -58,17 +58,27 @@
         <% end %>
       </ul>
       <% for result in run.results.each %>
-        <div id="search_<%= result.name %>"  class= "clearfix" style="min-height:300px;
-                                          	height:auto !important;
-                                                height:300px; " >
+        <% result_uri = IO.read(result.result_filename) %>
+        <div id="search_<%= result.name %>" class= "clearfix" style="min-height:300px;
+                                            height:auto !important;
+                                            height:300px; " >
         <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
-        <div class="download_button">
-          <%= button_to 'Download', :controller => 'results', 
+        <% unless result_uri  =~ URI::regexp -%>
+          <div class="download_button">
+            <%= button_to 'Download', :controller => 'results', 
                         :action => 'download', :id => result.id %>
-        </div>
+          </div>
+        <% end -%>
         <div class="show_result">
           <% if result.filetype.to_s =~ /text/ %>
-            <%= simple_format(IO.read(result.result_filename))%>
+            
+            <% if result_uri  =~ URI::regexp -%>
+              <% if active_link?(result_uri) %>
+                <%= link_to(result_uri, result_uri)  -%>
+              <% end %>
+            <% else %>
+              <%= simple_format(IO.read(result.result_filename))%>	
+            <%end%>
           <% elsif result.filetype.to_s =~ /error/ %>
             <%= simple_format(IO.read(result.result_filename))%>
           <% else %>

@@ -51,8 +51,8 @@
      This workflow has <%= @sources.count %> 
      <%= "Input".pluralize(@sources.count)%> 
    </h2>
-  <% @sources.each do |item| %> 
-    <% portname = item[0] %>
+  <% @custom_inputs.each do |item| %> 
+    <% portname = item.name %>
     <% example_value = @sources[portname].blank? ? "": @sources[portname] -%> 
     <h3> <%= label_tag portname %></h3>
     <dl class='list_any'>
@@ -60,14 +60,37 @@
       <dd class='list_description'>
         <%=@source_descriptions[portname].blank? ? "Not Provided" : simple_format(@source_descriptions[portname]) -%>
       </dd>
-       <dt class='list_title'>Example Value:</dt>
-       <dd class='list_description'>
-         <%= render :partial => 'partials/preview_and_detail', 
-           :locals => {:content_label => portname, :content => example_value } %>
-      </dd>
+      <% if item.id.nil? -%> 
+      <!-- If not customised show default view -->
+        <dt class='list_title'>Example Value:</dt>
+        <dd class='list_description'>
+          <%= render :partial => 'partials/preview_and_detail', 
+            :locals => {:content_label => portname, :content => example_value } %>
+        </dd>
+      <% else -%>
+      <!-- If customised show custom sample and/or file -->
+              
+        <% if (item.display_control_id == 1) || item.display_control_id == 2 then -%>
+          <dt class='list_title'>Example Value:</dt>
+          <dd class='list_description'>
+            <%= render :partial => 'partials/preview_and_detail', 
+              :locals => {:content_label => portname, :content => item.sample_value } %>
+          </dd>
+        <% end -%>
+        <% if (item.display_control_id == 1) || item.display_control_id == 3 then -%>
+          <dt class='list_title'>Example File:</dt>
+          <dd class='list_description'>
+            <%= render :partial => 'partials/preview_and_detail', 
+              :locals => {:content_label => portname, :content => item.sample_file } %>       
+              <%= button_to 'Download', :controller => 'workflow_ports', 
+                        :action => 'download', :id => item.id %>
+          </dd>
+        <% end -%>
+      <% end -%>      
     </dl>
-  <% end %>
-<% else %>  
+    
+  <% end -%>
+<% else -%>  
   <p>
     <b> This workflow has no inputs </b>
   </p>
