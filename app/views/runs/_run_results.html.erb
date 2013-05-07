@@ -58,7 +58,11 @@
         <% end %>
       </ul>
       <% for result in run.results.each %>
-        <% result_uri = IO.read(result.result_filename) %>
+        <% if result.filetype.to_s =~ /text/   
+             result_uri = IO.read(result.result_filename) 
+           else 
+             result_uri = "" 
+           end %>
         <div id="search_<%= result.name %>" class= "clearfix" style="min-height:300px;
                                             height:auto !important;
                                             height:300px; " >

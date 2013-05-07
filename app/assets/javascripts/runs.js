@@ -55,9 +55,10 @@ function uploadFile(fileList, targetName) {
   jQuery(function() {
     return $('#runs_table').dataTable({
       //sPaginationType: "full_numbers",
-      "iDisplayLength": 10,
-      "bFilter": false,
-      "bLengthChange": false,
+      "iDisplayLength": 25,
+      "oLanguage": {
+         "sSearch": "Filter Runs:"
+      },   
       "bRetrieve": true,
       "bJQueryUI": true,
       "aoColumnDefs": [

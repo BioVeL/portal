@@ -45,7 +45,10 @@
   jQuery(function() {
     return $('#announcements_table').dataTable({
       sPaginationType: "full_numbers",
-      "iDisplayLength": 10,
+      "oLanguage": {
+         "sSearch": "Filter Announcements:"
+      },   
+      iDisplayLength : 20,
       "bJQueryUI": true,
       "aoColumnDefs": [
         { "bSortable": false, "aTargets": [ -1 ] }

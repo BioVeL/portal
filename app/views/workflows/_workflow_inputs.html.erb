@@ -56,17 +56,21 @@
     <% example_value = @sources[portname].blank? ? "": @sources[portname] -%> 
     <h3> <%= label_tag portname %></h3>
     <dl class='list_any'>
+      <% unless @source_descriptions[portname].blank? -%>
       <dt class='list_title'>Description:</dt>
       <dd class='list_description'>
         <%=@source_descriptions[portname].blank? ? "Not Provided" : simple_format(@source_descriptions[portname]) -%>
       </dd>
+      <% end -%> 
       <% if item.id.nil? -%> 
       <!-- If not customised show default view -->
+        <% unless example_value.blank? -%>
         <dt class='list_title'>Example Value:</dt>
         <dd class='list_description'>
           <%= render :partial => 'partials/preview_and_detail', 
             :locals => {:content_label => portname, :content => example_value } %>
         </dd>
+        <% end -%>
       <% else -%>
       <!-- If customised show custom sample and/or file -->
               
