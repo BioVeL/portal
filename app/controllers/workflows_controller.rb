@@ -65,7 +65,6 @@ class WorkflowsController < ApplicationController
     @custom_inputs = @workflow.get_custom_inputs
     @custom_outputs = @workflow.get_custom_outputs
     @sinks, @sink_descriptions = @workflow.get_outputs
-    @custom_outputs = WorkflowPort.get_custom_ports(@workflow.id, 2)
     @processors = @workflow.get_processors
     @ordered_processors = @workflow.get_processors_in_order
     respond_to do |format|
@@ -245,6 +244,7 @@ class WorkflowsController < ApplicationController
           #save file 
           @wfp.file_content = File.open( params[:file_uploads][file_for_i].tempfile, 'r')
           @wfp.sample_file =  params[:file_uploads][file_for_i].original_filename
+          @wfp.sample_file_type = params[:file_uploads][file_for_i].content_type   
         end
         if params[:file_uploads][i_name] != ""
           #save value
@@ -267,6 +267,58 @@ class WorkflowsController < ApplicationController
     end
   end
 
+  def save_custom_outputs
+    @workflow = Workflow.find(params[:id])
+    @outputs, @output_desc = @workflow.get_outputs
+    @output_desc.each do |indiv_in| 
+      i_name = indiv_in[0]
+      file_for_i = "file_for_"+i_name
+      customise_i = "customise_"+i_name
+      display_i = "display_for_"+i_name
+      if ((params[:file_uploads].include? i_name) &&
+          params[:file_uploads][customise_i] == "1") &&
+          ((params[:file_uploads].include? file_for_i) || 
+           (params[:file_uploads][i_name] != "")) 
+        # verify if customised output exists
+        wfps = WorkflowPort.where("port_type = ? and name = ?", "2", i_name)
+        if wfps.empty? 
+          @wfp = WorkflowPort.new()
+          puts "New Port"
+        else 
+          @wfp = wfps[0] 
+          puts "Old Port"
+        end
+        #get values for customised output 
+        @wfp.workflow_id = @workflow.id
+        @wfp.port_type = 2 # 2 = output
+        @wfp.name = i_name
+        @wfp.display_control_id = params[:file_uploads][display_i]
+        if params[:file_uploads].include? file_for_i
+          #save file 
+          @wfp.file_content = File.open( params[:file_uploads][file_for_i].tempfile, 'r')
+          @wfp.sample_file =  params[:file_uploads][file_for_i].original_filename
+          @wfp.sample_file_type = params[:file_uploads][file_for_i].content_type 
+        end
+        if params[:file_uploads][i_name] != ""
+          #save value
+          @wfp.sample_value = params[:file_uploads][i_name]
+        end 
+        #save the customisation
+        @wfp.save
+      else 
+        puts "Port is not being customised " + i_name
+      end
+    end
+    respond_to do |format|
+      if @workflow.update_attributes(params[:workflow])
+        format.html { redirect_to @workflow, :notice => 'Workflow outputs updated' }
+        format.json { head :no_content }
+      else
+        format.html { render :action => "edit" }
+        format.json { render :json => @workflow.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
   private
 
   def get_workflows

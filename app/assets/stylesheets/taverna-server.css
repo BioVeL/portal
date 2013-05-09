@@ -718,6 +718,8 @@ h4 {
   padding: 2px;
   margin-bottom: 2px;
   background: linear-gradient(to top, red 70%, pink);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=red, endColorstr=pink); /* for IE */
+  background: -webkit-gradient(linear, left top, left bottom,from(pink),to(red)); /* for webkit browsers */
   border-width: 1px 1px 1px 1px;
   border-style: solid;
   border-color: red red red red;

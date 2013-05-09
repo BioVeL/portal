@@ -117,9 +117,17 @@
             <%= render :partial => 'partials/preview_and_detail', 
               :locals => {:content_label => portname, :content => item.sample_value } %>
           </dd>
+          <dd class='list_description'>
+            
+            The example value is automatically entered in the box below. 
+            Click to edit it or enter a new value.
+    
+          </dd>
+        </dl>
+        <dl class='list_any'>
           <dt class='list_title'>Enter Value:</dt>
           <dd class='list_description'>
-            <%= f.text_area portname, :value => example_value, :rows => 1, 
+            <%= f.text_area portname, :value => item.sample_value, :rows => 1, 
               :onclick => '$(this).select();', :style =>'width:95%' %> 
           </dd>
         <% end -%>

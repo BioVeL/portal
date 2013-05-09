@@ -49,15 +49,22 @@
     <h3>Results</h3>
     <div id="tabs_results">
       <ul>
-        <% for result in run.results.each %>
+        <% for result in run.results.where('depth=0').order('name').each %>
         <li>
           <a href="#search_<%= result.name %>" >
             <%= label_tag result.name %>
           </a>
         </li>
         <% end %>
+        <% for result in run.results.where('depth <> 0').order('name').group('name').each %>
+        <li>
+          <a href="#search_<%= result.name %>" >
+            <%= label_tag result.name %>
+          </a>
+        </li>
+        <% end %>  
       </ul>
-      <% for result in run.results.each %>
+      <% for result in run.results.where('depth=0').order('name').each %>
         <% if result.filetype.to_s =~ /text/   
              result_uri = IO.read(result.result_filename) 
            else 
@@ -66,38 +73,79 @@
         <div id="search_<%= result.name %>" class= "clearfix" style="min-height:300px;
                                             height:auto !important;
                                             height:300px; " >
-        <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
-        <% unless result_uri  =~ URI::regexp -%>
-          <div class="download_button">
-            <%= button_to 'Download', :controller => 'results', 
-                        :action => 'download', :id => result.id %>
-          </div>
-        <% end -%>
-        <div class="show_result">
-          <% if result.filetype.to_s =~ /text/ %>
-            
-            <% if result_uri  =~ URI::regexp -%>
-              <% if active_link?(result_uri) %>
-                <%= link_to(result_uri, result_uri)  -%>
-              <% end %>
+          <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
+          <% unless result_uri  =~ URI::regexp -%>
+            <div class="download_button">
+              <%= button_to 'Download', :controller => 'results', 
+                          :action => 'download', :id => result.id %>
+            </div>
+          <% end -%>
+          <div class="show_result">
+            <% if result.filetype.to_s =~ /text/ %>            
+              <% if (result_uri  =~ URI::regexp) == 0 -%>
+                <% if active_link?(result_uri) %>
+                  <%= link_to(result_uri, result_uri)  -%>
+                <% end %>
+              <% else %>
+                <% contents = IO.read(result.result_filename) %> 
+                  <% if simple_format(contents)[0,7]=='<p></p>'%>	
+                    <%= contents %>
+                  <% else %>
+                    <%= simple_format(contents)%>	
+                  <% end %>              
+              <%end%>
+            <% elsif result.filetype.to_s =~ /error/ %>
+              <%= simple_format(IO.read(result.result_filename))%>
             <% else %>
-              <%= simple_format(IO.read(result.result_filename))%>	
-            <%end%>
-          <% elsif result.filetype.to_s =~ /error/ %>
-            <%= simple_format(IO.read(result.result_filename))%>
-          <% else %>
-            <%= image_tag result.result_filepath %>
-          <% end %>
-        </div>
-        <%if !@sink_descriptions[result.name].nil? && 
-            @sink_descriptions[result.name] != ""  %>
-          <div class="show_description">
-            <b>Description</b>
-            <%= simple_format(@sink_descriptions[result.name]) %>
+              <%= image_tag result.result_filepath %>
+            <% end %>
           </div>
-         <%end%>
-      </div>
-       <% end %>
+          <%if !@sink_descriptions[result.name].nil? && 
+            @sink_descriptions[result.name] != ""  %>
+            <div class="show_description">
+              <b>Description</b>
+              <%= simple_format(@sink_descriptions[result.name]) %>
+            </div>
+          <%end%>
+        </div>
+      <% end %>
+      <% for result_g in run.results.where('depth <> 0').order('name').group('name').each %>
+        <% result_group_name = result_g.name %>
+        <div id="search_<%= result_group_name %>" class= "clearfix" 
+                                            style="min-height:300px;
+                                            height:auto !important;
+                                            height:300px; " >
+          <%if !@sink_descriptions[result_group_name].nil? && 
+            @sink_descriptions[result_group_name] != ""  %>
+            <div class="show_description">
+              <b>Description</b>
+              <%= simple_format(@sink_descriptions[result.name]) %>
+            </div>
+          <%end%>
+          <% for result in run.results.where('name=?', result_group_name).order('name,filepath').each %>
+          <div class="show_result">
+            <% if result.filetype.to_s =~ /text/ %>            
+                <% if (result_uri  =~ URI::regexp) == 0 -%>
+                  <% if active_link?(result_uri) %>
+                    <%= link_to(result_uri, result_uri)  -%>
+                  <% end %>
+                <% else %> 
+                  <% contents = IO.read(result.result_filename) %> 
+                  <% if simple_format(contents)[0,7]=='<p></p>'%>	
+                    <%= contents %>
+                  <% else %>
+                    <%= simple_format(contents)%>	
+                  <% end %>              
+                <%end%>
+              <% elsif result.filetype.to_s =~ /error/ %>
+                <%= simple_format(IO.read(result.result_filename))%>
+              <% else %>
+                <%= image_tag result.result_filepath %>
+              <% end %>
+            </div>
+          <%end%>
+        </div>
+      <% end %>  
     </div>
   <%end%>
 </div>

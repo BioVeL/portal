@@ -46,7 +46,7 @@
 <% unless @run.state=="running" %>
   location.reload(true);
 <% else %>
-  $('#runstate').replaceWith('<%= escape_javascript(render(:partial => 'runstate', :locals => {:run=>@run})) %>');
+  $('#runstate').replaceWith('<%= escape_javascript(render(:partial => 'run_state', :locals => {:run=>@run})) %>');
   $('#interactionframe').replaceWith('<%= escape_javascript(render(:partial => 'interactionframe'))%>');
   <% unless @interaction_id.nil? %>
     interaction_identifier = '<%=@interaction_id%>'

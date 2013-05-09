@@ -54,6 +54,6 @@ class ResultsController < ApplicationController
     @result = Result.find(params[:id])
     path = @result.result_filename
     filetype = MIME::Types.type_for(path)
-    send_file path, filetype, :name => @result.name
+    send_file path, :type=>filetype, :name => @result.name
   end
 end

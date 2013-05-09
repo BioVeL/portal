@@ -48,6 +48,7 @@ TliteR3::Application.routes.draw do
       put "make_public"
       put "make_private"
       post "save_custom_inputs"
+      post "save_custom_outputs"
     end
   end
   #*****************************************************

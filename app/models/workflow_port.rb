@@ -43,8 +43,8 @@
 # through the grant agreement number 283359.
 class WorkflowPort < ActiveRecord::Base
   attr_accessible :display_control_id, :display_description, :display_name, 
-     :name, :order, :port_value_type, :port_type, :sample_file, :sample_value, 
-     :show, :workflow_id
+     :name, :order, :port_value_type, :port_type, :sample_file,  
+     :sample_file_type, :sample_value, :show, :workflow_id
   # every port is linked to a workflow, trough workflow_id
   belongs_to :workflow
   after_save :store_file
@@ -81,8 +81,8 @@ class WorkflowPort < ActiveRecord::Base
     if @file_data
       # create the WORKFLOW_STORE Folder if it does not exist
       port_dir = File.join WORKFLOW_STORE, "#{workflow_id}/#{name}"
-      FileUtils.mkdir_p port_dir
-      
+      FileUtils.mkdir_p port_dir 
+      port_filename = File.join port_dir, "#{sample_file}"
       # create the file and write the data to the file system
       File.open(port_filename, 'wb') do |f|   
         f.write(@file_data.read)

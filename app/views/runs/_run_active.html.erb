@@ -1,5 +1,5 @@
 <h3> Running: <%=h @run.description -%> </h3>
-<% if current_user.admin  -%>
+<% if !current_user.nil? && current_user.admin  -%>
   <dl class='list_any'>
     <dt class='list_title'>User:</dt>
     <dd class='list_description'>

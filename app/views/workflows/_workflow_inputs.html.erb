@@ -51,48 +51,69 @@
      This workflow has <%= @sources.count %> 
      <%= "Input".pluralize(@sources.count)%> 
    </h2>
-  <% @custom_inputs.each do |item| %> 
-    <% portname = item.name %>
-    <% example_value = @sources[portname].blank? ? "": @sources[portname] -%> 
-    <h3> <%= label_tag portname %></h3>
-    <dl class='list_any'>
-      <% unless @source_descriptions[portname].blank? -%>
-      <dt class='list_title'>Description:</dt>
-      <dd class='list_description'>
-        <%=@source_descriptions[portname].blank? ? "Not Provided" : simple_format(@source_descriptions[portname]) -%>
-      </dd>
-      <% end -%> 
-      <% if item.id.nil? -%> 
-      <!-- If not customised show default view -->
-        <% unless example_value.blank? -%>
-        <dt class='list_title'>Example Value:</dt>
-        <dd class='list_description'>
-          <%= render :partial => 'partials/preview_and_detail', 
-            :locals => {:content_label => portname, :content => example_value } %>
-        </dd>
-        <% end -%>
-      <% else -%>
-      <!-- If customised show custom sample and/or file -->
-              
-        <% if (item.display_control_id == 1) || item.display_control_id == 2 then -%>
-          <dt class='list_title'>Example Value:</dt>
-          <dd class='list_description'>
-            <%= render :partial => 'partials/preview_and_detail', 
-              :locals => {:content_label => portname, :content => item.sample_value } %>
-          </dd>
-        <% end -%>
-        <% if (item.display_control_id == 1) || item.display_control_id == 3 then -%>
-          <dt class='list_title'>Example File:</dt>
-          <dd class='list_description'>
-            <%= render :partial => 'partials/preview_and_detail', 
-              :locals => {:content_label => portname, :content => item.sample_file } %>       
-              <%= button_to 'Download', :controller => 'workflow_ports', 
-                        :action => 'download', :id => item.id %>
-          </dd>
-        <% end -%>
-      <% end -%>      
-    </dl>
-    
+   <% @custom_inputs.each do |item| %> 
+     <% portname = item.name %>
+     <% example_value = @sources[portname].blank? ? "": @sources[portname] -%> 
+     <h3> <%= label_tag portname %></h3>
+     <dl class='list_any'>
+       <% the_description = @source_descriptions[portname] %>
+       <% puts the_description %>
+       <% unless the_description.blank? -%>
+       <dt class='list_title'>Description:</dt>
+       <dd class='list_description'>
+         <%=@source_descriptions[portname].blank? ? "Not Provided" : simple_format(the_description,{},:sanitize=>true) -%>
+       </dd>
+       <% end -%> 
+       <% if item.id.nil? -%> 
+       <!-- If not customised show default view -->
+         <% unless example_value.blank? -%>
+         <dt class='list_title'>Example Value:</dt>
+         <dd class='list_description'>
+           <%= render :partial => 'partials/preview_and_detail', 
+             :locals => {:content_label => portname, :content => example_value } %>
+         </dd>
+         <% end -%>
+       <% else -%>
+       <!-- If customised show custom sample and/or file -->         
+        <% if item.sample_file_type.to_s =~ /text/   
+             file_uri = IO.read(item.sample_file_path) 
+           else 
+             file_uri = "" 
+           end %>       
+         <% if (item.display_control_id == 1) || item.display_control_id == 2 then -%>
+           <dt class='list_title'>Example Value:</dt>
+           <dd class='list_description'>
+             <%= render :partial => 'partials/preview_and_detail', 
+               :locals => {:content_label => portname, :content => item.sample_value } %>
+           </dd>
+         <% end -%>
+         <% if (item.display_control_id == 1) || item.display_control_id == 3 then -%>
+           <dt class='list_title'>Example File:</dt>
+           <dd class='list_description'>
+          <% if item.sample_file_type.to_s =~ /text/ %>            
+            <% if (file_uri  =~ URI::regexp) == 0 -%>
+              <% if active_link?(file_uri) %>
+                <%= link_to(file_uri, file_uri)  -%>
+              <% end %>
+            <% else %>
+              <%= render :partial => 'partials/preview_and_detail', 
+                    :locals => {:content_label => portname, 
+                    :content => IO.read(item.sample_file_path)} %>         	
+            <%end%>
+          <% elsif item.sample_file_type.to_s =~ /image/ %>
+             <%= image_tag item.sample_file_path %>
+          <% else -%>
+             <%= render :partial => 'partials/preview_and_detail', 
+              :locals => {:content_label => portname, :content => item.sample_file} %>         
+          <% end -%>   
+          <% unless file_uri  =~ URI::regexp %>
+               <%= button_to 'Download', :controller => 'workflow_ports', 
+                     :action => 'download', :id => item.id %>
+             <% end -%>
+           </dd>
+         <% end -%>
+       <% end -%>      
+     </dl>
   <% end -%>
 <% else -%>  
   <p>

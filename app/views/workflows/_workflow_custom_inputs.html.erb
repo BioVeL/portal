@@ -67,19 +67,24 @@
           Select the input (click on the ckeck box) 
         </li>   
         <li>
-          Provide a custom value or a file 
+          Provide a custom value and/or a file 
         </li>
         <li>  
-          Select the display option (value, file or both)
+          Select the input type (value, file or both)
         </li>
         <li>  
-          The value will be used when the workflow is shown and run
+          Repeat 1 - 3 for every input you want to customise
         </li>
         <li>  
-          Or leave as it is to use default values provided 
+          Click "Save" to save customised inputs
         </li>
       </ol> 
-    </p>   
+      <b>  
+        The custom values and/or files will be used when the workflow is shown 
+        and run
+      </b>
+   </p>   
+        
    <% @custom_inputs.each do |item| %>
      <% portname = item.name %>
      <!-- Use sources to get the original sample and descriptio values -->
@@ -88,7 +93,7 @@
      <dl class='list_any'>
        <dt class='list_title'>Description:</dt>
        <dd class='list_description'>
-         <%=@source_descriptions[portname].blank? ? "Not Provided" : @source_descriptions[portname] -%>
+         <%=@source_descriptions[portname].blank? ? "Not Provided" : simple_format(@source_descriptions[portname]) -%>
        </dd>
        <dt class='list_title'>Example Value:</dt>
        <dd class='list_description'>
@@ -113,7 +118,7 @@
          <%= f.file_field  "file_for_#{portname}" %>
          <%= item.sample_file.nil? ? "No sample" : "Current: " + item.sample_file -%> 
        </dd>      
-       <dt class='list_title'>Input type:</dt>
+       <dt class='list_title'>Input Type:</dt>
        <dd class='list_description'>
          <%= f.select "display_for_#{portname}", 
            options_for_select([["value or file (Default)", 1],

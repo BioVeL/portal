@@ -4,10 +4,10 @@
 #
 # All rights reserved.
 #
-# Redistribution and use in source and binary forms, with or without
+# Redistribution and use in sink and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 # 
-# * Redistributions of source code must retain the above copyright notice,
+# * Redistributions of sink code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
 # 
 # * Redistributions in binary form must reproduce the above copyright notice,
@@ -47,30 +47,75 @@
      			    height:auto !important;
                             height:300px; ">
 <% if @sinks.count>0 %>
-   <p>
-     <b> This workflow has <%= @sinks.count %> <%= "Output".pluralize(@sinks.count)%> </b>
-   </p>
-   <% @sinks.each do |item| %> 
-    <% portname = item[0] %>
-    <% example_value = @sinks[portname].blank? ? "": @sinks[portname] -%>
-    <h3> <%= label_tag portname %></h3>
-    <dl class='list_any'>
-      <% unless @sink_descriptions[portname].blank? -%>
-      <dt class='list_title'>Description:</dt>
-      <dd class='list_description'>
-        <%=@sink_descriptions[portname].blank? ? "Not Provided" : @sink_descriptions[portname] -%>
-      </dd>
-      <% end -%>
-      <% unless example_value.blank? -%> 
-        <dt class='list_title'>Example Value:</dt>
-        <dd class='list_description'>
-          <%= render :partial => 'partials/preview_and_detail', 
-          :locals => {:content_label => portname, :content => example_value } %>
-        </dd>
-      <% end -%>
-    </dl>
-
-    <% end %>
+   <h2>
+     This workflow has <%= @sinks.count %> 
+     <%= "Output".pluralize(@sinks.count)%> 
+   </h2>
+   <% @custom_outputs.each do |item| %> 
+     <% portname = item.name %>
+     <% example_value = @sinks[portname].blank? ? "": @sinks[portname] -%> 
+     <% the_description = @sink_descriptions[portname] %>
+     <h3> <%= label_tag portname %></h3>
+     <dl class='list_any'>
+       <% unless the_description .blank? -%>
+       <dt class='list_title'>Description:</dt>
+       <dd class='list_description'>
+         <%=@sink_descriptions[portname].blank? ? "Not Provided" : simple_format(the_description) -%>
+       </dd>
+       <% end -%> 
+       <% if item.id.nil? -%> 
+       <!-- If not customised show default view -->
+         <% unless example_value.blank? -%>
+         <dt class='list_title'>Example Value:</dt>
+         <dd class='list_description'>
+           <%= render :partial => 'partials/preview_and_detail', 
+             :locals => {:content_label => portname, :content => example_value } %>
+         </dd>
+         <% end -%>
+       <% else -%>
+       <!-- If customised show custom sample and/or file -->
+        <% if item.sample_file_type.to_s =~ /text/   
+             file_uri = IO.read(item.sample_file_path) 
+           else 
+             file_uri = "" 
+           end %>              
+         <% if (item.display_control_id == 1) || item.display_control_id == 2 then -%>
+           <dt class='list_title'>Example Value:</dt>
+           <dd class='list_description'>
+             <%= render :partial => 'partials/preview_and_detail', 
+               :locals => {:content_label => portname, :content => item.sample_value } %>
+           </dd>
+         <% end -%>
+         <% if (item.display_control_id == 1) || item.display_control_id == 3 then -%>
+           <dt class='list_title'>Example File:</dt>
+           <dd class='list_description'>
+          <% if item.sample_file_type.to_s =~ /text/ %>            
+            <% if file_uri  =~ URI::regexp -%>
+              <% if active_link?(file_uri) %>
+                <%= link_to(file_uri, file_uri)  -%>
+              <% end %>
+            <% else %>
+              <%= render :partial => 'partials/preview_and_detail', 
+                    :locals => {:content_label => portname, 
+                    :content => IO.read(item.sample_file_path)} %>         	
+            <%end%>
+          <% elsif item.sample_file_type.to_s =~ /image/ %>
+          <div class="show_result">     
+             <%= image_tag item.sample_file_path %>
+          </div>   
+          <% else -%>
+             <%= render :partial => 'partials/preview_and_detail', 
+              :locals => {:content_label => portname, :content => item.sample_file} %>         
+          <% end -%>   
+          <% unless file_uri  =~ URI::regexp %>
+               <%= button_to 'Download', :controller => 'workflow_ports', 
+                     :action => 'download', :id => item.id %>
+             <% end -%>
+           </dd>
+         <% end -%>
+       <% end -%>      
+     </dl>
+  <% end -%>
 
 <% else %>  
   <p>

@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(:version => 20130424163243) do
     t.integer  "port_value_type"
     t.string   "sample_value"
     t.string   "sample_file"
+    t.string   "sample_file_type"
     t.boolean  "show"
     t.integer  "display_control_id"
     t.datetime "created_at",          :null => false
