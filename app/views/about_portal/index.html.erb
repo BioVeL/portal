@@ -1,4 +1,4 @@
-<%
+<% 
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -32,7 +32,9 @@
 # 
 # Authors
 #     Abraham Nieva de la Hidalga
-#     Alan Williams 
+#     Finn Baccall
+#     Robert Haines
+# 
 # Synopsis 
 # 
 # BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
@@ -42,50 +44,44 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
-%>
-<div class='container'>
-  <div class='menu'>
-    <ul id="menu">
-      <li class='page_item'>
-        <a></a>
-      </li> 
-      <li class='page_item'>
-        <a href='/'>
-          <img alt='Home' src='/assets/biovel.png' width="18" height="18">
-          Home
-        </a>
-      </li>    
-      <li class='page_item'>
-        <a href='/workflows'>
-          <img alt='Workflows' src='/assets/cog.png'>
-          Workflows
-        </a>
-      </li>
-      <li class='page_item'>
-        <a href='/runs'>
-          <img alt='Workflow Runs' src='/assets/table.png'>
-          Runs
-        </a>
-      </li>
-      <% if !current_user.nil? && current_user.admin %>
-        <li class='page_item'>
-          <a href='/credentials'>
-            <img alt='Home' src='/assets/taverna-server-logo92x92.png' width="18" height="18">
-            Settings
-          </a>
-        </li>
-        <li class='page_item'>
-            <a href='/announcements'>
-              <img alt='Announcement' src='/assets/transmit.png' width="18" height="18">
-              Notices
-            </a>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-</div>
-<%= javascript_tag do -%>
-  $( "#menu" ).menu();
-<% end -%>
+%>  
+<% content_for :title, "BioVeL Portal - About"%>
+<div style="float:left;width:65%">
+<h1>About BioVeL Portal</h1>
+</br>
+<p>
+ The BioVeL Portal is jointly developed and maintained by the Biodiversity 
+ Informatics Group at Cardiff University and the myGrid team at Manchester 
+ University. 
+</p>
+<p>
+  The BioVeL Portal is being developed using:
+<ul>
 
-  
+<li> 
+  Taverna Server 
+  <a href='http://www.taverna.org.uk/documentation/taverna-2-x/server/' target='_blank'>
+    <img alt='Taverna Server' src='/assets/taverna-server-logo92x92.png' height='50px'>
+  </a>
+</li>
+<li>
+  Taverna Player Beta Release 0.3.7
+  <a href='http://www.taverna.org.uk/developers/work-in-progress/taverna-player/' target='_blank'>
+    <img alt='Taverna Player' src='/assets/taverna-player.png' height='50px'>
+  </a>
+</li>
+<li>
+  Taverna Lite Beta Release 0.3.7
+  <a href='http://www.taverna.org.uk/' target='_blank'>
+    <img alt='Taverna Lite' src='/assets/taverna-lite-logo-small.png' height='50px'>
+  </a>
+</li>
+</ul>
+<p>
+Your feedback is greatly appreciated
+
+You can email comments and suggestions to : support@biovel.eu 
+</p>
+</div>
+<%= render :partial => 'partials/notice' %>
+

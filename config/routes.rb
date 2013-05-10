@@ -1,4 +1,7 @@
 TliteR3::Application.routes.draw do
+
+  resources :about_portal
+
   resources :workflow_ports do
     member do
       post "download"
@@ -59,6 +62,7 @@ TliteR3::Application.routes.draw do
   #*****************************************************
   # mapping for the redirection when creating a new run
   match 'workflows/:id/newrun/', :controller => 'runs', :action => 'new_run'
+  #*****************************************************
 
   #*****************************************************
   # mapping for the redirection when downloading a workflow
@@ -69,7 +73,6 @@ TliteR3::Application.routes.draw do
   # mapping for the redirection when downloading a result
   match 'results/:id/download/', :controller => 'results', :action => 'download'
   #*****************************************************
-
 
 
   # You can have the root of your site routed with "root"
