@@ -195,12 +195,10 @@ class Workflow < ActiveRecord::Base
       if ((!description_values.nil?) && (description_values.size == 1)) then
         # Force encoding is tricky this may not be needed on server as mySQL
         # databases are by default ASCII-8BIT or at least I think they are
-        descriptions[source.name] = description_values[0].force_encoding('ASCII-8BIT')
+        descriptions[source.name] = description_values[0]
       else
-        descriptions[source.name] = "".force_encoding('ASCII-8BIT')
+        descriptions[source.name] = ""
       end  
-      #puts "Description of input " + source.name + ": " + descriptions[source.name] 
-      #puts descriptions[source.name].encoding.name 
     }
     return [sources,descriptions]
   end
@@ -222,12 +220,10 @@ class Workflow < ActiveRecord::Base
       if ((!description_values.nil?) && (description_values.size == 1)) then
         # Force encoding is tricky this may not be needed on server as mySQL
         # databases are by default ASCII-8BIT or at least I think they are
-        descriptions[sink.name] = description_values[0].force_encoding('ASCII-8BIT')
+        descriptions[sink.name] = description_values[0]
       else
-        descriptions[sink.name] = "".force_encoding('ASCII-8BIT')
+        descriptions[sink.name] = ""
       end  
-      puts "Description of output " + sink.name + ": " + descriptions[sink.name] 
-      puts descriptions[sink.name].encoding.name 
     }
     return [sinks,descriptions]
   end

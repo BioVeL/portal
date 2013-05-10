@@ -41,7 +41,6 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
-require 'mime-types'
 class WorkflowPortsController < ApplicationController
   # GET /workflow_ports
   # GET /workflow_ports.json
@@ -86,10 +85,10 @@ class WorkflowPortsController < ApplicationController
 
     respond_to do |format|
       if @workflow_port.save
-        format.html { redirect_to @workflow_port, notice: 'Workflow port was successfully created.' }
-        format.json { render :json => @workflow_port, :status => :created, location: @workflow_port }
+        format.html { redirect_to @workflow_port, :notice => 'Workflow port was successfully created.' }
+        format.json { render :json => @workflow_port, :status => :created, :location => @workflow_port }
       else
-        format.html { render action: "new" }
+        format.html { render :action => "new" }
         format.json { render :json => @workflow_port.errors, :status => :unprocessable_entity }
       end
     end
@@ -102,10 +101,10 @@ class WorkflowPortsController < ApplicationController
 
     respond_to do |format|
       if @workflow_port.update_attributes(params[:workflow_port])
-        format.html { redirect_to @workflow_port, notice: 'Workflow port was successfully updated.' }
+        format.html { redirect_to @workflow_port, :notice => 'Workflow port was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render :action => "edit" }
         format.json { render :json => @workflow_port.errors, :status => :unprocessable_entity }
       end
     end

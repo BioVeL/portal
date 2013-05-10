@@ -764,7 +764,7 @@ div.dataTables_info {
 }
 
 .dataTables_paginate {
-	This workflow has <%= @sources.count %> <%= "Input".pluralize(@sources.count)%> 
+	width: 400px;
 }
 
 table.dataTable thead th div.DataTables_sort_wrapper {
