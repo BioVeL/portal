@@ -45,13 +45,13 @@
 %>
 <% unless current_user.nil?
      if current_user.admin
-       content_for :title, "Taverna Lite - Runs for all users"
+       content_for :title, "BioVeL Portal - Runs for all users"
      else
        content_for :title,
-                  "Taverna Lite - Runs created by " + current_user.name
+                  "BioVeL Portal - Runs created by " + current_user.name
      end
    else
-     content_for :title, "Taverna Lite - Runs for Guest user"
+     content_for :title, "BioVeL Portal - Runs for Guest user"
    end -%>
 <h1><%= "Guest" if current_user.nil? %> Runs</h1>
 

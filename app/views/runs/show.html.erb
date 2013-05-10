@@ -45,8 +45,8 @@
 # through the grant agreement number 283359. 
 %>
 
-<% content_for :title, "Taverna Lite - Run of " +
-                 @run.description + " Workflow"%>
+<% content_for :title, "BioVeL Portal - Run " +
+                 @run.description %>
 <% if @run.state == "finished" -%>
   <%= render :partial => 'run_finished', :locals => {:run => @run} %>
 <% else %>
