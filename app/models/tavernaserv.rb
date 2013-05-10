@@ -66,7 +66,7 @@ class Tavernaserv < ActiveRecord::Base
                          Credential.get_taverna_credentials)
     unless svrrun.nil?      
       # if the run has finished copy the outputs 
-      if svrrun.status.to_s == 'finished'
+      if svrrun.status.to_s == 'finished' then
         runner.expiry = svrrun.expiry
         runner.state = svrrun.status.to_s
         runner.end = svrrun.finish_time
@@ -81,10 +81,13 @@ class Tavernaserv < ActiveRecord::Base
           # update workflow statistics after the run has finished
           update_workflow_stats(runner.workflow_id, running_time)
           # delete the run after outputs and stats have been collected
-          #@server.delete_run(runner.run_identification, Credential.get_taverna_credentials)
+          @server.delete_run(runner.run_identification, Credential.get_taverna_credentials)
         ## what if the run has finished but there are no results?
         end
       end
+    else
+        runner.state = 'Terminated'
+        runner.end = DateTime.now()
     end
   end
   def self.update_workflow_stats(wf_id = 0, running_time = 0)
