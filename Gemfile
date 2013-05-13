@@ -5,9 +5,8 @@ gem 'rails', '3.2.6'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
-
-gem 'mysql', '~> 2.8.1'
+#gem 'sqlite3'
+gem 'mysql'
 
 gem 'json'
 
@@ -53,6 +52,5 @@ gem 'ratom'
 gem 'daemons-rails'
 # Mongrel for dev server
 gem 'mongrel', "1.2.0.pre2"
-
 # Connect to my Experiment using oauth-plugin to gemfile
 gem 'oauth-plugin', ">= 0.4.0.pre1"

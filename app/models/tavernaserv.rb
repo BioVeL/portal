@@ -86,8 +86,10 @@ class Tavernaserv < ActiveRecord::Base
         end
       end
     else
-        runner.state = 'Terminated'
+        runner.description += ' TERMINATED'
+        runner.state = 'finished'
         runner.end = DateTime.now()
+        runner.save
     end
   end
   def self.update_workflow_stats(wf_id = 0, running_time = 0)
