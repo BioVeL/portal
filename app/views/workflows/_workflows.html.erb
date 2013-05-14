@@ -62,7 +62,7 @@
       <td title="<%= workflow.description %>" alt="<%= workflow.description %>">
         <dl class="wf_snip">
           <dt><%= link_to workflow.title, workflow  %></dt>
-          <dd><%= workflow.description[0,79]+"..." %></dd>
+          <dd><%= workflow.description.nil? ? "" : workflow.description[0,79]+"..." %></dd>
         </dl>
     </td>
     <td><%= workflow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
