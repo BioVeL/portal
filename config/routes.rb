@@ -1,6 +1,8 @@
 TliteR3::Application.routes.draw do
 
-  resources :about_portal
+  match '/about_portal' => 'about_portal#index'
+  match '/cookies' => 'about_portal#cookies'
+  match '/about' => 'about_portal#index'
 
   resources :workflow_ports do
     member do

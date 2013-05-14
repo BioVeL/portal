@@ -42,6 +42,4 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
 class AboutPortalController < ApplicationController
-  def index
-  end
 end
