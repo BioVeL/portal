@@ -114,7 +114,7 @@
          <%= f.file_field  "file_for_#{portname}" %>
          <%= item.sample_file.nil? ? "No sample" : "Current: " + item.sample_file -%> 
        </dd>      
-       <dt class='list_title'>Input type:</dt>
+       <dt class='list_title'>Output type:</dt>
        <dd class='list_description'>
          <%= f.select "display_for_#{portname}", 
            options_for_select([["value (Default)", 2],

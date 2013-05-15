@@ -124,7 +124,7 @@ class WorkflowPortsController < ApplicationController
   # download a sample file value 
   def download
     @workflow_port = WorkflowPort.find(params[:id])
-    path = @workflow_port.sample_file_path
+    path = @workflow_port.sample_file_actual_path
     filetype = MIME::Types.type_for(path)
     send_file path, :type=> filetype, :name => @workflow_port.sample_file
   end

@@ -68,7 +68,13 @@ class WorkflowPort < ActiveRecord::Base
     end
   end   
   
-  def sample_file_path
+  def sample_file_relative_path
+    port_dir = File.join '/workflow_store', "#{workflow_id}/#{name}"
+    port_filename = File.join port_dir, "#{sample_file}"
+    return port_filename
+  end
+
+  def sample_file_actual_path
     port_dir = File.join WORKFLOW_STORE, "#{workflow_id}/#{name}"
     port_filename = File.join port_dir, "#{sample_file}"
     return port_filename

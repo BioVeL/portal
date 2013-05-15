@@ -242,7 +242,7 @@ class WorkflowsController < ApplicationController
         @wfp.display_control_id = params[:file_uploads][display_i]
         if params[:file_uploads].include? file_for_i
           #save file 
-          @wfp.file_content = File.open( params[:file_uploads][file_for_i].tempfile, 'r')
+          @wfp.file_content = params[:file_uploads][file_for_i].tempfile
           @wfp.sample_file =  params[:file_uploads][file_for_i].original_filename
           @wfp.sample_file_type = params[:file_uploads][file_for_i].content_type   
         end
@@ -294,10 +294,10 @@ class WorkflowsController < ApplicationController
         @wfp.name = i_name
         @wfp.display_control_id = params[:file_uploads][display_i]
         if params[:file_uploads].include? file_for_i
-          #save file 
-          @wfp.file_content = File.open( params[:file_uploads][file_for_i].tempfile, 'r')
+          # save file
+          @wfp.file_content = params[:file_uploads][file_for_i].tempfile
           @wfp.sample_file =  params[:file_uploads][file_for_i].original_filename
-          @wfp.sample_file_type = params[:file_uploads][file_for_i].content_type 
+          @wfp.sample_file_type = params[:file_uploads][file_for_i].content_type
         end
         if params[:file_uploads][i_name] != ""
           #save value

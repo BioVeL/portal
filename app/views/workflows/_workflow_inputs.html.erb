@@ -76,7 +76,7 @@
        <% else -%>
        <!-- If customised show custom sample and/or file -->         
         <% if item.sample_file_type.to_s =~ /text/   
-             file_uri = IO.read(item.sample_file_path) 
+             file_uri = IO.read(item.sample_file_actual_path) 
            else 
              file_uri = "" 
            end %>       
@@ -98,10 +98,10 @@
             <% else %>
               <%= render :partial => 'partials/preview_and_detail', 
                     :locals => {:content_label => portname, 
-                    :content => IO.read(item.sample_file_path)} %>         	
+                    :content => IO.read(item.sample_file_actual_path)} %>         	
             <%end%>
           <% elsif item.sample_file_type.to_s =~ /image/ %>
-             <%= image_tag item.sample_file_path %>
+             <%= image_tag item.sample_file_relative_path %>
           <% else -%>
              <%= render :partial => 'partials/preview_and_detail', 
               :locals => {:content_label => portname, :content => item.sample_file} %>         
