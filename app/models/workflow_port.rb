@@ -80,6 +80,11 @@ class WorkflowPort < ActiveRecord::Base
     return port_filename
   end
 
+  def delete_files
+    port_dir = File.join WORKFLOW_STORE, "#{workflow_id}/#{name}" 
+    FileUtils.rm_rf(port_dir)
+  end
+	
   private
   # ****************************************************************************
   # verify if there is actually a file to be saved
@@ -97,4 +102,5 @@ class WorkflowPort < ActiveRecord::Base
       @file_data = nil
     end
   end
+
 end

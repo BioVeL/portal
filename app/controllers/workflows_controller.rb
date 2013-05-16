@@ -215,8 +215,26 @@ class WorkflowsController < ApplicationController
   end
 
   def save_custom_inputs
+    action = params[:commit]	   
     @workflow = Workflow.find(params[:id])
     @inputs, @input_desc = @workflow.get_inputs
+    if action == 'Save'
+      save_inputs
+    elsif action == 'Reset'
+      reset_inputs
+    end
+    respond_to do |format|
+      if @workflow.update_attributes(params[:workflow])
+        format.html { redirect_to @workflow, :notice => 'Workflow inputs updated' }
+        format.json { head :no_content }
+      else
+        format.html { render :action => "edit" }
+        format.json { render :json => @workflow.errors, :status => :unprocessable_entity }
+      end
+    end
+  end 
+
+  def save_inputs  
     @input_desc.each do |indiv_in| 
       i_name = indiv_in[0]
       file_for_i = "file_for_"+i_name
@@ -252,13 +270,42 @@ class WorkflowsController < ApplicationController
         end 
         #save the customisation
         @wfp.save
-      else 
-        puts "Port is not being customised " + i_name
+      elsif params[:file_uploads][customise_i] == "0"
+        # reset port customisation
+        wfps = WorkflowPort.where("port_type = ? and name = ?", "1", i_name)
+        unless wfps.empty? 
+          @wfp = wfps[0] 
+          @wfp.delete_files
+          @wfp.destroy 
+        end         
       end
+    end
+  end
+
+  def reset_inputs
+    @input_desc.each do |indiv_in| 
+      i_name = indiv_in[0]
+      wfps = WorkflowPort.where("port_type = ? and name = ?", "1", i_name)
+      unless wfps.empty? 
+        @wfp = wfps[0] 
+        @wfp.delete_files
+        @wfp.destroy 
+      end         
+    end
+  end
+
+  def save_custom_outputs
+    action = params[:commit]
+    @workflow = Workflow.find(params[:id])
+    @outputs, @output_desc = @workflow.get_outputs
+    if action == 'Save'
+      save_outputs
+    elsif action == 'Reset'
+      reset_outputs
     end
     respond_to do |format|
       if @workflow.update_attributes(params[:workflow])
-        format.html { redirect_to @workflow, :notice => 'Workflow inputs updated' }
+        format.html { redirect_to @workflow, :notice => 'Workflow outputs updated' }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }
@@ -267,9 +314,7 @@ class WorkflowsController < ApplicationController
     end
   end
 
-  def save_custom_outputs
-    @workflow = Workflow.find(params[:id])
-    @outputs, @output_desc = @workflow.get_outputs
+  def save_outputs
     @output_desc.each do |indiv_in| 
       i_name = indiv_in[0]
       file_for_i = "file_for_"+i_name
@@ -305,20 +350,30 @@ class WorkflowsController < ApplicationController
         end 
         #save the customisation
         @wfp.save
-      else 
-        puts "Port is not being customised " + i_name
-      end
-    end
-    respond_to do |format|
-      if @workflow.update_attributes(params[:workflow])
-        format.html { redirect_to @workflow, :notice => 'Workflow outputs updated' }
-        format.json { head :no_content }
-      else
-        format.html { render :action => "edit" }
-        format.json { render :json => @workflow.errors, :status => :unprocessable_entity }
+      elsif params[:file_uploads][customise_i] == "0"
+        # reset port customisation
+        wfps = WorkflowPort.where("port_type = ? and name = ?", "2", i_name)
+        unless wfps.empty? 
+          @wfp = wfps[0] 
+          @wfp.delete_files
+          @wfp.destroy 
+        end         
       end
     end
   end
+
+  def reset_outputs
+    @output_desc.each do |indiv_out| 
+      o_name = indiv_out[0]
+      wfps = WorkflowPort.where("port_type = ? and name = ?", "2", o_name)
+      unless wfps.empty? 
+        @wfp = wfps[0] 
+        @wfp.delete_files
+        @wfp.destroy 
+      end         
+    end
+  end
+
   private
 
   def get_workflows

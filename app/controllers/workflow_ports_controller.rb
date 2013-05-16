@@ -41,6 +41,7 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
+require 'mime/types'
 class WorkflowPortsController < ApplicationController
   # GET /workflow_ports
   # GET /workflow_ports.json

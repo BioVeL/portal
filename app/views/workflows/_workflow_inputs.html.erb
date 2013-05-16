@@ -106,7 +106,7 @@
              <%= render :partial => 'partials/preview_and_detail', 
               :locals => {:content_label => portname, :content => item.sample_file} %>         
           <% end -%>   
-          <% unless file_uri  =~ URI::regexp %>
+          <% unless (file_uri  =~ URI::regexp) || item.sample_file.nil? %>
                <%= button_to 'Download', :controller => 'workflow_ports', 
                      :action => 'download', :id => item.id %>
              <% end -%>

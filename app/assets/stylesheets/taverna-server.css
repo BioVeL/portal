@@ -54,7 +54,7 @@
     position: relative;
 }
 .header{
-    height: 40px;
+    height: 24px;
     margin-bottom: 	0px;
     border-style: solid;
     border-width: 1px;
@@ -66,13 +66,12 @@
 
 /* Logo */
 
-.biovel-logo { position: relative; float:left; width: 150px; height: 40px; }
-.biovel-logo img {position: absolute; top: -6px; left: 10px; }
-.taverna-logo { position: relative; float: right; width: 92px; height: 40px; }
-.taverna-logo img {position: absolute; top: -6px; right: 10px; }
+.biovel-logo { position: relative; float:left; width: 150px; height: 24 px; }
+.biovel-logo img {position: absolute; top: -4px; left: 10px; }
+
 
 .header-title { float: left; margin: 12px 0 0 10px; font-weight: bold;}
-#logo, .header-title { font-size: 36px; line-height: 20px; color: #287621; }
+#logo, .header-title { font-size: 32px; line-height: 20px; color: #287621; }
 .header-title:hover { text-decoration: none; }
 .logomaj{color: black;}
 #tagline { color: #333; }
