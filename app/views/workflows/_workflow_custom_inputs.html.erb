@@ -54,6 +54,7 @@
       :html => {:multipart => true}, :disable_with => "Saving..." do |f| -%>
   <%= hidden_field_tag "workflow_id", @workflow.id %>
   <%= hidden_field_tag "selected_tab", 'customise' %>
+  <%= hidden_field_tag "selected_choice", 'inputs' %> 
     <h3>
       This workflow has <%= @sources.count %> 
       <%= "Input".pluralize(@sources.count)%>  

@@ -54,6 +54,7 @@ TliteR3::Application.routes.draw do
       put "make_private"
       post "save_custom_inputs"
       post "save_custom_outputs"
+      post "save_custom_errors"
     end
   end
   #*****************************************************

@@ -350,6 +350,28 @@ class Workflow < ActiveRecord::Base
     return ordered_processors
   end
 
+  def get_errors
+    # need a model for storing error handling information and some benchmarks
+    # workflow_id, error_id, error_name, error_pattern, error_message, count,
+    # most_recent
+    # 1 check en results to see if there are results associated to errors
+    bad_results = Result.where("filetype=? ",'error').joins(:run).where("workflow_id = ?", id)
+    # 2 Filter all duplicates, present only unique error messages
+    #   must open every error file, if different from ones already in leave else
+    #   do not add to final list of bad results 
+    # 3 filter those errors that have been handled i.e. check if error file
+    #   contains a recognised error_pattern if it does then remove the error 
+    #   from set
+    # 4 return the rest as unhandled error occurrences
+    return bad_results
+  end
+
+  def get_runs_with_errors_count
+    runs_with_errors = 
+      Run.where('workflow_id = ?',id).joins(:results).where('filetype = ?','error').group('run_id').count.count
+    return runs_with_errors
+  end
+  
   private 
   #the store wffile method is called after the details are saved    
   def store_wffile
