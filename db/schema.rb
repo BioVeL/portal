@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130424163243) do
+ActiveRecord::Schema.define(:version => 20130517104649) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -85,6 +85,20 @@ ActiveRecord::Schema.define(:version => 20130424163243) do
     t.string   "auth_token"
     t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
+  end
+
+  create_table "workflow_errors", :force => true do |t|
+    t.integer  "workflow_id"
+    t.string   "error_code"
+    t.string   "my_experiment_id"
+    t.string   "error_name"
+    t.string   "error_pattern"
+    t.string   "error_message"
+    t.integer  "runs_count"
+    t.integer  "ports_count"
+    t.datetime "most_recent"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "workflow_ports", :force => true do |t|

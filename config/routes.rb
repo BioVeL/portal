@@ -1,5 +1,7 @@
 TliteR3::Application.routes.draw do
 
+  resources :workflow_errors
+
   match '/about_portal' => 'about_portal#index'
   match '/cookies' => 'about_portal#cookies'
   match '/about' => 'about_portal#index'

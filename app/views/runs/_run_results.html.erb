@@ -95,7 +95,23 @@
                   <% end %>              
               <%end%>
             <% elsif result.filetype.to_s =~ /error/ %>
-              <%= simple_format(IO.read(result.result_filename))%>
+              <!--Here is where errors should be handled-->
+              <dl class='list_any'>
+                <dt class='list_title'>Error: </dt>
+                <dd class='list_description'>
+                  <%= @run_error_codes[result.name].error_name -%>
+                </dd>
+                <dt class='list_title'>Explanation: </dt>
+                <dd class='list_description'>
+                  <%= @run_error_codes[result.name].error_message %>
+                </dd>
+                <dt class='list_title'>Text:</dt>
+                <dd class='list_description'> 
+                  <% error_text = IO.read(result.result_filename)%>
+                  <%= render :partial => 'partials/preview_and_detail', 
+                    :locals => {:content_label => result.name, :content =>error_text} %>  
+                </dd>
+              </dl>
             <% else %>
               <%= image_tag result.result_filepath %>
             <% end %>

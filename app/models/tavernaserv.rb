@@ -73,7 +73,7 @@ class Tavernaserv < ActiveRecord::Base
         # if run finishes copy run output to outputs dir within run
         if runner.results.count == 0
           Rails.logger.info "Saving run:#{runner.id} results @ #{Time.now}.\n"  
-          #puts "no results recorded for this run"
+          #Rails.logger.info "#no results recorded for this run"
           outputs = svrrun.output_ports
           save_results(runner.id, outputs)    
           runner.save
@@ -132,24 +132,24 @@ class Tavernaserv < ActiveRecord::Base
   def self.save_results(runid, outputs)
     #resultset = {}
     if outputs.nil? or outputs.empty?
-      puts "#TAVSERV SAVE_RESULTS The workflow has no output ports"    
+      Rails.logger.info "##TAVSERV SAVE_RESULTS The workflow has no output ports"    
     else 
       outputs.each do |name, port|
-        puts "#TAVSERV SAVE_RESULTS #{name} (port #{port.name} depth #{port.depth})"
+        Rails.logger.info "##TAVSERV SAVE_RESULTS #{name} (port #{port.name} depth #{port.depth})"
       begin  
         if port.value.is_a?(Array)
-          puts "#TAVSERV SAVE_RESULTS partial Results are in a list"
+          Rails.logger.info "##TAVSERV SAVE_RESULTS partial Results are in a list"
           sub_array = port.value
           save_nested(runid,name,sub_array,port.type[0],port.depth,index="")
         elsif port.error?
-          puts "#TAVSERV SAVE_ERROR Results are errors"
+          Rails.logger.info "##TAVSERV SAVE_ERROR Results are errors"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}.error", port.error)
         else
-          puts "#TAVSERV SAVE_RESULTS path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
+          Rails.logger.info "##TAVSERV SAVE_RESULTS path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)                  
         end
       rescue
-         puts "## ERROR CAUGHT\n\n#{$!}\n\n"
+         Rails.logger.info "### ERROR CAUGHT\n\n#{$!}\n\n"
          save_to_db(name, "Error", port.depth, runid, "#{runid}/result/#{name}.error", port.error)
          @error_message="#{$!}"
          Rails.logger.info "Update Error "
@@ -186,7 +186,7 @@ class Tavernaserv < ActiveRecord::Base
     result.filepath = filepath
     result.result_file = value
 
-    puts "#TAVSERV SAVE_TO_DB: #{value}" 
+    Rails.logger.info "##TAVSERV SAVE_TO_DB: #{value}" 
     result.save
   end
 

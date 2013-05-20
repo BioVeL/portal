@@ -62,4 +62,63 @@ class Run < ActiveRecord::Base
   def delete_results
     Result.delete_files(id) 
   end
+  def get_error_codes
+    # check if run has errors
+    bad_results = 
+      Result.where("filetype=? AND run_id = ?",'error', id)
+    error_codes = 
+      WorkflowError.where('workflow_id = ?',workflow_id)
+    # verify each error to check if it has been handled
+    samples = []
+    collect = {}
+    bad_results.each do |ind_result| 
+      is_new = true
+      error_codes.each do |ind_error| 
+        File.open(ind_result.result_filename) do |f|
+          f.each_line do |line|
+            if line =~ /#{ind_error.error_pattern}/ then
+              puts "Found it: #{line}"
+              collect[ind_result.name] = ind_error   
+              is_new = false
+            else
+              puts "Not Found in: #{line}"
+            end
+          end
+          if !is_new then
+            puts "FOUND  #{ind_error.error_pattern}"
+          else
+            puts "NOT FOUND  #{ind_error.error_pattern}" 
+          end
+        end
+      end
+      if is_new then 
+        example_value = IO.read(ind_result.result_filename)     
+        # 1 Filer duplicate outputs - Sometimes the same error happens several times
+        unless samples.include?(example_value) 
+          new_error = WorkflowError.new
+          new_error.error_code = "E_" + (100000+ind_result.run_id).to_s + "_" + ind_result.name
+          new_error.error_message = "Workflow run produced an error for " + ind_result.name
+          new_error.error_name = ind_result.name 
+          new_error.error_pattern = example_value
+          if Run.exists?(ind_result.run_id) 
+            # if run still exists assign the run creation date
+            new_error.most_recent = creation
+          else
+            # if run has been deleted assign result creation date
+            new_error.most_recent = ind_result.created_at
+          end
+          new_error.my_experiment_id = Workflow.find(workflow_id).my_experiment_id
+          new_error.ports_count = 1
+          new_error.runs_count = 1
+          new_error.workflow_id = id
+          collect[ind_result.name] = new_error
+          samples << example_value 
+        end 
+      end
+    end
+    puts "COLLECTED: #{collect.count}"
+    puts collect
+    return collect      
+  end
+
 end

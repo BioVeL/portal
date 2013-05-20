@@ -68,7 +68,8 @@ class WorkflowsController < ApplicationController
     @processors = @workflow.get_processors
     @ordered_processors = @workflow.get_processors_in_order
     @workflow_errors = @workflow.get_errors
-
+    @workflow_error_codes = @workflow.get_error_codes
+        
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @workflow }

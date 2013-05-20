@@ -46,7 +46,7 @@
 
 <div id="wf_custom_errors" class="workflow_part" style="min-height:300px;
      			    height:auto !important;
-                            height:300px;">
+                            height:300px;display:none">
 
 <% if @workflow_errors.count>0 %>
 <%= form_for :file_uploads, 
@@ -92,54 +92,51 @@
         and run
       </b>
    </p>   
-   <%= render :partial => '/results/results_list', :locals => {:results => @workflow_errors} %>
      
-   <% @custom_inputs.each do |item| %>
-     <% portname = item.name %>
-     <!-- Use sources to get the original sample and descriptio values -->
-     <% example_value = @sources[portname].blank? ? "": @sources[portname] -%>  
-     <h2> <%= label_tag portname %></h2>
+   <% @workflow_error_codes.each do |item| %>
+     <% errorcode = item.error_code %>
+      <!-- The example value will be the contents of the error file -->
+     <% example_value = item.error_pattern -%>  
+     <h2> <%= errorcode %></h2>
      <dl class='list_any'>
-       <dt class='list_title'>Description:</dt>
+       <dt class='list_title'>Error Name:</dt>
        <dd class='list_description'>
-         <%=@source_descriptions[portname].blank? ? "Not Provided" : simple_format(@source_descriptions[portname]) -%>
+         <%= item.error_name -%>
        </dd>
-       <dt class='list_title'>Example Value:</dt>
+       <dt class='list_title'>Error Text:</dt>
        <dd class='list_description'>
-         <%= render :partial => 'partials/preview_and_detail', 
-           :locals => {:content_label => "cit_"+ portname, :content => example_value } %>
+         <%= item.error_message %>
        </dd>
      </dl>
      <h3> 
-       Customise <%= label_tag portname %>   
-       <%= f.check_box  "customise_#{portname}", :checked => !item.id.nil? -%>
+       Customise <%= errorcode %>   
+       <%= f.check_box  "customise_#{errorcode}", :checked => !item.id.nil? -%>
      </h3>
-     <% example_value = !item.id.nil? ? item.sample_value : example_value -%>
-     <!-- Use custom_inputs to load saved customisation values -->
      <dl class='list_any'>
-       <dt class='list_title'>Enter Value:</dt>
+       <dt class='list_title'>Error Name:</dt>
        <dd class='list_description'>
-         <%= f.text_area portname, :value => example_value, :rows => 1, 
-           :onclick => '$(this).select();', :style =>'width:95%' %> 
+         <%= item.error_name -%>
        </dd>
-       <dt class='list_title'>Select File:</dt>
+       <dt class='list_title'>Error Text:</dt>
        <dd class='list_description'>
-         <%= f.file_field  "file_for_#{portname}" %>
-         <%= item.sample_file.nil? ? "No sample" : "Current: " + item.sample_file -%> 
-       </dd>      
-       <dt class='list_title'>Input Type:</dt>
+         <%= item.error_message %>
+       </dd>
+       <dt class='list_title'>Error Pattern:</dt>
        <dd class='list_description'>
-         <%= f.select "display_for_#{portname}", 
-           options_for_select([["value or file (Default)", 1],
-                               ["value", 2], ["file", 3]], item.display_control_id) %>
-       </dd>      
-       <!-- Add a preview that shows how data will be displayed according with 
-            the selected input control-->
-       <!-- Create a control for displaying file contents on demand -->
-       <!-- If file is present add a button link to it -->
-     </dl>    
+         <%= item.error_pattern %>
+       </dd>
+       <dt class='list_title'>Runs where found:</dt>
+       <dd class='list_description'>
+         <%= item.runs_count %>
+       </dd>
+       <dt class='list_title'>Port where found:</dt>
+       <dd class='list_description'>
+         <%= item.ports_count %>
+       </dd>     </dl>
+
+
    <% end %>
-   <div title="Save Input Changes" alt="Save Input Changes" style="float:right; padding:10px;"> 
+	   <div title="Save Input Changes" alt="Save Input Changes" style="float:right; padding:10px;"> 
      <%= submit_tag 'Save' %>  
    </div>
    <div title="Revert workflow annotation" alt="Revert workflow annotation" style="float:right; padding:10px;"> 
@@ -164,9 +161,9 @@
 <% end %> <!--if output.count-->
 </div>  
    <% @sources.each do |item| -%>  
-     <% portname = item[0] -%>
+     <% errorcode = item[0] -%>
           <%= javascript_tag do -%>
-            $( "#dialog<%='_'+portname%>" ).dialog({
+            $( "#dialog<%='_'+errorcode%>" ).dialog({
               autoOpen: false,
               show: {
                 effect: "blind",
@@ -177,7 +174,7 @@
                 duration: 1000
               }
             });
-            $( "#switch<%='_'+portname%>" ).click(function() {
+            $( "#switch<%='_'+errorcode%>" ).click(function() {
               $( "#dialog" ).dialog( "open" );
               });
            });

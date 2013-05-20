@@ -75,6 +75,8 @@ class RunsController < ApplicationController
     return login_required if current_user.nil? && !@run.user_id.nil?
 
     @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
+    @run_error_codes = @run.get_error_codes
+    
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @run }

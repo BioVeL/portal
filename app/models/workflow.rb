@@ -354,10 +354,10 @@ class Workflow < ActiveRecord::Base
 
   def get_errors
     # need a model for storing error handling information and some benchmarks
-    # workflow_id, error_id, error_name, error_pattern, error_message, count,
-    # most_recent
+    # workflow_id, error_id, error_name, error_pattern, error_message, 
+    # runs_count, ports_count, most_recent
     # 1 check en results to see if there are results associated to errors
-    bad_results = Result.where("filetype=? ",'error').joins(:run).where("workflow_id = ?", id)
+    bad_results = filter_errors
     # 2 Filter all duplicates, present only unique error messages
     #   must open every error file, if different from ones already in leave else
     #   do not add to final list of bad results 
@@ -373,7 +373,96 @@ class Workflow < ActiveRecord::Base
       Run.where('workflow_id = ?',id).joins(:results).where('filetype = ?','error').group('run_id').count.count
     return runs_with_errors
   end
-  
+
+  def filter_errors 
+    bad_results = 
+      Result.where("filetype=? ",'error').joins(:run).where("workflow_id = ?", id)
+    collect = []
+    samples = []
+    runs = []
+    bad_results.each do |ind_error| 
+      example_value = IO.read(ind_error.result_filename)     
+      unless samples.include?(example_value)
+        collect << ind_error
+        samples << example_value 
+        runs << ind_error.id
+      end
+    end
+    return collect  
+  end
+
+  def get_error_codes
+    error_codes = 
+      WorkflowError.where('workflow_id = ?',id)
+    unhandled =  unhandled_errors 
+   
+    return error_codes | unhandled
+  end
+
+  def get_runs_with_errors_count
+    runs_with_errors = 
+      Run.where('workflow_id = ?',id).joins(:results).where('filetype = ?','error').group('run_id').count.count
+    return runs_with_errors
+  end
+
+  def unhandled_errors 
+    bad_results = 
+      Result.where("filetype=? ",'error').joins(:run).where("workflow_id = ?", id)
+    error_codes = 
+      WorkflowError.where('workflow_id = ?',id)
+    collect = []
+    samples = []
+    runs = []
+    bad_results.each do |ind_result| 
+      is_new = true
+      error_codes.each do |ind_error| 
+        File.open(ind_result.result_filename) do |f|
+          f.each_line do |line|
+            if line =~ /#{ind_error.error_pattern}/ then
+              puts "Found it: #{line}"
+              is_new = false
+            else
+              puts "Not Found in: #{line}"
+            end
+          end
+          if !is_new then
+            puts "FOUND  #{ind_error.error_pattern}"
+          else
+            puts "NOT FOUND  #{ind_error.error_pattern}" 
+          end
+        end
+      end
+      if is_new then 
+        example_value = IO.read(ind_result.result_filename)     
+        # 1 Filer duplicate outputs - Sometimes the same error happens several times
+        unless samples.include?(example_value) 
+          new_error = WorkflowError.new
+          new_error.error_code = "E_" + (100000+ind_result.run_id).to_s + "_" + ind_result.name
+          new_error.error_message = "Workflow run produced an error for " + ind_result.name
+          new_error.error_name = name + " Error" 
+          new_error.error_pattern = example_value
+          if Run.exists?(ind_result.run_id) 
+            # if run still exists assign the run creation date
+            new_error.most_recent = Run.find(ind_result.run_id).creation
+          else
+            # if run has been deleted assign result creation date
+            new_error.most_recent = ind_result.created_at
+          end
+          new_error.my_experiment_id = my_experiment_id
+          new_error.ports_count = 1
+          new_error.runs_count = 1
+          new_error.workflow_id = id
+          collect << new_error
+          samples << example_value 
+          runs << ind_result.id
+        end
+      end
+    end
+    puts "COLLECTED: #{collect.count}"
+    return collect  
+  end
+
+
   private 
   #the store wffile method is called after the details are saved    
   def store_wffile
