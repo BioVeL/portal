@@ -1,4 +1,3 @@
-<%
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -42,10 +41,53 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
-%>
-<h1>Editing workflow_port</h1>
 
-<%= render 'form' %>
+require 'test_helper'
 
-<%= link_to 'Show', @workflow_port %> |
-<%= link_to 'Back', workflow_ports_path %>
+class WorkflowErrorsControllerTest < ActionController::TestCase
+  setup do
+    @workflow_error = workflow_errors(:one)
+  end
+
+  test "should get index" do
+    get :index
+    assert_response :success
+    assert_not_nil assigns(:workflow_errors)
+  end
+
+  test "should get new" do
+    get :new
+    assert_response :success
+  end
+
+  test "should create workflow_error" do
+    assert_difference('WorkflowError.count') do
+      post :create, workflow_error: { error_code: @workflow_error.error_code, error_message: @workflow_error.error_message, error_name: @workflow_error.error_name, error_pattern: @workflow_error.error_pattern, most_recent: @workflow_error.most_recent, my_experiment_id: @workflow_error.my_experiment_id, ports_count: @workflow_error.ports_count, runs_count: @workflow_error.runs_count, workflow_id: @workflow_error.workflow_id }
+    end
+
+    assert_redirected_to workflow_error_path(assigns(:workflow_error))
+  end
+
+  test "should show workflow_error" do
+    get :show, id: @workflow_error
+    assert_response :success
+  end
+
+  test "should get edit" do
+    get :edit, id: @workflow_error
+    assert_response :success
+  end
+
+  test "should update workflow_error" do
+    put :update, id: @workflow_error, workflow_error: { error_code: @workflow_error.error_code, error_message: @workflow_error.error_message, error_name: @workflow_error.error_name, error_pattern: @workflow_error.error_pattern, most_recent: @workflow_error.most_recent, my_experiment_id: @workflow_error.my_experiment_id, ports_count: @workflow_error.ports_count, runs_count: @workflow_error.runs_count, workflow_id: @workflow_error.workflow_id }
+    assert_redirected_to workflow_error_path(assigns(:workflow_error))
+  end
+
+  test "should destroy workflow_error" do
+    assert_difference('WorkflowError.count', -1) do
+      delete :destroy, id: @workflow_error
+    end
+
+    assert_redirected_to workflow_errors_path
+  end
+end

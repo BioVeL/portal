@@ -1,4 +1,3 @@
-<%
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -42,10 +41,20 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
-%>
-<h1>Editing workflow_port</h1>
+class CreateWorkflowErrors < ActiveRecord::Migration
+  def change
+    create_table :workflow_errors do |t|
+      t.integer  :workflow_id
+      t.string   :error_code
+      t.string   :my_experiment_id
+      t.string   :error_name
+      t.string   :error_pattern
+      t.string   :error_message
+      t.integer  :runs_count
+      t.integer  :ports_count
+      t.datetime :most_recent
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @workflow_port %> |
-<%= link_to 'Back', workflow_ports_path %>
+      t.timestamps
+    end
+  end
+end

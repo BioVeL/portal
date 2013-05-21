@@ -43,9 +43,53 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
 %>
-<h1>Editing workflow_port</h1>
+<p id="notice"><%= notice %></p>
 
-<%= render 'form' %>
+<p>
+  <b>Workflow:</b>
+  <%= @workflow_error.workflow_id %>
+</p>
 
-<%= link_to 'Show', @workflow_port %> |
-<%= link_to 'Back', workflow_ports_path %>
+<p>
+  <b>Error code:</b>
+  <%= @workflow_error.error_code %>
+</p>
+
+<p>
+  <b>My experiment:</b>
+  <%= @workflow_error.my_experiment_id %>
+</p>
+
+<p>
+  <b>Error name:</b>
+  <%= @workflow_error.error_name %>
+</p>
+
+<p>
+  <b>Error pattern:</b>
+  <%= @workflow_error.error_pattern %>
+</p>
+
+<p>
+  <b>Error message:</b>
+  <%= @workflow_error.error_message %>
+</p>
+
+<p>
+  <b>Runs count:</b>
+  <%= @workflow_error.runs_count %>
+</p>
+
+<p>
+  <b>Ports count:</b>
+  <%= @workflow_error.ports_count %>
+</p>
+
+<p>
+  <b>Most recent:</b>
+  <%= @workflow_error.most_recent %>
+</p>
+
+
+<%= link_to 'Edit', edit_workflow_error_path(@workflow_error) %> |
+<%= link_to 'Back', workflow_errors_path %>

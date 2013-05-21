@@ -43,9 +43,56 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
 %>
-<h1>Editing workflow_port</h1>
+<%= form_for(@workflow_error) do |f| %>
+  <% if @workflow_error.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@workflow_error.errors.count, "error") %> prohibited this workflow_error from being saved:</h2>
 
-<%= render 'form' %>
+      <ul>
+      <% @workflow_error.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
 
-<%= link_to 'Show', @workflow_port %> |
-<%= link_to 'Back', workflow_ports_path %>
+  <div class="field">
+    <%= f.label :workflow_id %><br />
+    <%= f.number_field :workflow_id %>
+  </div>
+  <div class="field">
+    <%= f.label :error_code %><br />
+    <%= f.text_field :error_code %>
+  </div>
+  <div class="field">
+    <%= f.label :my_experiment_id %><br />
+    <%= f.text_field :my_experiment_id %>
+  </div>
+  <div class="field">
+    <%= f.label :error_name %><br />
+    <%= f.text_field :error_name %>
+  </div>
+  <div class="field">
+    <%= f.label :error_pattern %><br />
+    <%= f.text_field :error_pattern %>
+  </div>
+  <div class="field">
+    <%= f.label :error_message %><br />
+    <%= f.text_field :error_message %>
+  </div>
+  <div class="field">
+    <%= f.label :runs_count %><br />
+    <%= f.number_field :runs_count %>
+  </div>
+  <div class="field">
+    <%= f.label :ports_count %><br />
+    <%= f.number_field :ports_count %>
+  </div>
+  <div class="field">
+    <%= f.label :most_recent %><br />
+    <%= f.text_field :most_recent %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

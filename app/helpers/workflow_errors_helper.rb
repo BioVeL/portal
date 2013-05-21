@@ -1,4 +1,3 @@
-<%
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -42,10 +41,5 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
-%>
-<h1>Editing workflow_port</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Show', @workflow_port %> |
-<%= link_to 'Back', workflow_ports_path %>
+module WorkflowErrorsHelper
+end

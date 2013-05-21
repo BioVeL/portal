@@ -43,9 +43,42 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
 %>
-<h1>Editing workflow_port</h1>
+<h1>Listing workflow_errors</h1>
 
-<%= render 'form' %>
+<table>
+  <tr>
+    <th>Workflow</th>
+    <th>Error code</th>
+    <th>My experiment</th>
+    <th>Error name</th>
+    <th>Error pattern</th>
+    <th>Error message</th>
+    <th>Runs count</th>
+    <th>Ports count</th>
+    <th>Most recent</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
 
-<%= link_to 'Show', @workflow_port %> |
-<%= link_to 'Back', workflow_ports_path %>
+<% @workflow_errors.each do |workflow_error| %>
+  <tr>
+    <td><%= workflow_error.workflow_id %></td>
+    <td><%= workflow_error.error_code %></td>
+    <td><%= workflow_error.my_experiment_id %></td>
+    <td><%= workflow_error.error_name %></td>
+    <td><%= workflow_error.error_pattern %></td>
+    <td><%= workflow_error.error_message %></td>
+    <td><%= workflow_error.runs_count %></td>
+    <td><%= workflow_error.ports_count %></td>
+    <td><%= workflow_error.most_recent %></td>
+    <td><%= link_to 'Show', workflow_error %></td>
+    <td><%= link_to 'Edit', edit_workflow_error_path(workflow_error) %></td>
+    <td><%= link_to 'Destroy', workflow_error, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Workflow error', new_workflow_error_path %>
