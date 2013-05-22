@@ -64,7 +64,6 @@
           </a>
         </label>
       </input>
-      <% if (current_user.admin) -%>
         <input type="radio" id="custom_error_handling" name="radio">
           <label for="custom_error_handling">
             <a href="javascript:showdiv('wf_custom_errors')">
@@ -73,15 +72,12 @@
             </a>
           </label>
         </input>
-      <% end -%>
     </div>
   </form> 
 
   <%= render :partial => 'workflow_custom_inputs', :locals => {:workflow => @workflow} %>
   <%= render :partial => 'workflow_custom_outputs', :locals => {:workflow => @workflow} %>
-  <% if (current_user.admin) -%>
-    <%= render :partial => 'workflow_custom_errors', :locals => {:workflow => @workflow} %>
-  <% end -%>
+  <%= render :partial => 'workflow_custom_errors', :locals => {:workflow => @workflow} %>
  </div>
  
 <%= javascript_tag do -%>

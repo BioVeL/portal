@@ -50,7 +50,7 @@ class WorkflowErrorsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @workflow_errors }
+      format.json { render :json => @workflow_errors }
     end
   end
 
@@ -61,7 +61,7 @@ class WorkflowErrorsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @workflow_error }
+      format.json { render :json => @workflow_error }
     end
   end
 
@@ -72,7 +72,7 @@ class WorkflowErrorsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @workflow_error }
+      format.json { render :json => @workflow_error }
     end
   end
 
@@ -88,11 +88,11 @@ class WorkflowErrorsController < ApplicationController
 
     respond_to do |format|
       if @workflow_error.save
-        format.html { redirect_to @workflow_error, notice: 'Workflow error was successfully created.' }
-        format.json { render json: @workflow_error, status: :created, location: @workflow_error }
+        format.html { redirect_to @workflow_error, :notice => 'Workflow error was successfully created.' }
+        format.json { render :json => @workflow_error, :status => :created, :location => @workflow_error }
       else
-        format.html { render action: "new" }
-        format.json { render json: @workflow_error.errors, status: :unprocessable_entity }
+        format.html { render :action => "new" }
+        format.json { render :json => @workflow_error.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -104,11 +104,11 @@ class WorkflowErrorsController < ApplicationController
 
     respond_to do |format|
       if @workflow_error.update_attributes(params[:workflow_error])
-        format.html { redirect_to @workflow_error, notice: 'Workflow error was successfully updated.' }
+        format.html { redirect_to @workflow_error, :notice => 'Workflow error was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
-        format.json { render json: @workflow_error.errors, status: :unprocessable_entity }
+        format.html { render :action => "edit" }
+        format.json { render :json =>@workflow_error.errors, :status => :unprocessable_entity }
       end
     end
   end
