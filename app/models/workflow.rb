@@ -409,10 +409,10 @@ class Workflow < ActiveRecord::Base
         File.open(ind_result.result_filename) do |f|
           f.each_line do |line|
             if line =~ /#{ind_error.error_pattern}/ then
-              puts "Found it: #{line}"
+            #  puts "Found it: #{line}"
               is_new = false
-            else
-              puts "Not Found in: #{line}"
+            #else
+            #  puts "Not Found in: #{line}"
             end
           end
           if !is_new then

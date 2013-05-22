@@ -81,7 +81,7 @@ class Tavernaserv < ActiveRecord::Base
           # update workflow statistics after the run has finished
           update_workflow_stats(runner.workflow_id, running_time)
           # delete the run after outputs and stats have been collected
-          @server.delete_run(runner.run_identification, Credential.get_taverna_credentials)
+          #@server.delete_run(runner.run_identification, Credential.get_taverna_credentials)
         ## what if the run has finished but there are no results?
         end
       end
@@ -150,10 +150,8 @@ class Tavernaserv < ActiveRecord::Base
         end
       rescue
          Rails.logger.info "### ERROR CAUGHT\n\n#{$!}\n\n"
-         save_to_db(name, "Error", port.depth, runid, "#{runid}/result/#{name}.error", port.error)
-         @error_message="#{$!}"
-         Rails.logger.info "Update Error "
-         Rails.logger.info @error_message
+         save_to_db(name, "Error", port.depth, runid, "#{runid}/result/#{name}.error", "Result cannot be interpreted")
+         Rails.logger.info "Update Error Result cannot be interpreted"
       end 
       end
     end

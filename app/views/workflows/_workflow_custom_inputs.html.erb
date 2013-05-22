@@ -147,24 +147,5 @@
   </p>
 <% end %> <!--if output.count-->
 </div>  
-   <% @sources.each do |item| -%>  
-     <% portname = item[0] -%>
-          <%= javascript_tag do -%>
-            $( "#dialog<%='_'+portname%>" ).dialog({
-              autoOpen: false,
-              show: {
-                effect: "blind",
-                duration: 1000
-              },
-              hide: {
-                effect: "explode",
-                duration: 1000
-              }
-            });
-            $( "#switch<%='_'+portname%>" ).click(function() {
-              $( "#dialog" ).dialog( "open" );
-              });
-           });
-          <% end -%>  
-  <%end -%>
+
 

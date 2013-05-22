@@ -43,6 +43,7 @@
 # through the grant agreement number 283359. 
 require 'mime/types'
 class WorkflowPortsController < ApplicationController
+  before_filter :admin_required
   # GET /workflow_ports
   # GET /workflow_ports.json
   def index

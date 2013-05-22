@@ -53,8 +53,8 @@
       :url => {:controller => 'workflows', :action => 'save_custom_errors'}, 
       :html => {:multipart => true}, :disable_with => "Saving..." do |f| -%>
   <%= hidden_field_tag "workflow_id", @workflow.id %>
-  <%= hidden_field_tag "selected_tab", 'customise' %>
-  <%= hidden_field_tag "selected_choice", 'errors' %> 
+  <%= hidden_field_tag "selected_tab", 'wf_custom_ports' %>
+  <%= hidden_field_tag "selected_choice", 'wf_custom_errors' %> 
     <h3>
       This workflow has been executed <%= @workflow.run_count %> 
       <%= "Time".pluralize(@workflow.run_count)%>        
@@ -72,24 +72,28 @@
         </b>
       <ol>
         <li>
-          Select the an error pattern  
+          Provide an error code   
+        </li>   
+        <li>
+          Provide title for the error   
         </li>   
         <li>
           Provide a custom message to explain what has happened  
         </li>
-        <li>  
-          Select the title for the the error message
+        <li>
+          Provide a pattern that can be used to detect the error. This can be a 
+          phrase or a regular expression
         </li>
         <li>  
-          Repeat 1 - 3 for every error you want to customise
+          Repeat 1 - 4 for every error you want to customise
         </li>
         <li>  
           Click "Save" to save customised error messages
         </li>
       </ol> 
       <b>  
-        The custom values and/or files will be used when the workflow is shown 
-        and run
+        The custom error description  will be used when a workflow run 
+        containing an error is shown.
       </b>
    </p>   
      
@@ -109,37 +113,38 @@
        </dd>
      </dl>
      <h3> 
-       Customise <%= errorcode %>   
-       <%= f.check_box  "customise_#{errorcode}", :checked => !item.id.nil? -%>
+       Customise <%= errorcode %>
+       <% error_id = item.id.nil? ? 0: item.id %>
+       <%= f.check_box  errorcode, :checked => !item.id.nil? -%>
+       <%= f.hidden_field "id_for_#{errorcode}", :value => error_id %>
      </h3>
      <dl class='list_any'>
-       <dt class='list_title'>Error Name:</dt>
+       <dt class='list_title'>Code:</dt>
        <dd class='list_description'>
-         <%= item.error_name -%>
+         <%= f.text_area "code_for_#{errorcode}", :value => errorcode, :rows => 1, 
+           :onclick => '$(this).select();', :style =>'width:95%' %> 
+       </dd>       
+       <dt class='list_title'>Title:</dt>
+       <dd class='list_description'>
+         <%= f.text_area "name_for_#{errorcode}", :value => item.error_name, :rows => 1, 
+           :onclick => '$(this).select();', :style =>'width:95%' %> 
        </dd>
-       <dt class='list_title'>Error Text:</dt>
+       <dt class='list_title'>Explanation:</dt>
        <dd class='list_description'>
-         <%= item.error_message %>
+         <%= f.text_area "message_for_#{errorcode}", :value => item.error_message, :rows => 1, 
+           :onclick => '$(this).select();', :style =>'width:95%' %>
        </dd>
-       <dt class='list_title'>Error Pattern:</dt>
+       <dt class='list_title'>Pattern:</dt>
        <dd class='list_description'>
-         <%= item.error_pattern %>
+         <%= f.text_area "pattern_for_#{errorcode}", :value => item.error_pattern, :rows => 1, 
+           :onclick => '$(this).select();', :style =>'width:95%' %>
        </dd>
-       <dt class='list_title'>Runs where found:</dt>
-       <dd class='list_description'>
-         <%= item.runs_count %>
-       </dd>
-       <dt class='list_title'>Port where found:</dt>
-       <dd class='list_description'>
-         <%= item.ports_count %>
-       </dd>     </dl>
-
-
+    </dl>
    <% end %>
-	   <div title="Save Input Changes" alt="Save Input Changes" style="float:right; padding:10px;"> 
+   <div title="Save Custom Error" alt="Save Custom Error" style="float:right; padding:10px;"> 
      <%= submit_tag 'Save' %>  
    </div>
-   <div title="Revert workflow annotation" alt="Revert workflow annotation" style="float:right; padding:10px;"> 
+   <div title="Delete Custom Errors" alt="Delete Custom Errors" style="float:right; padding:10px;"> 
      <%= submit_tag 'Reset' %>  
    </div>
 
@@ -158,26 +163,7 @@
       </b>
     <% end%> 
   </p>
-<% end %> <!--if output.count-->
+<% end %> <!--if error.count-->
 </div>  
-   <% @sources.each do |item| -%>  
-     <% errorcode = item[0] -%>
-          <%= javascript_tag do -%>
-            $( "#dialog<%='_'+errorcode%>" ).dialog({
-              autoOpen: false,
-              show: {
-                effect: "blind",
-                duration: 1000
-              },
-              hide: {
-                effect: "explode",
-                duration: 1000
-              }
-            });
-            $( "#switch<%='_'+errorcode%>" ).click(function() {
-              $( "#dialog" ).dialog( "open" );
-              });
-           });
-          <% end -%>  
-  <%end -%>
+
 

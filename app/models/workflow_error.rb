@@ -42,5 +42,6 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
 class WorkflowError < ActiveRecord::Base
-  attr_accessible :error_code, :error_message, :error_name, :error_pattern, :most_recent, :my_experiment_id, :ports_count, :runs_count, :workflow_id
+  attr_accessible :error_code, :error_message, :error_name, :error_pattern, 
+    :most_recent, :my_experiment_id, :ports_count, :runs_count, :workflow_id
 end
