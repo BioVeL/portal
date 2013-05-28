@@ -1,0 +1,9 @@
+log/*.log
+tmp/
+db/*.sqlite3
+public/result_store/*
+public/workflow_store/*
+.buildpath
+.project
+.idea
+.rvmrc
