@@ -74,7 +74,7 @@
                                             height:auto !important;
                                             height:300px; " >
           <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
-          <% unless result_uri  =~ URI::regexp -%>
+          <% unless result_uri  =~ URI::regexp(%w(http https)) -%>
             <div class="download_button">
               <%= button_to 'Download', :controller => 'results', 
                           :action => 'download', :id => result.id %>
@@ -82,7 +82,7 @@
           <% end -%>
           <div class="show_result">
             <% if result.filetype.to_s =~ /text/ %>            
-              <% if (result_uri  =~ URI::regexp) == 0 -%>
+              <% if (result_uri  =~ URI::regexp(%w(http https))) == 0 -%>
                 <% if active_link?(result_uri) %>
                   <%= link_to(result_uri, result_uri)  -%>
                 <% end %>
@@ -127,6 +127,7 @@
       <% end %>
       <% for result_g in run.results.where('depth <> 0').order('name').group('name').each %>
         <% result_group_name = result_g.name %>
+
         <div id="search_<%= result_group_name %>" class= "clearfix" 
                                             style="min-height:300px;
                                             height:auto !important;
@@ -135,13 +136,18 @@
             @sink_descriptions[result_group_name] != ""  %>
             <div class="show_description">
               <b>Description</b>
-              <%= simple_format(@sink_descriptions[result.name]) %>
+              <%= simple_format(@sink_descriptions[result_group_name]) %>
             </div>
           <%end%>
           <% for result in run.results.where('name=?', result_group_name).order('name,filepath').each %>
+          <% if result.filetype.to_s =~ /text/   
+             result_uri = IO.read(result.result_filename) 
+           else 
+             result_uri = "" 
+           end %> 
           <div class="show_result">
             <% if result.filetype.to_s =~ /text/ %>            
-                <% if (result_uri  =~ URI::regexp) == 0 -%>
+                <% if (result_uri  =~ URI::regexp(%w(http https))) == 0 -%>
                   <% if active_link?(result_uri) %>
                     <%= link_to(result_uri, result_uri)  -%>
                   <% end %>
