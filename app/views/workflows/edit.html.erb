@@ -43,9 +43,11 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
 %>
-<h1>Editing workflow</h1>
-
-<%= render 'form' %>
-
+<% if (!current_user.nil?) && ((current_user.id == @workflow.user_id) || current_user.admin) -%>
+  <h1>Editing workflow</h1>
+  <%= render 'form' %>
+<% else -%>
+   <h1 style="color: red"> Only the workflow uploader can edit this workflow </h1> 
+<% end -%>
 <%= link_to 'Show', @workflow %> |
 <%= link_to 'Back', workflows_path %>
