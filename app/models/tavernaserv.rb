@@ -111,7 +111,7 @@ class Tavernaserv < ActiveRecord::Base
     end 
 
     unless (user_statistic.last_run_date.nil? && user_statistic.first_run_date.nil?) 
-      months_running = ((user_statistic.last_run_date - user_statistic.first_run_date).to_i)/30
+      months_running = ((user_statistic.last_run_date - user_statistic.first_run_date).to_i)/(60*60*24*30)
     else 
       months_running = 1
     end
@@ -119,7 +119,7 @@ class Tavernaserv < ActiveRecord::Base
       months_running = 1
     end
     user_statistic.latest_workflow_id = wf_id
-    user_statistic.mothly_run_average =  user_statistic.run_count/months_running 
+    user_statistic.mothly_run_average = user_statistic.run_count/months_running 
     user_statistic.save
   end
 

@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_filter :admin_required, :except => [:new, :create]
   def index
     @biovel_users = User.all
     guest = User.new(:name=>'Guest') #the guest user

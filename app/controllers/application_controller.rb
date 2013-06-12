@@ -58,7 +58,6 @@ class ApplicationController < ActionController::Base
 
   # detect if a user is logged in
   def login_required
-    #if session[:user_id].nil?
     if cookies[:auth_token].nil?  
       flash[:error] = 'This content is available only for registered users'
       redirect_to '/log_in'

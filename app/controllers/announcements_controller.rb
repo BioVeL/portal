@@ -34,7 +34,7 @@
 # 
 # Synopsis 
 # 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+# BioVeL Taverna Portal is a prototype interface to Taverna Server which is 
 # provided to support easy inspection and execution of workflows.
 # 
 # For more details see http://www.biovel.eu

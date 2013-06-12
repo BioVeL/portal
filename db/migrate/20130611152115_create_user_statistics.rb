@@ -43,7 +43,7 @@ class CreateUserStatistics < ActiveRecord::Migration
       t.datetime :first_run_date
       t.datetime :last_run_date
       t.integer :latest_workflow_id, :default => 0
-      t.boolean :is_biovel, :default => false
+      t.integer :user_id
 
       t.timestamps
     end

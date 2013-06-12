@@ -42,8 +42,8 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 class UserStatistic < ActiveRecord::Base
-  attr_accessible :first_run_date, :is_biovel, :last_run_date, 
-  :latest_workflow_id, :mothly_run_average, :run_count, :user_id, :user_type
+  attr_accessible :first_run_date, :last_run_date, :latest_workflow_id, 
+    :mothly_run_average, :run_count, :user_id
   # every statistic is linked to a user, trough user_id
   belongs_to :user
 end
