@@ -1,4 +1,3 @@
-<%
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -35,34 +34,16 @@
 #      
 # Synopsis 
 # 
-# BioVeL Portal is a prototype interface to Taverna Server which is 
+# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
 # provided to support easy inspection and execution of workflows.
 # 
 # For more details see http://www.biovel.eu
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-%>
-<div id="benefits" style="float:left;">
-<p>
-By creating an account you will gain access to a number of features:
-</p>
-<ul class="list">
-  <li>
-    Upload your own workflows
-  </li>
-  <li>
-    Download shared workflows
-  </li>
-  <li>
-    Search for workflows on 
-    <%= link_to 'my experiment', 'http://www.myexperiment.org' %> 
-  </li>
-  <li>
-    Share your workflows with the BioVeL users 
-  </li>
-  <li>
-    Keep run results for longer. 
-  </li>
-</ul>
-</div>
+class UserStatistic < ActiveRecord::Base
+  attr_accessible :first_run_date, :is_biovel, :last_run_date, 
+  :latest_workflow_id, :mothly_run_average, :run_count, :user_id, :user_type
+  # every statistic is linked to a user, trough user_id
+  belongs_to :user
+end

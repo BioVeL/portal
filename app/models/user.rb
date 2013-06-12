@@ -34,7 +34,7 @@
 #      
 # Synopsis 
 # 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+# BioVeL Portal is a prototype interface to Taverna Server which is 
 # provided to support easy inspection and execution of workflows.
 # 
 # For more details see http://www.biovel.eu
@@ -42,9 +42,11 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 class User < ActiveRecord::Base
-  attr_accessible :name, :email, :password, :password_confirmation, :admin 
+  attr_accessible :name, :email, :password, :password_confirmation, :admin, 
+    :biovel, :type_id
 
   attr_accessor :password  
+  has_one :user_statistic
   before_create { generate_token(:auth_token) }
 
   before_save :encrypt_password

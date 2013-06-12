@@ -43,26 +43,47 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 %>
-<div id="benefits" style="float:left;">
-<p>
-By creating an account you will gain access to a number of features:
+<% content_for :title, "BioVeL Portal - Users"%>
+<h1>User Management</h1>
+<p> 
+  This page shows users registered on BioVeL Portal
 </p>
-<ul class="list">
-  <li>
-    Upload your own workflows
-  </li>
-  <li>
-    Download shared workflows
-  </li>
-  <li>
-    Search for workflows on 
-    <%= link_to 'my experiment', 'http://www.myexperiment.org' %> 
-  </li>
-  <li>
-    Share your workflows with the BioVeL users 
-  </li>
-  <li>
-    Keep run results for longer. 
-  </li>
-</ul>
-</div>
+
+<table id="biovel_users_table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Admin</th>
+      <th>Runs Count</th>
+      <th>Monthly run average</th>
+      <th>First run</th>
+      <th>Latest run</th>
+      <th>Latest workflow</th>
+      <th>BioVeL</th>
+      <th>User Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @biovel_users.each do |biovel_user| %>
+    <tr>
+      <td><%= unless (biovel_user.id == 0)
+                link_to(biovel_user.name, edit_user_path(biovel_user))
+              else
+                biovel_user.name
+              end
+            %></td>
+      <td><%= biovel_user.email %></td>
+      <td><%= biovel_user.admin	 %></td>
+      <td><%= biovel_user.user_statistic.run_count %></td>
+      <td><%= biovel_user.user_statistic.mothly_run_average %></td>
+      <td><%= biovel_user.user_statistic.first_run_date %></td>
+      <td><%= biovel_user.user_statistic.last_run_date %></td>
+      <td><%= biovel_user.user_statistic.latest_workflow_id %></td>    
+      <td><%= biovel_user.biovel %></td>
+      <td><%= biovel_user.type_id %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

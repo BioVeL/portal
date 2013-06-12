@@ -35,7 +35,7 @@
 #      
 # Synopsis 
 # 
-# BioVeL Portal is a prototype interface to Taverna Server which is 
+# BioVeL Portal  is a prototype interface to Taverna Server which is 
 # provided to support easy inspection and execution of workflows.
 # 
 # For more details see http://www.biovel.eu
@@ -43,26 +43,37 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 %>
-<div id="benefits" style="float:left;">
-<p>
-By creating an account you will gain access to a number of features:
-</p>
-<ul class="list">
-  <li>
-    Upload your own workflows
-  </li>
-  <li>
-    Download shared workflows
-  </li>
-  <li>
-    Search for workflows on 
-    <%= link_to 'my experiment', 'http://www.myexperiment.org' %> 
-  </li>
-  <li>
-    Share your workflows with the BioVeL users 
-  </li>
-  <li>
-    Keep run results for longer. 
-  </li>
-</ul>
-</div>
+  <%= form_for @user do |f| %>  
+    <% if @user.errors.any? %>  
+      <div class="error_messages">  
+        <h2>Form is invalid</h2>  
+        <ul>  
+          <% for message in @user.errors.full_messages %>  
+            <li><%= message %></li>  
+          <% end %>  
+        </ul>  
+      </div>  
+    <% end %>        
+    <p>  
+      <%= f.label :name, "Username" %><br />  
+      <%= f.text_field :name %>  
+    </p>  
+    <p>  
+      <%= f.label :email %><br />  
+      <%= f.text_field :email %>  
+    </p>      <p>  
+      <%= f.label :admin %><br />  
+      <%= f.check_box :admin %>  
+    </p>  
+    <p>  
+      <%= f.label :biovel %><br />  
+      <%= f.check_box :biovel %>  
+    </p>  
+    <p>  
+      <%= f.label 'User Type' %><br />  
+      <%= f.select :type_id, [['user',1],['tester',2],['developer',3],['other',4]] %>  
+    </p>  
+    <p class="button"><%= f.submit %></p>  
+  <% end %>  
+
+

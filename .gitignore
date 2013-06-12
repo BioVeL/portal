@@ -1,4 +1,4 @@
-log/*.log
+log/*
 tmp/
 db/*.sqlite3
 public/result_store/*
@@ -7,3 +7,5 @@ public/workflow_store/*
 .project
 .idea
 .rvmrc
+*~
+Gemfile.lock

@@ -1,4 +1,4 @@
-<%
+<% #
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -32,7 +32,7 @@
 # 
 # Authors
 #     Abraham Nieva de la Hidalga
-#      
+# 
 # Synopsis 
 # 
 # BioVeL Portal is a prototype interface to Taverna Server which is 
@@ -41,28 +41,8 @@
 # For more details see http://www.biovel.eu
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
-# through the grant agreement number 283359.
+# through the grant agreement number 283359. 
 %>
-<div id="benefits" style="float:left;">
-<p>
-By creating an account you will gain access to a number of features:
-</p>
-<ul class="list">
-  <li>
-    Upload your own workflows
-  </li>
-  <li>
-    Download shared workflows
-  </li>
-  <li>
-    Search for workflows on 
-    <%= link_to 'my experiment', 'http://www.myexperiment.org' %> 
-  </li>
-  <li>
-    Share your workflows with the BioVeL users 
-  </li>
-  <li>
-    Keep run results for longer. 
-  </li>
-</ul>
-</div>
+  <h1>Editing User</h1>
+  <%= render 'edit_form' %>
+  <%= link_to 'Back', workflows_path %>

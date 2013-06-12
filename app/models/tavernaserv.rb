@@ -34,7 +34,7 @@
 # 
 # Synopsis 
 # 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+# BioVeL Portal  is a prototype interface to Taverna Server which is 
 # provided to support easy inspection and execution of workflows.
 # 
 # For more details see http://www.biovel.eu
@@ -80,20 +80,51 @@ class Tavernaserv < ActiveRecord::Base
           running_time = runner.end - runner.start
           # update workflow statistics after the run has finished
           update_workflow_stats(runner.workflow_id, running_time)
+          # update workflow statistics after the run has finished
+          update_user_run_stats(runner.user_id, runner.workflow_id)           
           # delete the run after outputs and stats have been collected
-          #@server.delete_run(runner.run_identification, Credential.get_taverna_credentials)
-        ## what if the run has finished but there are no results?
+          @server.delete_run(runner.run_identification, Credential.get_taverna_credentials)      
         end
       end
     else
-        runner.description += ' TERMINATED'
-        runner.state = 'finished'
-        runner.end = DateTime.now()
-        runner.save
+      # what if the run has finished but there are no results?
+      runner.description += ' TERMINATED'
+      runner.state = 'finished'
+      runner.end = DateTime.now()
+      runner.save
     end
   end
+  def self.update_user_run_stats(user_id = 0, wf_id = 0)
+    Rails.logger.info "Updating user run stats at #{Time.now}.\n"
+    user_statistic = UserStatistic.where(:user_id => user_id)
+    if user_statistic.nil?
+      user_statistic = UserStatistic.new()
+    else
+      user_statistic = user_statistic[0]
+    end
+    user_statistic.run_count += 1
+    if (user_statistic.last_run_date.nil? && user_statistic.first_run_date.nil?) 
+      user_statistic.last_run_date = DateTime.now()
+      user_statistic.first_run_date = DateTime.now()
+    else
+      user_statistic.last_run_date = DateTime.now()
+    end 
+
+    unless (user_statistic.last_run_date.nil? && user_statistic.first_run_date.nil?) 
+      months_running = ((user_statistic.last_run_date - user_statistic.first_run_date).to_i)/30
+    else 
+      months_running = 1
+    end
+    if months_running < 1 then
+      months_running = 1
+    end
+    user_statistic.latest_workflow_id = wf_id
+    user_statistic.mothly_run_average =  user_statistic.run_count/months_running 
+    user_statistic.save
+  end
+
   def self.update_workflow_stats(wf_id = 0, running_time = 0)
-    Rails.logger.info "Updating workflow stats at #{Time.now}.\n"
+    Rails.logger.info "Updating workflow stats at #{Time.now}.\n" 
     wf = Workflow.find(wf_id)
     prev_run_count = wf.run_count
     prev_avg_run = wf.average_run
@@ -107,10 +138,12 @@ class Tavernaserv < ActiveRecord::Base
     end
     if (wf.slowest_run < running_time)
       wf.slowest_run_date = DateTime.now()
+
       wf.slowest_run = running_time
     end
     wf.save 
   end
+
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
   def self.check_serv

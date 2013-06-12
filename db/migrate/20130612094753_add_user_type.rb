@@ -1,10 +1,3 @@
-<%
-# Copyright (c) 2012-2013 Cardiff University, UK.
-# Copyright (c) 2012-2013 The University of Manchester, UK.
-#
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 # 
 # * Redistributions of source code must retain the above copyright notice,
@@ -32,7 +25,7 @@
 # 
 # Authors
 #     Abraham Nieva de la Hidalga
-#      
+# 
 # Synopsis 
 # 
 # BioVeL Portal is a prototype interface to Taverna Server which is 
@@ -42,27 +35,9 @@
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-%>
-<div id="benefits" style="float:left;">
-<p>
-By creating an account you will gain access to a number of features:
-</p>
-<ul class="list">
-  <li>
-    Upload your own workflows
-  </li>
-  <li>
-    Download shared workflows
-  </li>
-  <li>
-    Search for workflows on 
-    <%= link_to 'my experiment', 'http://www.myexperiment.org' %> 
-  </li>
-  <li>
-    Share your workflows with the BioVeL users 
-  </li>
-  <li>
-    Keep run results for longer. 
-  </li>
-</ul>
-</div>
+class AddUserType < ActiveRecord::Migration
+  def change 
+    add_column :users, :biovel, :boolean, :default => false
+    add_column :users, :type_id, :integer, :default => 1
+  end
+end
