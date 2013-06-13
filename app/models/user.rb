@@ -46,9 +46,9 @@ class User < ActiveRecord::Base
     :biovel, :type_id
 
   attr_accessor :password  
-  has_one :user_statistic
+  has_one :user_statistic, :dependent => :destroy
   before_create { generate_token(:auth_token) }
-
+  before_create :build_default_statistic
   before_save :encrypt_password
 
   validates_confirmation_of :password  
@@ -88,7 +88,22 @@ class User < ActiveRecord::Base
     save!
     UserMailer.password_reset(self).deliver
   end
-
+  
+  private
+    def build_default_statistic
+      # stackoverflow.com/questions/3808782 
+      # build default statistic instance will use default parameters
+      # the foreign key of the owning User model is set automatically
+      build_user_statistic
+      true # Always return true in callbacks as the normal 'continue' state
+           # assumes that the default user statistic can always be created.
+           # or
+           # Check the validation of the statisc. If it is not valid, then 
+           # return false from the callback. Best to use before validation
+           # if doing this. View code should check the errors of the child
+           # or add the child's errors to the user model's error array of 
+           # the :base error item
+    end
 end  
 
 
