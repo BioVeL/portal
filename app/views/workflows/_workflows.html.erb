@@ -65,7 +65,7 @@
           <dd><%= workflow.description.nil? ? "" : workflow.description[0,79]+"..." %></dd>
         </dl>
     </td>
-    <td><%= workflow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+    <td><%= workflow.updated_at.strftime("%Y/%m/%d %H:%M") %></td>
     <td>
       <%= workflow.author %>
     </td>
