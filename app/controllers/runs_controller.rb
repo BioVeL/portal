@@ -35,7 +35,7 @@
 # 
 # Synopsis 
 # 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+# BioVeL Portal is a prototype interface to Taverna Server which is 
 # provided to support easy inspection and execution of workflows.
 # 
 # For more details see http://www.biovel.eu
@@ -347,8 +347,10 @@ class RunsController < ApplicationController
               stringinput = params[:file_uploads][input].to_s
               Rails.logger.info "#NEW RUN (#{Time.now}): 2   #{stringinput.class}"
               if stringinput.include?("[") and stringinput.include?("]")
+                stringinput.sub! '[',''
+                stringinput.sub! ']',''
                 Rails.logger.info "#NEW RUN (#{Time.now}): 3   Input is a list"
-                inputarray = stringinput[1..-2].split(',').collect! {|n| n.to_s}
+                inputarray = stringinput.split(',').collect! {|n| n.to_s}
                 Rails.logger.info "#NEW RUN (#{Time.now}): 4   Values"
                 Rails.logger.info "#NEW RUN (#{Time.now}): " + inputarray.to_s
                 Rails.logger.info "#NEW RUN (#{Time.now}): " + inputarray.class.to_s
@@ -554,5 +556,4 @@ class RunsController < ApplicationController
       Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server full" 
     end
   end
-
 end
