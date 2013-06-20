@@ -88,11 +88,11 @@ class InteractionEntriesController < ApplicationController
 
     respond_to do |format|
       if @interaction_entry.save
-        format.html { redirect_to @interaction_entry, notice: 'Interaction entry was successfully created.' }
-        format.json { render :json => @interaction_entry, status: :created, location: @interaction_entry }
+        format.html { redirect_to @interaction_entry, :notice => 'Interaction entry was successfully created.' }
+        format.json { render :json => @interaction_entry, :status => :created, :location => @interaction_entry }
       else
         format.html { render :action => "new" }
-        format.json { render :json => @interaction_entry.errors, status: :unprocessable_entity }
+        format.json { render :json => @interaction_entry.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -104,11 +104,11 @@ class InteractionEntriesController < ApplicationController
 
     respond_to do |format|
       if @interaction_entry.update_attributes(params[:interaction_entry])
-        format.html { redirect_to @interaction_entry, notice: 'Interaction entry was successfully updated.' }
+        format.html { redirect_to @interaction_entry, :notice => 'Interaction entry was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render :action => "edit" }
-        format.json { render :json => @interaction_entry.errors, status: :unprocessable_entity }
+        format.json { render :json => @interaction_entry.errors, :status => :unprocessable_entity }
       end
     end
   end

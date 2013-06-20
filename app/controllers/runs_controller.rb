@@ -200,7 +200,7 @@ class RunsController < ApplicationController
     interaction = nil
     # Find if there is an entry that does not have a reply
     # Get all interactions for the run
-    entries = InteractionEntry.find_all_by_run_id_and_response(run_id,nil)
+    entries = InteractionEntry.find_all_by_run_id_and_response(run_id,false)
     entries.each do |entry|
       responded = InteractionEntry.find_all_by_in_reply_to(entry.taverna_interaction_id).count
       if responded != 0 then 
