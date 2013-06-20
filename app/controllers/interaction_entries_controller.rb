@@ -50,7 +50,7 @@ class InteractionEntriesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @interaction_entries }
+      format.json { render :json => @interaction_entries }
     end
   end
 
@@ -61,7 +61,7 @@ class InteractionEntriesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @interaction_entry }
+      format.json { render :json => @interaction_entry }
     end
   end
 
@@ -72,7 +72,7 @@ class InteractionEntriesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @interaction_entry }
+      format.json { render :json => @interaction_entry }
     end
   end
 
@@ -89,10 +89,10 @@ class InteractionEntriesController < ApplicationController
     respond_to do |format|
       if @interaction_entry.save
         format.html { redirect_to @interaction_entry, notice: 'Interaction entry was successfully created.' }
-        format.json { render json: @interaction_entry, status: :created, location: @interaction_entry }
+        format.json { render :json => @interaction_entry, status: :created, location: @interaction_entry }
       else
-        format.html { render action: "new" }
-        format.json { render json: @interaction_entry.errors, status: :unprocessable_entity }
+        format.html { render :action => "new" }
+        format.json { render :json => @interaction_entry.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -107,8 +107,8 @@ class InteractionEntriesController < ApplicationController
         format.html { redirect_to @interaction_entry, notice: 'Interaction entry was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
-        format.json { render json: @interaction_entry.errors, status: :unprocessable_entity }
+        format.html { render :action => "edit" }
+        format.json { render :json => @interaction_entry.errors, status: :unprocessable_entity }
       end
     end
   end
