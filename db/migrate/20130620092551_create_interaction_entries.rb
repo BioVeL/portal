@@ -1,9 +1,3 @@
-# Copyright (c) 2012-2013 Cardiff University, UK.
-# Copyright (c) 2012-2013 The University of Manchester, UK.
-#
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 # 
 # * Redistributions of source code must retain the above copyright notice,
@@ -34,49 +28,32 @@
 # 
 # Synopsis 
 # 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+# BioVeL Portal is a prototype interface to Taverna Server which is 
 # provided to support easy inspection and execution of workflows.
 # 
 # For more details see http://www.biovel.eu
 # 
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
-# through the grant agreement number 283359. 
+# through the grant agreement number 283359.
+class CreateInteractionEntries < ActiveRecord::Migration
+  def change
+    create_table :interaction_entries do |t|
+      t.string :author_name
+      t.text :content
+      t.string :href
+      t.string :in_reply_to
+      t.text :input_data
+      t.string :interaction_id
+      t.datetime :published
+      t.boolean :response, :default => false 
+      t.text :result_data
+      t.string :result_status
+      t.string :run_id
+      t.string :taverna_interaction_id
+      t.text :title
+      t.datetime :updated
 
-#!/usr/bin/env ruby
-
-# You might want to change this for production mode
-ENV["RAILS_ENV"] ||= "development"
-
-root = File.expand_path(File.dirname(__FILE__))
-root = File.dirname(root) until File.exists?(File.join(root, 'config'))
-require File.join(root, "config", "environment")
-
-Rails.logger.info "The run updater started running at #{Time.now}.\n"
-
-$running = true
-Signal.trap("TERM") do 
-  $running = false
-  Rails.logger.info "The run updater daemon stopped running at #{Time.now}.\n"
-end
-
-while($running) do
-  
-  # Replace this with your code
-  #Rails.logger.auto_flushing = true
-  
-  begin
-    Tavernaserv.run_update
-    if InteractionEntry.get_interactions
-      Rails.logger.info "Found new interactions."
-    else
-      Rails.logger.info "Could not find new interactions."
+      t.timestamps
     end
-  rescue
-     @error_message="#{$!}"
-     Rails.logger.info "Updater Daemon Error. "
-     Rails.logger.info @error_message
-  ensure
-    sleep 10
   end
-  
 end

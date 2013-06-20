@@ -50,7 +50,7 @@ class Run < ActiveRecord::Base
 
   # a run can have many results
   has_many :results
-  
+
   # Validate that inputs have been provided
   def validate
     validate_inputs

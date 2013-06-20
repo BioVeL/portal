@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130612094753) do
+ActiveRecord::Schema.define(:version => 20130620092551) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -42,6 +43,25 @@ ActiveRecord::Schema.define(:version => 20130612094753) do
     t.boolean  "default",     :default => false, :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
+  end
+
+  create_table "interaction_entries", :force => true do |t|
+    t.string   "author_name"
+    t.text     "content"
+    t.string   "href"
+    t.string   "in_reply_to"
+    t.text     "input_data"
+    t.string   "interaction_id"
+    t.datetime "published"
+    t.boolean  "response"
+    t.text     "result_data"
+    t.string   "result_status"
+    t.string   "run_id"
+    t.string   "taverna_interaction_id"
+    t.text     "title"
+    t.datetime "updated"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "results", :force => true do |t|
@@ -79,11 +99,9 @@ ActiveRecord::Schema.define(:version => 20130612094753) do
     t.datetime "first_run_date"
     t.datetime "last_run_date"
     t.integer  "latest_workflow_id", :default => 0
-    t.boolean  "is_biovel",          :default => false
-    t.integer  "user_type",          :default => 0
-    t.integer  "user_id",            :default => 0
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.integer  "user_id"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
   end
 
   create_table "users", :force => true do |t|

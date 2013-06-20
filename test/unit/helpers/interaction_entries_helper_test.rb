@@ -42,41 +42,7 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359. 
 
-#!/usr/bin/env ruby
+require 'test_helper'
 
-# You might want to change this for production mode
-ENV["RAILS_ENV"] ||= "development"
-
-root = File.expand_path(File.dirname(__FILE__))
-root = File.dirname(root) until File.exists?(File.join(root, 'config'))
-require File.join(root, "config", "environment")
-
-Rails.logger.info "The run updater started running at #{Time.now}.\n"
-
-$running = true
-Signal.trap("TERM") do 
-  $running = false
-  Rails.logger.info "The run updater daemon stopped running at #{Time.now}.\n"
-end
-
-while($running) do
-  
-  # Replace this with your code
-  #Rails.logger.auto_flushing = true
-  
-  begin
-    Tavernaserv.run_update
-    if InteractionEntry.get_interactions
-      Rails.logger.info "Found new interactions."
-    else
-      Rails.logger.info "Could not find new interactions."
-    end
-  rescue
-     @error_message="#{$!}"
-     Rails.logger.info "Updater Daemon Error. "
-     Rails.logger.info @error_message
-  ensure
-    sleep 10
-  end
-  
+class InteractionEntriesHelperTest < ActionView::TestCase
 end

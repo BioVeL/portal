@@ -1,5 +1,7 @@
 TliteR3::Application.routes.draw do
 
+  resources :interaction_entries
+
   resources :workflow_errors
 
   match '/about_portal' => 'about_portal#index'

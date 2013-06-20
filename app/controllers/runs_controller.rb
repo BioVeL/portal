@@ -146,7 +146,7 @@ class RunsController < ApplicationController
 
   def refresh
     @run = Run.find(params[:id])
-    @interaction_id, @interaction_uri = get_interaction(@run.run_identification, @run.start)
+    @interaction_id, @interaction_uri = get_interaction(@run.run_identification)
     @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
     respond_to do |format|
       format.js 
@@ -195,66 +195,30 @@ class RunsController < ApplicationController
 
 
   $feed_ns = "http://ns.taverna.org.uk/2012/interaction"
-  $feed_uri = "http://localhost:8080/ah/interaction/notifications"
-  def get_interaction(run_id = "7952aed1-b5e7-46ab-88ac-db08975d16c0", run_date =  DateTime.now())
-    puts "*****************************************************"
-    puts "MONITORING RUN TO GET INTERACTIONS*******************"
-    puts "*****************************************************"
-
-    feed = Atom::Feed.load_feed(URI.parse($feed_uri))
-    replies_for_run = Array.new
+  $feed_uri = "http://localhost:8080/ah/interaction/notifications?limit=1000"
+  def get_interaction(run_id = "7952aed1-b5e7-46ab-88ac-db08975d16c0")
     interaction = nil
-    puts run_id
-    puts feed.entries.count
-    # Go through all the entries in reverse order and return the first which   
-    # does not have a reply.
-    feed.each_entry do |entry|
-      entry_run_id = entry[$feed_ns, "run-id"]
-      puts entry[$feed_ns, "run-id"]
-      if (entry_run_id.empty?)
-        puts("empty")
+    # Find if there is an entry that does not have a reply
+    # Get all interactions for the run
+    entries = InteractionEntry.find_all_by_run_id_and_response(run_id,nil)
+    entries.each do |entry|
+      responded = InteractionEntry.find_all_by_in_reply_to(entry.taverna_interaction_id).count
+      if responded != 0 then 
+        # Interaction has been responded already
         next
-      end
-      unless (entry_run_id[0] == run_id)
-        puts "not equal #{entry_run_id} to #{run_id}"
-        next
-      end
-
-      puts "Found equal #{entry_run_id} to #{run_id}"
-       in_reply_to_int_id = entry[$feed_ns, "in-reply-to"]
-      puts "Run Date: " + run_date.to_s
-      feed_datetime = entry.updated
-      puts feed_datetime
-      
-      puts "reply ID: " +  in_reply_to_int_id.to_s
-      puts "Stored Replies: " + replies_for_run.to_s
-      if  in_reply_to_int_id.empty?
-        if replies_for_run.include?(entry[$feed_ns, "id"][0].to_s)
-          puts "This interaction has been responded already"
-          next
-        else
-          interaction = entry
-          puts "Found interaction " + interaction[$feed_ns, "id"][0]
-          break
-        end      
-      else 
-        puts "respose to interaction: " +  in_reply_to_int_id.to_s + " for run: "+ run_id
-        if !replies_for_run.include?( in_reply_to_int_id.to_s)
-          replies_for_run.push  in_reply_to_int_id.join.to_s
-        end
-      end 
-      if feed_datetime < run_date
+      else
+        # found interaction with no response
+        interaction = entry
         break
-      end 
+      end      
     end
-    # Return nil if there are no interactions
-    return [nil, nil] if interaction.nil?
-
-    # Get the interaction link from the feed entry
-    interaction.links.each do |link|
-      if link.rel == "presentation"
-        return [interaction[$feed_ns, "id"][0], link.to_s]
-      end
+    if interaction.nil? then
+      # Return nil if there are no interactions for run
+      return [nil, nil] 
+    else
+      # return the unresponded interaction 
+      puts "RETURNED: " + interaction.interaction_id + " " + interaction.href
+      return [interaction.interaction_id, interaction.href]
     end
 
     # Should not get here but return nil just in case...
@@ -264,52 +228,24 @@ class RunsController < ApplicationController
   def interaction
     @run = Run.find(params[:id])
     interactionid = params[:interactionid].to_s
-    @responded = probe_interaction(@run.run_identification, interactionid)
+    puts interactionid
+    @responded = probe_interaction(interactionid)
   end
 
-  def probe_interaction(run_id = "7952aed1-b5e7-46ab-88ac-db08975d16c0", interaction_id = "")
-    puts "*****************************************************"
-    puts "MONITORING INTERACTION TO GET RESPONSE***************"
-    puts "interaction " + interaction_id
-    puts "*****************************************************"
-    feed = Atom::Feed.load_feed(URI.parse($feed_uri))
-    interaction = nil
-    puts run_id
-    puts feed.entries.count
-    # Go through all the entries in reverse order and return true if
-    # it has been replied.
-    feed.each_entry do |entry|
-      entry_run_id = entry[$feed_ns, "run-id"]
-      puts entry[$feed_ns, "run-id"]
-      if (entry_run_id.empty?)
-        puts("empty")
-        next
-      end
-      unless (entry_run_id[0] == run_id)
-        puts "not equal #{entry_run_id} to #{run_id}"
-        next
-      end
-
-      puts "Found equal #{entry_run_id} to #{run_id}"
-       in_reply_to_int_id = entry[$feed_ns, "in-reply-to"]
-      puts "interaction id: " + interaction_id
-      puts "response to: " +  in_reply_to_int_id.join.to_s
-      if  in_reply_to_int_id.empty? && interaction_id == entry[$feed_ns, "id"][0] 
-        #the interaction has not been responded
-        puts "Found interaction not completed yet"
-        return false;
-      end
-      if  in_reply_to_int_id.join.to_s == interaction_id.to_s
-        puts "respose sent for " + run_id
-        return true;
-      elsif  in_reply_to_int_id.to_s=="[]"
-        puts "response sent, no run ID"
-        return true;
-      end
-      break
-    end
-    # Return nil if there are no interactions
-    return false
+  def probe_interaction(interaction_id = "")
+    return false if interaction_id.nil?
+    # Look if interaction has been replied.
+    puts interaction_id
+    entry = InteractionEntry.find_by_interaction_id(interaction_id)
+    return false if entry.nil?
+    responded = InteractionEntry.find_all_by_in_reply_to(entry.taverna_interaction_id).count
+    if responded != 0 then 
+      # Interaction has been responded already
+      return true
+    else
+      # found interaction with no response
+      return false
+    end      
   end
   
 
