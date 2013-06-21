@@ -83,7 +83,7 @@ class Tavernaserv < ActiveRecord::Base
           # update workflow statistics after the run has finished
           update_user_run_stats(runner.user_id, runner.workflow_id)           
           # delete the run after outputs and stats have been collected
-          @server.delete_run(runner.run_identification, Credential.get_taverna_credentials)      
+          delete_run(runner.run_identification)      
         end
       end
     else
@@ -216,11 +216,25 @@ class Tavernaserv < ActiveRecord::Base
     result.run_id = run
     result.filepath = filepath
     result.result_file = value
-
-    Rails.logger.info "##TAVSERV SAVE_TO_DB: #{value}" 
-    result.save
+    unless verify_if_saved(result) then
+      Rails.logger.info "##TAVSERV SAVE_TO_DB: result #{name} for run #{run}" 
+      result.save
+    end
   end
-
+  def self.verify_if_saved(result)
+    res = Result.where(:name => result.name, 
+                    :filetype => result.filetype,
+                    :depth => result.depth,
+                    :run_id => result.run_id, 
+                    :filepath => result.filepath)
+    if res.coun > 0 then
+      Rails.logger.info "##TAVSERV VERIFY: result #{name} for run #{run} already in DB"  
+      return true;
+    else
+      Rails.logger.info "##TAVSERV VERIFY: result #{name} for run #{run} not in DB"    
+      return false;
+    end
+  end
   def  self.delete_run(run_identification)
     check_serv 
     @server.delete_run(run_identification, 
