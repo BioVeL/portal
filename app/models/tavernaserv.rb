@@ -227,11 +227,11 @@ class Tavernaserv < ActiveRecord::Base
                     :depth => result.depth,
                     :run_id => result.run_id, 
                     :filepath => result.filepath)
-    if res.coun > 0 then
-      Rails.logger.info "##TAVSERV VERIFY: result #{name} for run #{run} already in DB"  
+    if res.count > 0 then
+      Rails.logger.info "##TAVSERV VERIFY: result #{name} already in DB"  
       return true;
     else
-      Rails.logger.info "##TAVSERV VERIFY: result #{name} for run #{run} not in DB"    
+      Rails.logger.info "##TAVSERV VERIFY: result #{name} not in DB"    
       return false;
     end
   end
