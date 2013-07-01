@@ -78,10 +78,15 @@ class Tavernaserv < ActiveRecord::Base
           save_results(runner.id, outputs)
           runner.save
           running_time = runner.end - runner.start
+
           # update workflow statistics after the run has finished
           update_workflow_stats(runner.workflow_id, running_time)
+
           # update workflow statistics after the run has finished
-          update_user_run_stats(runner.user_id, runner.workflow_id)
+          unless runner.user_id.nil?
+            update_user_run_stats(runner.user_id, runner.workflow_id)
+          end
+
           # delete the run after outputs and stats have been collected
           delete_run(runner.run_identification)
         end
