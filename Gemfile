@@ -5,10 +5,15 @@ gem 'rails', '3.2.6'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-#gem 'sqlite3'
-gem 'mysql', '2.8.1'
+group :development do
+  gem 'sqlite3', "~> 1.3.7"
+end
 
-gem 'json'
+group :production do
+  gem 'mysql', '2.8.1'
+end
+
+gem 'json', "~> 1.7.6"
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -17,18 +22,18 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyracer', :platforms => :ruby
+  gem 'therubyracer', "~> 0.11.3", :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
 
-  gem 'jquery-datatables-rails'
-  gem 'jquery-ui-rails'
+  gem 'jquery-datatables-rails', "~> 1.11.2"
+  gem 'jquery-ui-rails', "~> 4.0.2"
 end
 
-gem 'jquery-rails'
+gem 'jquery-rails', "~> 3.0.1"
 
 # To use ActiveModel has_secure_password
-gem 'bcrypt-ruby', '~> 3.0.0', :require => 'bcrypt'  
+gem 'bcrypt-ruby', '~> 3.0.0', :require => 'bcrypt'
 
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
@@ -40,16 +45,16 @@ gem 'bcrypt-ruby', '~> 3.0.0', :require => 'bcrypt'
 # gem 'capistrano'
 
 # To use debugger
-# gem 'ruby-debug'  
+# gem 'ruby-debug'
 
 # Taverna Server Gem
-gem 't2-server'
+gem 't2-server', "~> 0.9.3"
 # T2flow gem to parse and read workflows
-gem 'taverna-t2flow'
+gem 'taverna-t2flow', "~> 0.4.3"
 # RATOM to read and parse Atom feeds
-gem 'ratom'
+gem 'ratom', "~> 0.7.2"
 # Daemons for handling background tasks
-gem 'daemons-rails'
+gem 'daemons-rails', "~> 1.1.2"
 # Mongrel for dev server
 gem 'mongrel', "1.2.0.pre2"
 # Connect to my Experiment using oauth-plugin to gemfile

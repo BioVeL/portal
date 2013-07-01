@@ -9,4 +9,3 @@ public/workflow_store/*
 .idea
 .rvmrc
 *~
-Gemfile.lock
