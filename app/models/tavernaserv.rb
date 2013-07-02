@@ -62,8 +62,7 @@ class Tavernaserv < ActiveRecord::Base
   def self.update_this_run(runner)
     #update run details with the values from the server
     check_serv   
-    svrrun = @server.run(runner.run_identification, 
-                         Credential.get_taverna_credentials)
+    svrrun = @server.run(runner.run_identification, Credential.get_taverna_credentials)
     unless svrrun.nil?      
       # if the run has finished copy the outputs 
       if svrrun.status.to_s == 'finished' then
@@ -80,10 +79,11 @@ class Tavernaserv < ActiveRecord::Base
           running_time = runner.end - runner.start
           # update workflow statistics after the run has finished
           update_workflow_stats(runner.workflow_id, running_time)
+          # delete the run after outputs and stats have been collected
+          delete_run(runner.run_identification)     
           # update workflow statistics after the run has finished
           update_user_run_stats(runner.user_id, runner.workflow_id)           
-          # delete the run after outputs and stats have been collected
-          delete_run(runner.run_identification)      
+ 
         end
       end
     else
@@ -227,15 +227,16 @@ class Tavernaserv < ActiveRecord::Base
                     :depth => result.depth,
                     :run_id => result.run_id, 
                     :filepath => result.filepath)
-    if res.coun > 0 then
-      Rails.logger.info "##TAVSERV VERIFY: result #{name} for run #{run} already in DB"  
+    if res.count > 0 then
+      Rails.logger.info "##TAVSERV VERIFY: result #{result.name} for run #{result.run_id} already in DB"  
       return true;
     else
-      Rails.logger.info "##TAVSERV VERIFY: result #{name} for run #{run} not in DB"    
+      Rails.logger.info "##TAVSERV VERIFY: result #{result.name} for run #{result.run_id} not in DB"    
       return false;
     end
   end
   def  self.delete_run(run_identification)
+    logger.info "##TAVSERV DELETING RUN:  #{run_identification} "
     check_serv 
     @server.delete_run(run_identification, 
                          Credential.get_taverna_credentials)
