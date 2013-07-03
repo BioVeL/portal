@@ -33,15 +33,15 @@ POSSIBILITY OF SUCH DAMAGE.
 == Authors
     Abraham Nieva de la Hidalga
     Robert Haines
-    Finn Bacall       
+    Finn Bacall
     Alan Williams
 
-== Synopsis 
+== Synopsis
 
-BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+BioVeL Taverna Lite  is a prototype interface to Taverna Server which is
 provided to support easy inspection and execution of workflows.
 
 For more details see http://www.biovel.eu
 
 BioVeL is funded by the European Commission 7th Framework Programme (FP7),
-through the grant agreement number 283359. 
+through the grant agreement number 283359.

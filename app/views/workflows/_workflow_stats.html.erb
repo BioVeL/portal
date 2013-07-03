@@ -6,18 +6,18 @@
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # * Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
-# 
+#
 # * Redistributions in binary form must reproduce the above copyright notice,
 #   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# 
+#
 # * Neither the names of The University of Manchester nor Cardiff University nor
 #   the names of its contributors may be used to endorse or promote products
 #   derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -29,35 +29,35 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 # Authors
 #     Abraham Nieva de la Hidalga
-#      
-# Synopsis 
-# 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+#
+# Synopsis
+#
+# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is
 # provided to support easy inspection and execution of workflows.
-# 
+#
 # For more details see http://www.biovel.eu
-# 
+#
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 %>
 <div id="wf_statistics" style="min-height:300px;
      			       height:auto !important;
                                height:300px; ">
-  <% unless @workflow.run_count == 0 %> 
+  <% unless @workflow.run_count == 0 %>
   <p>
-    <b>Executed:</b> <%= @workflow.run_count %> times 
+    <b>Executed:</b> <%= @workflow.run_count %> times
   </p>
   <p>
     <b>Average Run:</b> <%=@workflow.average_run.round()%> seconds
-    (~<%=distance_of_time_in_words(0,@workflow.average_run.round(),true)%>) 
+    (~<%=distance_of_time_in_words(0,@workflow.average_run.round(),true)%>)
     on the <%= @workflow.updated_at.strftime("%d/%m/%Y - %H:%M:%S") %>
   </p>
   <p>
     <b>Fastest Run:</b> <td><%=@workflow.fastest_run.round()%> seconds
-    (~<%=distance_of_time_in_words(0,@workflow.fastest_run.round(),true)%>) 
+    (~<%=distance_of_time_in_words(0,@workflow.fastest_run.round(),true)%>)
     on the <%= @workflow.fastest_run_date.strftime("%d/%m/%Y - %H:%M:%S") %>
   </p>
   <p>
@@ -66,6 +66,6 @@
     on the <%= @workflow.slowest_run_date.strftime("%d/%m/%Y - %H:%M:%S") %>
   </p>
   <%else%>
-    This workflow has not been executed on Biovel Portal 
+    This workflow has not been executed on Biovel Portal
   <%end%>
 </div>

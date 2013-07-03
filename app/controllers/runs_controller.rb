@@ -5,18 +5,18 @@
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # * Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
-# 
+#
 # * Redistributions in binary form must reproduce the above copyright notice,
 #   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# 
+#
 # * Neither the names of The University of Manchester nor Cardiff University nor
 #   the names of its contributors may be used to endorse or promote products
 #   derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,30 +28,30 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 # Authors
 #     Abraham Nieva de la Hidalga
 #     Robert Haines
-# 
-# Synopsis 
-# 
-# BioVeL Portal is a prototype interface to Taverna Server which is 
+#
+# Synopsis
+#
+# BioVeL Portal is a prototype interface to Taverna Server which is
 # provided to support easy inspection and execution of workflows.
-# 
+#
 # For more details see http://www.biovel.eu
-# 
+#
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 gem 'ratom'
 require 'atom'
 class RunsController < ApplicationController
-  before_filter :login_required, :except => [:new_run, :show, :refresh, 
-                                             :refresh_list, :interaction, 
+  before_filter :login_required, :except => [:new_run, :show, :refresh,
+                                             :refresh_list, :interaction,
                                              :index, :destroy]
 
   # GET /runs
   # GET /runs.json
-  def index  
+  def index
     if current_user.nil?
       @runs = Run.find_all_by_user_id(nil, :order =>'start desc')
     else
@@ -76,7 +76,7 @@ class RunsController < ApplicationController
 
     @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
     @run_error_codes = @run.get_error_codes
-    
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @run }
@@ -118,7 +118,7 @@ class RunsController < ApplicationController
   # PUT /runs/1
   # PUT /runs/1.json
   def update
-    @run = Run.find(params[:id])    
+    @run = Run.find(params[:id])
     respond_to do |format|
       if @run.update_attributes(params[:run])
         format.html { redirect_to @run, :notice => 'Run was successfully updated.' }
@@ -137,7 +137,7 @@ class RunsController < ApplicationController
     Tavernaserv.delete_run(@run.run_identification)
     @run.delete_results
     @run.destroy
-    
+
     respond_to do |format|
       format.html { redirect_to runs_url, :notice => 'Run deleted.'  }
       format.json { head :no_content }
@@ -149,10 +149,10 @@ class RunsController < ApplicationController
     @interaction_id, @interaction_uri = get_interaction(@run.run_identification)
     @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
     respond_to do |format|
-      format.js 
+      format.js
     end
   end
-  
+
   def refresh_list
     run_count = Integer(params[:runs])
     running_on_client = Integer(params[:running])
@@ -180,16 +180,16 @@ class RunsController < ApplicationController
     if runs.count != run_count || running_now != running_on_client
       @runs = runs
       puts run_count.to_s + " != " + runs.count.to_s
-    else 
+    else
       @runs = {}
     end
 
-    puts run_count 
+    puts run_count
     puts params[:running]
     puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
     respond_to do |format|
-      format.js 
+      format.js
     end
   end
 
@@ -203,27 +203,27 @@ class RunsController < ApplicationController
     entries = InteractionEntry.find_all_by_run_id_and_response(run_id,false)
     entries.each do |entry|
       responded = InteractionEntry.find_all_by_in_reply_to(entry.taverna_interaction_id).count
-      if responded != 0 then 
+      if responded != 0 then
         # Interaction has been responded already
         next
       else
         # found interaction with no response
         interaction = entry
         break
-      end      
+      end
     end
     if interaction.nil? then
       # Return nil if there are no interactions for run
-      return [nil, nil] 
+      return [nil, nil]
     else
-      # return the unresponded interaction 
+      # return the unresponded interaction
       puts "RETURNED: " + interaction.interaction_id + " " + interaction.href
       return [interaction.interaction_id, interaction.href]
     end
 
     # Should not get here but return nil just in case...
     [nil, nil]
-  end  
+  end
 
   def interaction
     @run = Run.find(params[:id])
@@ -239,19 +239,19 @@ class RunsController < ApplicationController
     entry = InteractionEntry.find_by_interaction_id(interaction_id)
     return false if entry.nil?
     responded = InteractionEntry.find_all_by_in_reply_to(entry.taverna_interaction_id).count
-    if responded != 0 then 
+    if responded != 0 then
       # Interaction has been responded already
       return true
     else
       # found interaction with no response
       return false
-    end      
+    end
   end
-  
+
 
   #GET /workflows/1/newrun
   def new_run
-    
+
     cookies[:run_identification]=""
     unassigned_inputs = false
     Rails.logger.info "#NEW RUN (#{Time.now}): number of parameters: #{params.count}" #- 1
@@ -267,15 +267,15 @@ class RunsController < ApplicationController
     @descriptions = {}
     @files = {}
     @custom_inputs = nil
-    unless params[:workflow_id].nil?      
+    unless params[:workflow_id].nil?
       if inputs_provided(params)
         Rails.logger.info "#NEW RUN (#{Time.now}): using submitted inputs"
         check_server()
-        unless $server.nil?     
+        unless $server.nil?
           run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
           cookies[:run_identification] = run.identifier
           run.input_ports.each_value do |port|
-            input = port.name  
+            input = port.name
             input_file =  "file_for_#{port.name}"
             default_input_file =  "default_file_for_#{port.name}"
             if params[:file_uploads].include? input
@@ -294,7 +294,7 @@ class RunsController < ApplicationController
               else
                 port.value = stringinput
               end
-              Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to #{port.value}"   
+              Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to #{port.value}"
               Rails.logger.info "#NEW RUN (#{Time.now}): actual value = #{run.input_ports[input].value}       "
               if run.input_port(input).nil?
                 Rails.logger.info "#NEW RUN (#{Time.now}): no values assigned"
@@ -324,23 +324,23 @@ class RunsController < ApplicationController
           end
           run.start()
         else
-          puts 
-            "#NEW RUN (#{Time.now}): Server Down - Redirected to back"    
+          puts
+            "#NEW RUN (#{Time.now}): Server Down - Redirected to back"
           redirect_to :back,  :flash => {:error => "Server Busy, try again later"}
-        end 
+        end
        else
       # missing some or all inputs
          Rails.logger.info "#NEW RUN (#{Time.now}): Cannot start run, missing inputs"
-      end      
+      end
     end
 
-   if cookies[:run_identification]=="" 
+   if cookies[:run_identification]==""
       # if workflow has inputs
       @sources, @descriptions = @workflow.get_inputs
       @custom_inputs = @workflow.get_custom_inputs
     else
       save_run(run, run_name)
-    end   
+    end
   end
 
   def inputs_provided(params)
@@ -356,13 +356,13 @@ class RunsController < ApplicationController
           params[:file_uploads][input] = port[1]
         else
           inputs_provided = false
-          puts 
+          puts
             "#NEW RUN (#{Time.now}):*****************************************"
-          puts 
+          puts
             "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
-          puts 
-            "#NEW RUN (#{Time.now}):          " + input 
-          puts 
+          puts
+            "#NEW RUN (#{Time.now}):          " + input
+          puts
             "#NEW RUN (#{Time.now}):*****************************************"
           break
         end
@@ -378,12 +378,12 @@ class RunsController < ApplicationController
           Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
           Rails.logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
           Rails.logger.info "#NEW RUN (#{Time.now}):           " + input  + ""
-          Rails.logger.info "#NEW RUN (#{Time.now}):Detected:  " + value 
+          Rails.logger.info "#NEW RUN (#{Time.now}):Detected:  " + value
           Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
           break
         end
       end
-      
+
     end
     return inputs_provided
   end
@@ -392,7 +392,7 @@ class RunsController < ApplicationController
   def save_run(run, run_name)
     @run = Run.new
     puts "CREATE gets called after the new form is presented"
-    puts "CREATE #{params}" 
+    puts "CREATE #{params}"
     puts "CREATE run identifier #{cookies[:run_identification]}"
     @run.workflow_id = @workflow.id
     @run.description = run_name
@@ -407,7 +407,7 @@ class RunsController < ApplicationController
     respond_to do |format|
       if @run.save
         format.html { redirect_to  @run, :notice => 'The run was successfully created.' }
-        format.json { render :json => @run, :status => :created, :location => @run }    
+        format.json { render :json => @run, :status => :created, :location => @run }
       end
     end
   end
@@ -417,8 +417,8 @@ class RunsController < ApplicationController
     #resultset = {}
     "#SAVE_RESULTS"
     if outputs.empty?
-      Rails.logger.info "#SAVE_RESULTS: The workflow has no output ports"    
-    else 
+      Rails.logger.info "#SAVE_RESULTS: The workflow has no output ports"
+    else
       outputs.each do |name, port|
         Rails.logger.info "#SAVE_RESULTS: #{name} (depth #{port.depth})"
         if port.value.is_a?(Array)
@@ -427,7 +427,7 @@ class RunsController < ApplicationController
           save_nested(runid,name,sub_array,port.type[0],port.depth,index="")
         else
           Rails.logger.info "#SAVE_RESULTS: path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
-          save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)                  
+          save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)
         end
       end
     end
@@ -439,11 +439,11 @@ class RunsController < ApplicationController
       value = sub_array[i]
       if value.is_a?(Array) then
         save_nested(runid,portname,value,porttype, portdepth, i.to_s)
-      else 
+      else
         puts  "#SAVE_NESTED: path #{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i} type: #{porttype}"
         save_to_db(portname, porttype, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
       end
-    end 
+    end
   end
 
   def save_to_db(name,mimetype,depth,run,filepath,value)
@@ -454,12 +454,12 @@ class RunsController < ApplicationController
     result.run_id = run
     result.filepath = filepath
     result.result_file = value
-    Rails.logger.info "#SAVE_TO_DB: #{value}" 
+    Rails.logger.info "#SAVE_TO_DB: #{value}"
     #result.user_id = current_user.id
     #puts "USER: #{current_user.id} #{current_user.login}"
     result.save
   end
-  
+
   private
   # Get the workflow that will be executed
   def get_workflow
@@ -470,26 +470,26 @@ class RunsController < ApplicationController
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
   $error_code = 0 # 0 no error, 1 server busy, 2 server down
-  
+
   def check_server()
     if (!defined?($server) || ($server == nil)) #then
       begin
         $server = T2Server::Server.new(Credential.get_taverna_uri)
         req = Net::HTTP.new($server.uri.host, $server.uri.port)
         res = req.request_head($server.uri.path)
-      rescue Exception => e  
-        Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server down" 
+      rescue Exception => e
+        Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server down"
         #email if server is not responding
         credential = Credential.find_by_server_type_and_default_and_in_use("ts",true,true)
         AdminMailer.server_unresponsive(credential).deliver
-        $server = nil   
+        $server = nil
       end
     end
     max_runs = $server.run_limit(Credential.get_taverna_credentials)
-    running_now = $server.runs(Credential.get_taverna_credentials).count 
+    running_now = $server.runs(Credential.get_taverna_credentials).count
     if running_now == max_runs
-      $server = nil 
-      Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server full" 
+      $server = nil
+      Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server full"
     end
   end
 end

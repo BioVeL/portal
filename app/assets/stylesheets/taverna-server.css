@@ -1,4 +1,4 @@
-/* 
+/*
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -6,18 +6,18 @@
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # * Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
-# 
+#
 # * Redistributions in binary form must reproduce the above copyright notice,
 #   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# 
+#
 # * Neither the names of The University of Manchester nor Cardiff University nor
 #   the names of its contributors may be used to endorse or promote products
 #   derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -29,21 +29,21 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 # Authors
 #     Abraham Nieva de la Hidalga
 #     Finn Baccall
 #     Robert Haines
-# 
-# Synopsis 
-# 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+#
+# Synopsis
+#
+# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is
 # provided to support easy inspection and execution of workflows.
-# 
+#
 # For more details see http://www.biovel.eu
-# 
+#
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
-# through the grant agreement number 283359. 
+# through the grant agreement number 283359.
 */
 /* **************** from layout/2col-l.css ****************** */
 
@@ -97,7 +97,7 @@
 .inline-list { position: absolute; top: 100px; right: 0px;}
 .inline-text { position: absolute; top: 15px; left: 25px;}
 #window img.background { height: 260px; width: 950px; }
-.inline-title { 
+.inline-title {
 	float: left;
 	display: block;
 	padding: 5px 10px 5px 10px;
@@ -124,7 +124,7 @@
 
 .hentry { position: relative; }
 .post { clear:both;  padding-bottom: 25px; background:transparent url(entry.png) no-repeat scroll center bottom;}
-.cal-date { text-align: center; font-family: Helvetica, Arial, sans-serif; position: absolute; top: 4px; left: 0; width: 65px; padding: 10px 4px; color: #414c58; background: #fff; 
+.cal-date { text-align: center; font-family: Helvetica, Arial, sans-serif; position: absolute; top: 4px; left: 0; width: 65px; padding: 10px 4px; color: #414c58; background: #fff;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	}
@@ -137,7 +137,7 @@
 
 /*home page template */
 
-.styled-rule { 
+.styled-rule {
 -moz-background-clip:border;
 -moz-background-inline-policy:continuous;
 -moz-background-origin:padding;
@@ -385,7 +385,7 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 .alignright { float: right; }
 .aligncenter { margin-left: auto; margin-right: auto; display: block; clear: both; }
 
-.feedback label {      
+.feedback label {
       float: left;
       clear: both;
       width: 10em;
@@ -407,7 +407,7 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 .upper-wrap { background-color: #ffffcc; }
 
 
-#container-main { 
+#container-main {
     margin-bottom: 2px;
 }
 
@@ -443,11 +443,11 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 .aside a {color: #fff; }
 
 .enclosed { background: #dce5ef;
-            padding: 10px; 
-            margin-bottom: 20px; 
-            border-radius: 10px;      
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 10px;
             -moz-border-radius: 10px;
-            -webkit-border-radius: 10px; 
+            -webkit-border-radius: 10px;
             word-wrap: break-word ;}
 
 .outer-enclosed {
@@ -460,9 +460,9 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
     border-color: #bbb866;
     min-height:400px;
     height:auto !important;
-    height:400px; 
+    height:400px;
 }
-	
+
 .ddet_div {
 	  padding: 8px;
 	  background: #F4F4F4;
@@ -472,7 +472,7 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 
 
 .nav .page_item {
-    
+
     border-width: 0 1px;
     border-style: solid;
     border-color: transparent #ffffcc transparent #ddda88;
@@ -540,7 +540,7 @@ a.result_value:hover {
 a.result_value img {
   vertical-align: middle;
 }
- 
+
 a.button {
   line-height: 30px;
   padding: 0px 20px;
@@ -556,7 +556,7 @@ a.button {
   display: inline-block;
   margin-left: 1em;
 }
- 
+
 a.button:hover {
    background-image: url("gradient_green.png");
    border-color: #BBEA3E #99cc33 #99cc33 #99cc33;
@@ -599,22 +599,22 @@ h4 {
 }
 
 #announcement {
-  text-align: center; 
-  margin-top: -5px; 
-  margin-bottom: 0px; 
-  padding: 3px; 
-  border: 1px solid hsla(80, 90%, 40%, 0.7); 
+  text-align: center;
+  margin-top: -5px;
+  margin-bottom: 0px;
+  padding: 3px;
+  border: 1px solid hsla(80, 90%, 40%, 0.7);
   background: #EEEB99;
   color: rgb(153, 0, 0);
   font-size: 100%;
 }
 
 #error_explanation {
-  text-align: center; 
-  margin-top: -5px; 
-  margin-bottom: 0px; 
-  padding: 3px; 
-  border: 1px solid hsla(80, 90%, 40%, 0.7); 
+  text-align: center;
+  margin-top: -5px;
+  margin-bottom: 0px;
+  padding: 3px;
+  border: 1px solid hsla(80, 90%, 40%, 0.7);
   background: #EEEB99;
   color: rgb(153, 0, 0);
   font-size: 100%;
@@ -625,11 +625,11 @@ h4 {
 
 #user_log_in {
   position:relative;
-  margin-top: -35px; 
-  margin-bottom: 0px; 
-  margin-right: 0px; 
-  padding: 2px; 
-  border: 1px solid hsla(80, 90%, 40%, 0.7); 
+  margin-top: -35px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  padding: 2px;
+  border: 1px solid hsla(80, 90%, 40%, 0.7);
   color: rgb(153, 0, 0);
   float: right;
   -moz-border-radius: 8px;
@@ -711,7 +711,7 @@ h4 {
 .link_img_rem {
   float: left;
   text-decoration: none;
-  color: white;	
+  color: white;
   margin-right: 2px;
   text-align: center;
   padding: 2px;
@@ -781,8 +781,8 @@ table.dataTable thead th div.DataTables_sort_wrapper span {
 .contentdiv {
   width: 95%;
   float: left;
-  padding: 2px; 
-  border: 1px solid hsla(80, 90%, 40%, 0.7); 
+  padding: 2px;
+  border: 1px solid hsla(80, 90%, 40%, 0.7);
   color: rgb(153, 0, 0);
   -moz-border-radius: 8px;
   -webkit-border-radius:  8px;

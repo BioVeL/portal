@@ -13,7 +13,7 @@ TliteR3::Application.routes.draw do
       post "download"
     end
   end
- 
+
   resources :results
 
   resources :password_resets
@@ -31,13 +31,13 @@ TliteR3::Application.routes.draw do
   resources :credentials
 
   #*****************************************************
-  # mapping for the authentication redirections 
+  # mapping for the authentication redirections
   get "log_in" => "sessions#new", :as => "log_in"
-  get "log_out" => "sessions#destroy", :as => "log_out" 
-  get "sign_up" => "users#new", :as => "sign_up" 
-  
-  resources :users  
-  resources :sessions 
+  get "log_out" => "sessions#destroy", :as => "log_out"
+  get "sign_up" => "users#new", :as => "sign_up"
+
+  resources :users
+  resources :sessions
   #*****************************************************
 
   resources :runs
@@ -74,7 +74,7 @@ TliteR3::Application.routes.draw do
   #*****************************************************
   # mapping for the redirection when downloading a workflow
   match 'workflows/:id/download/', :controller => 'workflows', :action => 'download'
-  #*****************************************************  
+  #*****************************************************
 
   #*****************************************************
   # mapping for the redirection when downloading a result
