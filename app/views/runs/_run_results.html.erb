@@ -80,6 +80,13 @@
                           :action => 'download', :id => result.id %>
             </div>
           <% end -%>
+          <%if !@sink_descriptions[result.name].nil? &&
+            @sink_descriptions[result.name] != ""  %>
+            <div class="show_description">
+              <b>Description</b>
+              <%= simple_format(@sink_descriptions[result.name]) %>
+            </div>
+          <%end%>
           <div class="show_result">
             <% if result.filetype.to_s =~ /text/ %>
               <% if (result_uri  =~ URI::regexp(%w(http https))) == 0 -%>
@@ -111,13 +118,6 @@
               <%= image_tag result.result_filepath %>
             <% end %>
           </div>
-          <%if !@sink_descriptions[result.name].nil? &&
-            @sink_descriptions[result.name] != ""  %>
-            <div class="show_description">
-              <b>Description</b>
-              <%= simple_format(@sink_descriptions[result.name]) %>
-            </div>
-          <%end%>
         </div>
       <% end %>
       <% for result_g in run.results.where('depth <> 0').order('name').group('name').each %>
