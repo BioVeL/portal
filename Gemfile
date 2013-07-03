@@ -59,3 +59,5 @@ gem 'daemons-rails', "~> 1.1.2"
 gem 'mongrel', "1.2.0.pre2"
 # Connect to my Experiment using oauth-plugin to gemfile
 gem 'oauth-plugin', ">= 0.4.0.pre1"
+
+gem "coderay", "~> 1.0.9"
