@@ -4,7 +4,7 @@ class UsersController < ApplicationController
     @biovel_users = User.all
     guest = User.new(:name=>'Guest') #the guest user
     guest.id = 0
-    guest.user_statistic = UserStatistic.where(:user_id=>0)[0]
+    guest.user_statistic = UserStatistic.find_or_create_by_id(0)
     @biovel_users << guest
     @user_statistic = UserStatistic.all
   end

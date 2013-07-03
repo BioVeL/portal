@@ -83,9 +83,7 @@ class Tavernaserv < ActiveRecord::Base
           update_workflow_stats(runner.workflow_id, running_time)
 
           # update workflow statistics after the run has finished
-          unless runner.user_id.nil?
-            update_user_run_stats(runner.user_id, runner.workflow_id)
-          end
+          update_user_run_stats(runner.user_id, runner.workflow_id)
 
           # delete the run after outputs and stats have been collected
           delete_run(runner.run_identification)
@@ -101,12 +99,13 @@ class Tavernaserv < ActiveRecord::Base
   end
   def self.update_user_run_stats(user_id = 0, wf_id = 0)
     Rails.logger.info "Updating user run stats at #{Time.now}.\n"
-    user_statistic = UserStatistic.where(:user_id => user_id)
-    if user_statistic.nil?
-      user_statistic = UserStatistic.new()
+
+    if user_id.nil?
+      user_statistic = UserStatistic.find_or_create_by_id(0)
     else
-      user_statistic = user_statistic[0]
+      user_statistic = User.find(user_id).user_statistic
     end
+
     user_statistic.run_count += 1
     if (user_statistic.last_run_date.nil? && user_statistic.first_run_date.nil?)
       user_statistic.last_run_date = DateTime.now()
