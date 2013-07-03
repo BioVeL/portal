@@ -6,7 +6,6 @@ class UsersController < ApplicationController
     guest.id = 0
     guest.user_statistic = UserStatistic.find_or_create_by_id(0)
     @biovel_users << guest
-    @user_statistic = UserStatistic.all
   end
 
   def new
