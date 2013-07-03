@@ -48,8 +48,9 @@
     <thead>
       <tr>
         <th>Title</th>
-        <th>Uploaded</th>
         <th>Author(s)</th>
+        <th>Uploaded</th>
+        <th>Updated</th>
         <th>Operations</th>
       </tr>
     </thead>
@@ -62,11 +63,12 @@
             <dd><%= workflow.description[0,79]+"..." %></dd>
           </dl>
         </td>
-        <td><%= workflow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
         <td>
           <%= workflow.author %>
         </td>
-        <td  >
+        <td><%= workflow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+        <td><%= workflow.updated_at.strftime("%Y/%m/%d %H:%M") %></td>
+        <td>
           <div title="Run workflow" alt="Run workflow" style="float:left">
             <%= link_to 'Run', {:controller => 'runs',
               :action => 'new_run', :id => workflow.id}, :class => "link_img" %>

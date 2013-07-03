@@ -48,11 +48,12 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>Uploaded</th>
       <th>Author(s)</th>
       <% if current_user.admin -%>
         <th>Owner</th>
       <% end -%>
+      <th>Uploaded</th>
+      <th>Updated</th>
       <th>Operations</th>
     </tr>
   </thead>
@@ -65,7 +66,6 @@
           <dd><%= workflow.description.nil? ? "" : workflow.description[0,79]+"..." %></dd>
         </dl>
     </td>
-    <td><%= workflow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
     <td>
       <%= workflow.author %>
     </td>
@@ -78,6 +78,8 @@
         <%end%>
       </td>
     <% end -%>
+    <td><%= workflow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+    <td><%= workflow.updated_at.strftime("%Y/%m/%d %H:%M") %></td>
     <td>
     <div title="Run workflow" alt="Run workflow" style="float:left">
       <%= link_to 'Run', {:controller => 'runs' ,
