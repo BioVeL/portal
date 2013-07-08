@@ -51,10 +51,15 @@ module ResultHelper
       %w(html xml json).include?($1) ? $1 : "text"
     end.to_sym
 
-    contents = format_xml(contents) if type == :xml
-
-    raw(CodeRay.scan(contents, type).div(:css => :class,
-      :line_numbers => :table))
+    if type == :text
+      contents = CodeRay.scan(contents, type).div(:css => :class)
+      raw(auto_link(contents, :html => { :target => '_blank' },
+        :sanitize => false))
+    else
+      contents = format_xml(contents) if type == :xml
+      raw(CodeRay.scan(contents, type).div(:css => :class,
+        :line_numbers => :table))
+    end
   end
 
   private

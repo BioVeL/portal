@@ -61,3 +61,5 @@ gem 'mongrel', "1.2.0.pre2"
 gem 'oauth-plugin', ">= 0.4.0.pre1"
 
 gem "coderay", "~> 1.0.9"
+
+gem "rails_autolink", "~> 1.1.0"
