@@ -71,15 +71,19 @@ class RunsController < ApplicationController
   # GET /runs/1
   # GET /runs/1.json
   def show
-    @run = Run.find(params[:id])
-    return login_required if current_user.nil? && !@run.user_id.nil?
-
-    @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
-    @run_error_codes = @run.get_error_codes
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render :json => @run }
+    begin
+      @run = Run.find(params[:id])
+      return login_required if current_user.nil? && !@run.user_id.nil?
+      @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
+      @run_error_codes = @run.get_error_codes
+    rescue ActiveRecord::RecordNotFound
+      logger.error "Attempt to access an invalid run #{params[:id]}"
+      redirect_to runs_url, :flash => {:error => "Error: Selected run cannot be displayed"}
+    else
+      respond_to do |format|
+        format.html # show.html.erb
+        format.json { render :json => @run }
+      end
     end
   end
 
