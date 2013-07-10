@@ -34,8 +34,8 @@
 #
 # Synopsis
 #
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is
-# provided to support easy inspection and execution of workflows.
+# BioVeL Portal is a prototype interface to Taverna Server which is provided to 
+# support easy inspection and execution of workflows.
 #
 # For more details see http://www.biovel.eu
 #
@@ -77,17 +77,9 @@ class Run < ActiveRecord::Base
         File.open(ind_result.result_filename) do |f|
           f.each_line do |line|
             if line =~ /#{ind_error.error_pattern}/ then
-              puts "Found it: #{line}"
               collect[ind_result.name] = ind_error
               is_new = false
-            else
-              puts "Not Found in: #{line}"
             end
-          end
-          if !is_new then
-            puts "FOUND  #{ind_error.error_pattern}"
-          else
-            puts "NOT FOUND  #{ind_error.error_pattern}"
           end
         end
       end
@@ -116,8 +108,6 @@ class Run < ActiveRecord::Base
         end
       end
     end
-    puts "COLLECTED: #{collect.count}"
-    puts collect
     return collect
   end
 
