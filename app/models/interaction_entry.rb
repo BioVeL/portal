@@ -34,8 +34,8 @@
 #
 # Synopsis
 #
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is
-# provided to support easy inspection and execution of workflows.
+# BioVeL Portal is a prototype interface to Taverna Server which is  provided to
+# support easy inspection and execution of workflows.
 #
 # For more details see http://www.biovel.eu
 #
@@ -52,12 +52,8 @@ class InteractionEntry < ActiveRecord::Base
   $feed_ns = "http://ns.taverna.org.uk/2012/interaction"
   $feed_uri = "http://localhost:8080/ah/interaction/notifications?limit=500"
   def self.get_interactions
-    Rails.logger.info "*****************************************************"
-    Rails.logger.info "* MONITORING FEED                    ****************"
-    Rails.logger.info "*****************************************************"
     counter_i = 0
     feed = Atom::Feed.load_feed(URI.parse($feed_uri))
-    Rails.logger.info "Feed Entries = " + feed.entries.count.to_s
     # Go through all the entries in reverse order and add them if they are new
     feed.each_entry do |entry|
       entry_id = entry.id
@@ -101,13 +97,9 @@ class InteractionEntry < ActiveRecord::Base
         end
         interaction_entry.save
       else
-        if counter_i > 0 then
-          Rails.logger.info "Saved " + counter_i.to_s + " new feed entrie(s)"
-        end
         return false
       end
     end
-    Rails.logger.info "Saved " + counter_i.to_s + " new feed entries"
     return true
   end
 end
