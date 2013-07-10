@@ -158,8 +158,6 @@ class Tavernaserv < ActiveRecord::Base
         @server = nil
         logger.info 'no configuration found'
       end
-    else
-      logger.info 'no configuration found'
     end
   end
 

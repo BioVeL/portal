@@ -66,11 +66,7 @@ while($running) do
 
   begin
     Tavernaserv.run_update
-    if InteractionEntry.get_interactions
-      Rails.logger.info "Found new interactions."
-    else
-      Rails.logger.info "Could not find new interactions."
-    end
+    InteractionEntry.get_interactions
   rescue
      @error_message="#{$!}"
      Rails.logger.info "Updater Daemon Error. "
