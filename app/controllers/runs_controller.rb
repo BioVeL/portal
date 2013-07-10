@@ -180,17 +180,12 @@ class RunsController < ApplicationController
         running_now = Run.find_all_by_state('running', :order =>'start desc').count
       end
     end
-    puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
     if runs.count != run_count || running_now != running_on_client
       @runs = runs
-      puts run_count.to_s + " != " + runs.count.to_s
     else
       @runs = {}
     end
-
-    puts run_count
-    puts params[:running]
-    puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
     respond_to do |format|
       format.js
@@ -221,7 +216,6 @@ class RunsController < ApplicationController
       return [nil, nil]
     else
       # return the unresponded interaction
-      puts "RETURNED: " + interaction.interaction_id + " " + interaction.href
       return [interaction.interaction_id, interaction.href]
     end
 
@@ -232,14 +226,12 @@ class RunsController < ApplicationController
   def interaction
     @run = Run.find(params[:id])
     interactionid = params[:interactionid].to_s
-    puts interactionid
     @responded = probe_interaction(interactionid)
   end
 
   def probe_interaction(interaction_id = "")
     return false if interaction_id.nil?
     # Look if interaction has been replied.
-    puts interaction_id
     entry = InteractionEntry.find_by_interaction_id(interaction_id)
     return false if entry.nil?
     responded = InteractionEntry.find_all_by_in_reply_to(entry.taverna_interaction_id).count
@@ -255,7 +247,6 @@ class RunsController < ApplicationController
 
   #GET /workflows/1/newrun
   def new_run
-
     cookies[:run_identification]=""
     unassigned_inputs = false
     logger.info "#NEW RUN (#{Time.now}): number of parameters: #{params.count}" #- 1
@@ -282,24 +273,18 @@ class RunsController < ApplicationController
             input = port.name
             input_file =  "file_for_#{port.name}"
             default_input_file =  "default_file_for_#{port.name}"
+
             if params[:file_uploads].include? input
-              logger.info "#NEW RUN (#{Time.now}): 1 Actual Input for #{input} as string #{params[input].to_s}"
               stringinput = params[:file_uploads][input].to_s
-              logger.info "#NEW RUN (#{Time.now}): 2   #{stringinput.class}"
               if stringinput.include?("[") and stringinput.include?("]")
                 stringinput.sub! '[',''
                 stringinput.sub! ']',''
-                logger.info "#NEW RUN (#{Time.now}): 3   Input is a list"
                 inputarray = stringinput.split(',').collect! {|n| n.to_s}
-                logger.info "#NEW RUN (#{Time.now}): 4   Values"
-                logger.info "#NEW RUN (#{Time.now}): " + inputarray.to_s
-                logger.info "#NEW RUN (#{Time.now}): " + inputarray.class.to_s
                 port.value = inputarray
               else
                 port.value = stringinput
               end
-              logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to #{port.value}"
-              logger.info "#NEW RUN (#{Time.now}): actual value = #{run.input_ports[input].value}       "
+
               if run.input_port(input).nil?
                 logger.info "#NEW RUN (#{Time.now}): no values assigned"
               end
@@ -308,16 +293,11 @@ class RunsController < ApplicationController
               run.delete
               exit 1
             end
-            logger.info "#NEW RUN (#{Time.now}): Files? #{input_file}"
-
-            puts "#NEW RUN (#{Time.now}): Default Files? #{params[:file_uploads][default_input_file]}"
 
             if params[:file_uploads].include? input_file
               port.file = params[:file_uploads][input_file].tempfile.path
-              logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to use file '#{params[:file_uploads][input_file].original_filename}'"
             elsif params[:file_uploads].include? default_input_file
               port.file = params[:file_uploads][default_input_file].to_s
-              puts "#NEW RUN (#{Time.now}): Input '#{input}' set to use default file '#{params[:file_uploads][default_input_file].to_s}'"
             end
           end
 
@@ -328,8 +308,6 @@ class RunsController < ApplicationController
           end
           run.start()
         else
-          puts
-            "#NEW RUN (#{Time.now}): Server Down - Redirected to back"
           redirect_to :back,  :flash => {:error => "Server Busy, try again later"}
         end
        else
@@ -356,18 +334,10 @@ class RunsController < ApplicationController
       default_input_file =  "default_file_for_#{port[0]}"
       if  !(params[:file_uploads].include? input) && !(params[:file_uploads].include? input_file)
         unless port[1].blank?
-          logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value #{port[1]}"
+          logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value"
           params[:file_uploads][input] = port[1]
         else
           inputs_provided = false
-          puts
-            "#NEW RUN (#{Time.now}):*****************************************"
-          puts
-            "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
-          puts
-            "#NEW RUN (#{Time.now}):          " + input
-          puts
-            "#NEW RUN (#{Time.now}):*****************************************"
           break
         end
       end
@@ -375,15 +345,10 @@ class RunsController < ApplicationController
       value = params[:file_uploads][input].to_s
       if (value =="") && !(params[:file_uploads].include? input_file)
         unless port[1].blank?
-          logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value #{port[1]}"
+          logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value"
           params[:file_uploads][input] = port[1]
         else
           inputs_provided = false
-          logger.info "#NEW RUN (#{Time.now}):*****************************************"
-          logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
-          logger.info "#NEW RUN (#{Time.now}):           " + input  + ""
-          logger.info "#NEW RUN (#{Time.now}):Detected:  " + value
-          logger.info "#NEW RUN (#{Time.now}):*****************************************"
           break
         end
       end
@@ -395,9 +360,6 @@ class RunsController < ApplicationController
   # Save the new run in the database
   def save_run(run, run_name)
     @run = Run.new
-    puts "CREATE gets called after the new form is presented"
-    puts "CREATE #{params}"
-    puts "CREATE run identifier #{cookies[:run_identification]}"
     @run.workflow_id = @workflow.id
     @run.description = run_name
     @run.run_identification = run.identifier
@@ -418,7 +380,6 @@ class RunsController < ApplicationController
 
   #this process is called to copy the results to the local result_store
   def save_results(runid, outputs)
-    #resultset = {}
     "#SAVE_RESULTS"
     if outputs.empty?
       logger.info "#SAVE_RESULTS: The workflow has no output ports"
@@ -426,25 +387,24 @@ class RunsController < ApplicationController
       outputs.each do |name, port|
         logger.info "#SAVE_RESULTS: #{name} (depth #{port.depth})"
         if port.value.is_a?(Array)
-          logger.info "#SAVE_RESULTS:  partial Results are in a list"
+          # partial Results are in a list
           sub_array = port.value
           save_nested(runid,name,sub_array,port.type[0],port.depth,index="")
         else
-          logger.info "#SAVE_RESULTS: path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
+          logger.info "#SAVE_RESULTS: path: #{runid}/result/#{name} type: #{port.type}"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)
         end
       end
     end
-    #resultset
   end
+
   def save_nested(runid, portname, sub_array, porttype, portdepth, index="")
-    puts  "#SAVE_NESTED: "
+    # SAVE_NESTED - lists of results
     (0 .. sub_array.length - 1).each do |i|
       value = sub_array[i]
       if value.is_a?(Array) then
         save_nested(runid,portname,value,porttype, portdepth, i.to_s)
       else
-        puts  "#SAVE_NESTED: path #{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i} type: #{porttype}"
         save_to_db(portname, porttype, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
       end
     end
@@ -458,16 +418,14 @@ class RunsController < ApplicationController
     result.run_id = run
     result.filepath = filepath
     result.result_file = value
-    logger.info "#SAVE_TO_DB: #{value}"
-    #result.user_id = current_user.id
-    #puts "USER: #{current_user.id} #{current_user.login}"
+    #SAVE_TO_DB
     result.save
   end
 
   private
   # Get the workflow that will be executed
   def get_workflow
-    puts "getting workflow for #{params[:id]}"
+    # getting workflow for params[:id]
     @workflow = Workflow.find(params[:id])
   end
 
@@ -483,7 +441,7 @@ class RunsController < ApplicationController
         res = req.request_head($server.uri.path)
       rescue Exception => e
         logger.info "#CHECK SERVER ERROR (#{Time.now}): Server down"
-        #email if server is not responding
+        # email if server is not responding
         credential = Credential.find_by_server_type_and_default_and_in_use("ts",true,true)
         AdminMailer.server_unresponsive(credential).deliver
         $server = nil
