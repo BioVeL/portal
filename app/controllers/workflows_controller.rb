@@ -61,7 +61,6 @@ class WorkflowsController < ApplicationController
   # GET /workflows/1
   # GET /workflows/1.json
   def show
-    puts params
     @selected_tab = params[:selected_tab]
     @sources, @source_descriptions = @workflow.get_inputs
     @custom_inputs = @workflow.get_custom_inputs
@@ -72,9 +71,6 @@ class WorkflowsController < ApplicationController
     @workflow_errors = @workflow.get_errors
     @workflow_error_codes = @workflow.get_error_codes
 
-    puts "*********************************************"
-    puts @selected_tab.to_s
-    puts "*********************************************"
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @workflow }
@@ -122,7 +118,6 @@ class WorkflowsController < ApplicationController
     @workflow = Workflow.new(params[:workflow])
     @consumer_tokens=getConsumerTokens
     @services=OAUTH_CREDENTIALS.keys-@consumer_tokens.collect{|c| c.class.service_name}
-    puts "File name:" + @workflow.workflow_filename
     respond_to do |format|
       @workflow.get_details_from_model
       @workflow.user_id = current_user.id
@@ -149,7 +144,6 @@ class WorkflowsController < ApplicationController
       token = @consumer_tokens.first.client
       doc = REXML::Document.new(response.body)
       response=token.request(:get, content_uri)
-      puts response.body
 
       directory = "/tmp"
       File.open(File.join(directory, wf_name), 'wb') do |f|
@@ -251,10 +245,8 @@ class WorkflowsController < ApplicationController
         wfps = WorkflowPort.where("port_type = ? and name = ?", "1", i_name)
         if wfps.empty?
           @wfp = WorkflowPort.new()
-          puts "New Port"
         else
           @wfp = wfps[0]
-          puts "Old Port"
         end
         #get values for customised input
         @wfp.workflow_id = @workflow.id
@@ -329,10 +321,8 @@ class WorkflowsController < ApplicationController
         wfps = WorkflowPort.where("port_type = ? and name = ?", "2", i_name)
         if wfps.empty?
           @wfp = WorkflowPort.new()
-          puts "New Port"
         else
           @wfp = wfps[0]
-          puts "Old Port"
         end
         #get values for customised output
         @wfp.workflow_id = @workflow.id
@@ -416,10 +406,8 @@ class WorkflowsController < ApplicationController
         wfec = WorkflowError.where("error_code = ?", ecode)
         if wfec.empty?
           wfe = WorkflowError.new()
-          puts "New Error Code"
         else
           wfe = wfec[0]
-          puts "Old Error"
         end
         # get values for customised output
         wfe.workflow_id      = @workflow.id
@@ -492,7 +480,6 @@ class WorkflowsController < ApplicationController
     consumer_tokens = getConsumerTokens
     if consumer_tokens.count > 0
       token = consumer_tokens.first.client
-      # logger.info "private data: "+token.get("/data/index").body
       # URI for the packs, will return all the packs for selected page
       # PROBLEM: how do we know how many pages are there?
       workflow_uri = "http://www.myexperiment.org/search.xml?query='" + search_by
@@ -503,7 +490,6 @@ class WorkflowsController < ApplicationController
       begin
         response=token.request(:get, workflow_uri+ page.to_s)
         doc = REXML::Document.new(response.body)
-        logger.info 'DEBUG: Workflow XML Elements: ' + doc.elements.count.to_s
         if doc.elements['search/workflow'].nil? ||
            doc.elements['search/workflow'].has_elements?
           no_workflows = true
@@ -528,7 +514,6 @@ class WorkflowsController < ApplicationController
           page +=1
         end
       end while no_workflows == false
-      logger.info 'DEBUG: Workflow Pages: ' + page.to_s
     end
     return workflows
   end
@@ -536,7 +521,6 @@ class WorkflowsController < ApplicationController
     consumer_tokens=getConsumerTokens
     if consumer_tokens.count > 0
       token = consumer_tokens.first.client
-      # logger.info "private data: "+token.get("/data/index").body
       # URI for the packs, will return all the packs for selected page
       # PROBLEM: how do we know how many pages are there?
       workflow_uri = "http://www.myexperiment.org/workflow.xml?id=" +
@@ -560,12 +544,10 @@ class WorkflowsController < ApplicationController
     content_uri =""
     if consumer_tokens.count > 0
       token = consumer_tokens.first.client
-      # logger.info "private data: "+token.get("/data/index").body
       # URI for the workflow
       workflow_uri =  "http://www.myexperiment.org/workflow.xml?id="
       workflow_uri += workflow.my_exp_id.to_s
       workflow_uri += '&elements=content-uri'
-      logger.info "DEBUG: "+ workflow_uri
       response=token.request(:get, workflow_uri)
       doc = REXML::Document.new(response.body)
       doc.elements.each('workflow/content-uri') do |u|
@@ -579,12 +561,10 @@ class WorkflowsController < ApplicationController
     elements = []
     if consumer_tokens.count > 0
       token = consumer_tokens.first.client
-      # logger.info "private data: "+token.get("/data/index").body
       # URI for the workflow
       workflow_uri =  "http://www.myexperiment.org/workflow.xml?id="
       workflow_uri += workflow.my_exp_id.to_s
       workflow_uri += '&elements=privileges'
-      logger.info "DEBUG: "+ workflow_uri
       response=token.request(:get, workflow_uri)
       doc = REXML::Document.new(response.body)
       doc.elements.each('workflow/privileges/privilege') do |u|
