@@ -85,13 +85,12 @@ class Result < ActiveRecord::Base
     if @file_data
       # create the WORKFLOW_STORE Folder if it does not exist
       FileUtils.mkdir_p File.join RESULT_STORE, self.filepath
-    # create the file and write the data to the file system
+      # create the file and write the data to the file system
       File.open(result_filename, 'wb') do |f|
         f.write(@file_data)
       end
       # ensure that the data is only save once by clearing the cache after savig
       @file_data = nil
     end
-    puts "#STORE_RESULTFILE no data to save #{result_filename}"
   end
 end
