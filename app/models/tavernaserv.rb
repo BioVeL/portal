@@ -72,8 +72,8 @@ class Tavernaserv < ActiveRecord::Base
         runner.end = svrrun.finish_time
         # if run finishes copy run output to outputs dir within run
         if runner.results.count == 0
-          Rails.logger.info "Saving run:#{runner.id} results @ #{Time.now}.\n"
-          #Rails.logger.info "#no results recorded for this run"
+          logger.info "Saving run:#{runner.id} results @ #{Time.now}.\n"
+          #logger.info "#no results recorded for this run"
           outputs = svrrun.output_ports
           save_results(runner.id, outputs)
           runner.save
@@ -98,7 +98,7 @@ class Tavernaserv < ActiveRecord::Base
     end
   end
   def self.update_user_run_stats(user_id = 0, wf_id = 0)
-    Rails.logger.info "Updating user run stats at #{Time.now}.\n"
+    logger.info "Updating user run stats at #{Time.now}.\n"
 
     if user_id.nil?
       user_statistic = UserStatistic.find_or_create_by_id(0)
@@ -128,7 +128,7 @@ class Tavernaserv < ActiveRecord::Base
   end
 
   def self.update_workflow_stats(wf_id = 0, running_time = 0)
-    Rails.logger.info "Updating workflow stats at #{Time.now}.\n"
+    logger.info "Updating workflow stats at #{Time.now}.\n"
     wf = Workflow.find(wf_id)
     prev_run_count = wf.run_count
     prev_avg_run = wf.average_run
@@ -151,16 +151,15 @@ class Tavernaserv < ActiveRecord::Base
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
   def self.check_serv
-    puts Credential.get_taverna_uri
     if (!defined?(@server) || (@server == nil)) #then
       begin
         @server = T2Server::Server.new(Credential.get_taverna_uri)
       rescue Exception => e
         @server = nil
-        puts '/no_configuration'
+        logger.info 'no configuration found'
       end
     else
-      puts '/no_configuration'
+      logger.info 'no configuration found'
     end
   end
 
@@ -169,26 +168,22 @@ class Tavernaserv < ActiveRecord::Base
   def self.save_results(runid, outputs)
     #resultset = {}
     if outputs.nil? or outputs.empty?
-      Rails.logger.info "##TAVSERV SAVE_RESULTS The workflow has no output ports"
+      logger.info "##TAVSERV SAVE_RESULTS The workflow has no output ports"
     else
       outputs.each do |name, port|
-        Rails.logger.info "##TAVSERV SAVE_RESULTS #{name} (port #{port.name} depth #{port.depth})"
       begin
         if port.value.is_a?(Array)
-          Rails.logger.info "##TAVSERV SAVE_RESULTS partial Results are in a list"
+          # partial Results are in a list"
           sub_array = port.value
           save_nested(runid,name,sub_array,port.type[0],port.depth,index="")
         elsif port.error?
-          Rails.logger.info "##TAVSERV SAVE_ERROR Results are errors"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}.error", port.error)
         else
-          Rails.logger.info "##TAVSERV SAVE_RESULTS path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)
         end
       rescue
-         Rails.logger.info "### ERROR CAUGHT\n\n#{$!}\n\n"
          save_to_db(name, "Error", port.depth, runid, "#{runid}/result/#{name}.error", "Result cannot be interpreted")
-         Rails.logger.info "Update Error Result cannot be interpreted"
+         logger.info "Update Error Result cannot be interpreted"
       end
       end
     end
@@ -206,7 +201,6 @@ class Tavernaserv < ActiveRecord::Base
                                    Credential.get_taverna_credentials)
           value = svrrun.get_output(portname).join.to_s
         end
-        puts  "#TAVSERV SAVE_NESTED path #{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i} type: #{porttype} VALUE: #{value}"
         save_to_db(portname, porttype, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
       end
     end
@@ -221,7 +215,7 @@ class Tavernaserv < ActiveRecord::Base
     result.filepath = filepath
     result.result_file = value
     unless verify_if_saved(result) then
-      Rails.logger.info "##TAVSERV SAVE_TO_DB: result #{name} for run #{run}"
+      # TAVSERV SAVE TO DB
       result.save
     end
   end
@@ -232,10 +226,10 @@ class Tavernaserv < ActiveRecord::Base
                     :run_id => result.run_id,
                     :filepath => result.filepath)
     if res.count > 0 then
-      Rails.logger.info "##TAVSERV VERIFY: result #{name} already in DB"
+      logger.info "##TAVSERV VERIFY: result #{name} already in DB"
       return true;
     else
-      Rails.logger.info "##TAVSERV VERIFY: result #{name} not in DB"
+      logger.info "##TAVSERV VERIFY: result #{name} not in DB"
       return false;
     end
   end

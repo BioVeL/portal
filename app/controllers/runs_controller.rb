@@ -378,50 +378,6 @@ class RunsController < ApplicationController
     end
   end
 
-  #this process is called to copy the results to the local result_store
-  def save_results(runid, outputs)
-    "#SAVE_RESULTS"
-    if outputs.empty?
-      logger.info "#SAVE_RESULTS: The workflow has no output ports"
-    else
-      outputs.each do |name, port|
-        logger.info "#SAVE_RESULTS: #{name} (depth #{port.depth})"
-        if port.value.is_a?(Array)
-          # partial Results are in a list
-          sub_array = port.value
-          save_nested(runid,name,sub_array,port.type[0],port.depth,index="")
-        else
-          logger.info "#SAVE_RESULTS: path: #{runid}/result/#{name} type: #{port.type}"
-          save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)
-        end
-      end
-    end
-  end
-
-  def save_nested(runid, portname, sub_array, porttype, portdepth, index="")
-    # SAVE_NESTED - lists of results
-    (0 .. sub_array.length - 1).each do |i|
-      value = sub_array[i]
-      if value.is_a?(Array) then
-        save_nested(runid,portname,value,porttype, portdepth, i.to_s)
-      else
-        save_to_db(portname, porttype, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
-      end
-    end
-  end
-
-  def save_to_db(name,mimetype,depth,run,filepath,value)
-    result = Result.new
-    result.name = name
-    result.filetype = mimetype
-    result.depth = depth
-    result.run_id = run
-    result.filepath = filepath
-    result.result_file = value
-    #SAVE_TO_DB
-    result.save
-  end
-
   private
   # Get the workflow that will be executed
   def get_workflow
