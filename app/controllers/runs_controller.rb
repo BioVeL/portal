@@ -258,11 +258,11 @@ class RunsController < ApplicationController
 
     cookies[:run_identification]=""
     unassigned_inputs = false
-    Rails.logger.info "#NEW RUN (#{Time.now}): number of parameters: #{params.count}" #- 1
+    logger.info "#NEW RUN (#{Time.now}): number of parameters: #{params.count}" #- 1
 
     unless params[:id].nil?
       get_workflow()
-      Rails.logger.info "#NEW RUN (#{Time.now}): Generating new run for: #{@workflow.name}" # -2
+      logger.info "#NEW RUN (#{Time.now}): Generating new run for: #{@workflow.name}" # -2
     end
     if !params[:file_uploads].nil?
       run_name = params[:file_uploads][:run_name].nil? ? @workflow.title : params[:file_uploads][:run_name]
@@ -273,7 +273,7 @@ class RunsController < ApplicationController
     @custom_inputs = nil
     unless params[:workflow_id].nil?
       if inputs_provided(params)
-        Rails.logger.info "#NEW RUN (#{Time.now}): using submitted inputs"
+        logger.info "#NEW RUN (#{Time.now}): using submitted inputs"
         check_server()
         unless $server.nil?
           run = $server.create_run(@workflow.get_file, Credential.get_taverna_credentials)
@@ -283,38 +283,38 @@ class RunsController < ApplicationController
             input_file =  "file_for_#{port.name}"
             default_input_file =  "default_file_for_#{port.name}"
             if params[:file_uploads].include? input
-              Rails.logger.info "#NEW RUN (#{Time.now}): 1 Actual Input for #{input} as string #{params[input].to_s}"
+              logger.info "#NEW RUN (#{Time.now}): 1 Actual Input for #{input} as string #{params[input].to_s}"
               stringinput = params[:file_uploads][input].to_s
-              Rails.logger.info "#NEW RUN (#{Time.now}): 2   #{stringinput.class}"
+              logger.info "#NEW RUN (#{Time.now}): 2   #{stringinput.class}"
               if stringinput.include?("[") and stringinput.include?("]")
                 stringinput.sub! '[',''
                 stringinput.sub! ']',''
-                Rails.logger.info "#NEW RUN (#{Time.now}): 3   Input is a list"
+                logger.info "#NEW RUN (#{Time.now}): 3   Input is a list"
                 inputarray = stringinput.split(',').collect! {|n| n.to_s}
-                Rails.logger.info "#NEW RUN (#{Time.now}): 4   Values"
-                Rails.logger.info "#NEW RUN (#{Time.now}): " + inputarray.to_s
-                Rails.logger.info "#NEW RUN (#{Time.now}): " + inputarray.class.to_s
+                logger.info "#NEW RUN (#{Time.now}): 4   Values"
+                logger.info "#NEW RUN (#{Time.now}): " + inputarray.to_s
+                logger.info "#NEW RUN (#{Time.now}): " + inputarray.class.to_s
                 port.value = inputarray
               else
                 port.value = stringinput
               end
-              Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to #{port.value}"
-              Rails.logger.info "#NEW RUN (#{Time.now}): actual value = #{run.input_ports[input].value}       "
+              logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to #{port.value}"
+              logger.info "#NEW RUN (#{Time.now}): actual value = #{run.input_ports[input].value}       "
               if run.input_port(input).nil?
-                Rails.logger.info "#NEW RUN (#{Time.now}): no values assigned"
+                logger.info "#NEW RUN (#{Time.now}): no values assigned"
               end
             else
-              Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' has not been set."
+              logger.info "#NEW RUN (#{Time.now}): Input '#{input}' has not been set."
               run.delete
               exit 1
             end
-            Rails.logger.info "#NEW RUN (#{Time.now}): Files? #{input_file}"
+            logger.info "#NEW RUN (#{Time.now}): Files? #{input_file}"
 
             puts "#NEW RUN (#{Time.now}): Default Files? #{params[:file_uploads][default_input_file]}"
 
             if params[:file_uploads].include? input_file
               port.file = params[:file_uploads][input_file].tempfile.path
-              Rails.logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to use file '#{params[:file_uploads][input_file].original_filename}'"
+              logger.info "#NEW RUN (#{Time.now}): Input '#{input}' set to use file '#{params[:file_uploads][input_file].original_filename}'"
             elsif params[:file_uploads].include? default_input_file
               port.file = params[:file_uploads][default_input_file].to_s
               puts "#NEW RUN (#{Time.now}): Input '#{input}' set to use default file '#{params[:file_uploads][default_input_file].to_s}'"
@@ -334,7 +334,7 @@ class RunsController < ApplicationController
         end
        else
       # missing some or all inputs
-         Rails.logger.info "#NEW RUN (#{Time.now}): Cannot start run, missing inputs"
+         logger.info "#NEW RUN (#{Time.now}): Cannot start run, missing inputs"
       end
     end
 
@@ -356,7 +356,7 @@ class RunsController < ApplicationController
       default_input_file =  "default_file_for_#{port[0]}"
       if  !(params[:file_uploads].include? input) && !(params[:file_uploads].include? input_file)
         unless port[1].blank?
-          Rails.logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value #{port[1]}"
+          logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value #{port[1]}"
           params[:file_uploads][input] = port[1]
         else
           inputs_provided = false
@@ -375,15 +375,15 @@ class RunsController < ApplicationController
       value = params[:file_uploads][input].to_s
       if (value =="") && !(params[:file_uploads].include? input_file)
         unless port[1].blank?
-          Rails.logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value #{port[1]}"
+          logger.info "#NEW RUN (#{Time.now}): No input for #{input}, using example value #{port[1]}"
           params[:file_uploads][input] = port[1]
         else
           inputs_provided = false
-          Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
-          Rails.logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
-          Rails.logger.info "#NEW RUN (#{Time.now}):           " + input  + ""
-          Rails.logger.info "#NEW RUN (#{Time.now}):Detected:  " + value
-          Rails.logger.info "#NEW RUN (#{Time.now}):*****************************************"
+          logger.info "#NEW RUN (#{Time.now}):*****************************************"
+          logger.info "#NEW RUN (#{Time.now}):**          Missing Inputs             **"
+          logger.info "#NEW RUN (#{Time.now}):           " + input  + ""
+          logger.info "#NEW RUN (#{Time.now}):Detected:  " + value
+          logger.info "#NEW RUN (#{Time.now}):*****************************************"
           break
         end
       end
@@ -421,16 +421,16 @@ class RunsController < ApplicationController
     #resultset = {}
     "#SAVE_RESULTS"
     if outputs.empty?
-      Rails.logger.info "#SAVE_RESULTS: The workflow has no output ports"
+      logger.info "#SAVE_RESULTS: The workflow has no output ports"
     else
       outputs.each do |name, port|
-        Rails.logger.info "#SAVE_RESULTS: #{name} (depth #{port.depth})"
+        logger.info "#SAVE_RESULTS: #{name} (depth #{port.depth})"
         if port.value.is_a?(Array)
-          Rails.logger.info "#SAVE_RESULTS:  partial Results are in a list"
+          logger.info "#SAVE_RESULTS:  partial Results are in a list"
           sub_array = port.value
           save_nested(runid,name,sub_array,port.type[0],port.depth,index="")
         else
-          Rails.logger.info "#SAVE_RESULTS: path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
+          logger.info "#SAVE_RESULTS: path: #{runid}/result/#{name}  result_value: #{port.value} type: #{port.type}"
           save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)
         end
       end
@@ -458,7 +458,7 @@ class RunsController < ApplicationController
     result.run_id = run
     result.filepath = filepath
     result.result_file = value
-    Rails.logger.info "#SAVE_TO_DB: #{value}"
+    logger.info "#SAVE_TO_DB: #{value}"
     #result.user_id = current_user.id
     #puts "USER: #{current_user.id} #{current_user.login}"
     result.save
@@ -482,7 +482,7 @@ class RunsController < ApplicationController
         req = Net::HTTP.new($server.uri.host, $server.uri.port)
         res = req.request_head($server.uri.path)
       rescue Exception => e
-        Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server down"
+        logger.info "#CHECK SERVER ERROR (#{Time.now}): Server down"
         #email if server is not responding
         credential = Credential.find_by_server_type_and_default_and_in_use("ts",true,true)
         AdminMailer.server_unresponsive(credential).deliver
@@ -493,7 +493,7 @@ class RunsController < ApplicationController
     running_now = $server.runs(Credential.get_taverna_credentials).count
     if running_now == max_runs
       $server = nil
-      Rails.logger.info "#CHECK SERVER ERROR (#{Time.now}): Server full"
+      logger.info "#CHECK SERVER ERROR (#{Time.now}): Server full"
     end
   end
 end
