@@ -55,6 +55,7 @@
  *
  *= require_self
  *= require vendor
+ *= require jquery.ui.all
  *= require dataTables/jquery.dataTables
  *= require_tree .
  */
