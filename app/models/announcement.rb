@@ -5,18 +5,18 @@
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # * Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
-# 
+#
 # * Redistributions in binary form must reproduce the above copyright notice,
 #   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# 
+#
 # * Neither the names of The University of Manchester nor Cardiff University nor
 #   the names of its contributors may be used to endorse or promote products
 #   derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,33 +28,33 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 # Authors
 #     Abraham Nieva de la Hidalga
-#      
-# Synopsis 
-# 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+#
+# Synopsis
+#
+# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is
 # provided to support easy inspection and execution of workflows.
-# 
+#
 # For more details see http://www.biovel.eu
-# 
+#
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 class Announcement < ActiveRecord::Base
   attr_accessible :ends_at, :message, :starts_at
-  
-  def self.current_announcements(hide_time)
-    with_scope :find => { 
-        :conditions => "starts_at <= NOW() AND ends_at >= NOW()" 
-    #with_scope :find => { 
-    #    :conditions => "starts_at <= datetime('now') AND ends_at >= datetime('now')" 
-      } do
+
+  def self.current_announcements(hide_time = nil)
+    with_scope(:find => where(["starts_at <= ? AND ends_at >= ?",
+      Time.now, Time.now])) do
+
       if hide_time.nil?
         find(:all)
       else
-        find(:all, :conditions => ["updated_at > ? OR starts_at > ?", hide_time, hide_time])
+        find(:all, :conditions => ["updated_at > ? OR starts_at > ?",
+          hide_time, hide_time])
       end
     end
   end
+
 end

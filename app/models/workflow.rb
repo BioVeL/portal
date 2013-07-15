@@ -5,18 +5,18 @@
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # * Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
-# 
+#
 # * Redistributions in binary form must reproduce the above copyright notice,
 #   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# 
+#
 # * Neither the names of The University of Manchester nor Cardiff University nor
 #   the names of its contributors may be used to endorse or promote products
 #   derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,19 +28,19 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 # Authors
 #     Abraham Nieva de la Hidalga
 #     Robert Haines
 #     Alan Williams
-#      
-# Synopsis 
-# 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+#
+# Synopsis
+#
+# BioVeL Portal is a prototype interface to Taverna Server which is
 # provided to support easy inspection and execution of workflows.
-# 
+#
 # For more details see http://www.biovel.eu
-# 
+#
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 require 't2flow/model'
@@ -48,9 +48,9 @@ require 't2flow/parser'
 require 't2flow/dot'
 
 class Workflow < ActiveRecord::Base
-  attr_accessible :author, :description, :name, :title, :workflow_file, 
+  attr_accessible :author, :description, :name, :title, :workflow_file,
                   :wf_file, :my_experiment_id, :user_id, :is_shared,
-                  :slowest_run, :slowest_run_date, :fastest_run, 
+                  :slowest_run, :slowest_run_date, :fastest_run,
                   :fastest_run_date
 
   # a workflow can have many runs
@@ -61,25 +61,25 @@ class Workflow < ActiveRecord::Base
   # write the workflow file to the filesystem
   after_save :store_wffile
   # Validate the workflow file
-  validate :validate_file_is_included, :on=>:create 
+  validate :validate_file_is_included, :on=>:create
   validate :validate_file_is_t2flow
   # Validate that there is a file is selected
   def validate_file_is_included
     if workflow_file.nil? && @file_data.nil?
-      errors.add :workflow_file, 
+      errors.add :workflow_file,
                  " missing, please select a file and try again"
     end
   end
   #validate that the file is a workflow
   def validate_file_is_t2flow
     if !@file_data.nil? && !get_details_from_model
-      errors.add :workflow_file, 
+      errors.add :workflow_file,
                  " \"" + @file_data.original_filename +
                  "\" is not a valid taverna workflow file (t2flow)"
     end
   end
 
-  # when data is assigned via the upload, store the data in a 
+  # when data is assigned via the upload, store the data in a
   # variable for later and assing the file name to workflow_file
   def wf_file=(file_data)
     unless file_data.blank?
@@ -89,22 +89,22 @@ class Workflow < ActiveRecord::Base
       # workflow file name
       self.workflow_file = file_data.original_filename
     end
-  end  
-  
+  end
+
   def me_file=(file_data)
     unless file_data.blank?
       # store the uploaded data into a private instance variable
       @file_data = file_data
     end
-  end   
+  end
 
- 
+
   WORKFLOW_STORE = Rails.root.join('public', 'workflow_store')
   # define the path where workflow files will be written to:
   def workflow_filename
     File.join WORKFLOW_STORE, "#{id}" , "#{workflow_file}"
   end
-  
+
   #return the path that contains the workflow file
   def workflow_filepath
     return "/workflow_store/#{id}/#{workflow_file}"
@@ -125,7 +125,7 @@ class Workflow < ActiveRecord::Base
   end
   # delete the workflow file
   def delete_files
-    file_dir = File.join WORKFLOW_STORE, "#{id}" 
+    file_dir = File.join WORKFLOW_STORE, "#{id}"
     FileUtils.rm_rf(file_dir)
   end
   # get the workflow model
@@ -158,14 +158,13 @@ class Workflow < ActiveRecord::Base
         end
         file_OK = true
       rescue
-        puts "Error #{$!}"
         file_OK = false
-      ensure 
+      ensure
         @file_data.rewind
         return file_OK
       end
     end
-  end 
+  end
   def connects_to_r_server?
     response = false
     for df in self.get_model.dataflows do
@@ -175,9 +174,9 @@ class Workflow < ActiveRecord::Base
           break
         end
       end
-    end  
+    end
     return response
-  end 
+  end
   def get_inputs
     sources = {}
     descriptions = {}
@@ -196,7 +195,7 @@ class Workflow < ActiveRecord::Base
         descriptions[source.name] = description_values[0]
       else
         descriptions[source.name] = ""
-      end  
+      end
     }
     return [sources,descriptions]
   end
@@ -219,11 +218,11 @@ class Workflow < ActiveRecord::Base
         descriptions[sink.name] = description_values[0]
       else
         descriptions[sink.name] = ""
-      end  
+      end
     }
     return [sinks,descriptions]
   end
-   
+
   def get_custom_inputs
     # 1 Get custom inputs
     custom_inputs = WorkflowPort.get_custom_ports(id, 1)
@@ -247,7 +246,7 @@ class Workflow < ActiveRecord::Base
         custom_inputs << missing_port
       end
     }
-    # 4 Return the list of custom inputs 
+    # 4 Return the list of custom inputs
     return custom_inputs
   end
   def get_custom_outputs
@@ -273,7 +272,7 @@ class Workflow < ActiveRecord::Base
         custom_outputs << missing_port
       end
     }
-    # 4 Return the list of custom inputs 
+    # 4 Return the list of custom inputs
     return custom_outputs
   end
   def get_processors
@@ -294,9 +293,9 @@ class Workflow < ActiveRecord::Base
           ordered_processors[nth_processor[0]] = a_processor
         end
       end
-    end    
+    end
     # collect the workflow processors and their descriptions
-    #return ordered_processors 
+    #return ordered_processors
     # temporarily disable this because it creates infinite loop
     return wf_model.processors()
   end
@@ -314,7 +313,7 @@ class Workflow < ActiveRecord::Base
     end
     wf_model.sinks.each do |e_sink|
       wf_model.datalinks.each do |dl|
-        if dl.sink == e_sink.name && 
+        if dl.sink == e_sink.name &&
              !ordered_processors.has_value?(dl.source.split(':')[0])
           ordered_processors[i] = dl.source.split(':')[0]
           i -= 1
@@ -327,111 +326,103 @@ class Workflow < ActiveRecord::Base
         ordered_processors.dup.each do |pr|
           unless wf_sources.include?(lnk.source.split(':')[0])
             # processors put processors in order according to data links
-            unless ordered_processors.has_value?(lnk.source.split(':')[0])            
+            unless ordered_processors.has_value?(lnk.source.split(':')[0])
               if (lnk.sink.split(':')[0] == pr[1])
                 ordered_processors[i] = lnk.source.split(':')[0]
-                i -= 1 
+                i -= 1
               end
             end
           end
         end
       end
     end
-    
+
     #return the list of processors with their orders
     return ordered_processors
   end
 
   def get_errors
     # need a model for storing error handling information and some benchmarks
-    # workflow_id, error_id, error_name, error_pattern, error_message, 
+    # workflow_id, error_id, error_name, error_pattern, error_message,
     # runs_count, ports_count, most_recent
     # 1 check en results to see if there are results associated to errors
     bad_results = filter_errors
     # 2 Filter all duplicates, present only unique error messages
     #   must open every error file, if different from ones already in leave else
-    #   do not add to final list of bad results 
+    #   do not add to final list of bad results
     # 3 filter those errors that have been handled i.e. check if error file
-    #   contains a recognised error_pattern if it does then remove the error 
+    #   contains a recognised error_pattern if it does then remove the error
     #   from set
     # 4 return the rest as unhandled error occurrences
     return bad_results
   end
 
   def get_runs_with_errors_count
-    runs_with_errors = 
+    runs_with_errors =
       Run.where('workflow_id = ?',id).joins(:results).where('filetype = ?','error').group('run_id').count.count
     return runs_with_errors
   end
 
-  def filter_errors 
-    bad_results = 
+  def filter_errors
+    bad_results =
       Result.where("filetype=? ",'error').joins(:run).where("workflow_id = ?", id)
     collect = []
     samples = []
     runs = []
-    bad_results.each do |ind_error| 
-      example_value = IO.read(ind_error.result_filename)     
+    bad_results.each do |ind_error|
+      example_value = IO.read(ind_error.result_filename)
       unless samples.include?(example_value)
         collect << ind_error
-        samples << example_value 
+        samples << example_value
         runs << ind_error.id
       end
     end
-    return collect  
+    return collect
   end
 
   def get_error_codes
-    error_codes = 
+    error_codes =
       WorkflowError.where('workflow_id = ?',id)
-    unhandled =  unhandled_errors 
-   
+    unhandled =  unhandled_errors
+
     return error_codes | unhandled
   end
 
   def get_runs_with_errors_count
-    runs_with_errors = 
+    runs_with_errors =
       Run.where('workflow_id = ?',id).joins(:results).where('filetype = ?','error').group('run_id').count.count
     return runs_with_errors
   end
 
-  def unhandled_errors 
-    bad_results = 
+  def unhandled_errors
+    bad_results =
       Result.where("filetype=? ",'error').joins(:run).where("workflow_id = ?", id)
-    error_codes = 
+    error_codes =
       WorkflowError.where('workflow_id = ?',id)
     collect = []
     samples = []
     runs = []
-    bad_results.each do |ind_result| 
+    bad_results.each do |ind_result|
       is_new = true
-      error_codes.each do |ind_error| 
+      error_codes.each do |ind_error|
         File.open(ind_result.result_filename) do |f|
           f.each_line do |line|
             if line =~ /#{ind_error.error_pattern}/ then
-            #  puts "Found it: #{line}"
               is_new = false
-            #else
-            #  puts "Not Found in: #{line}"
             end
-          end
-          if !is_new then
-            puts "FOUND  #{ind_error.error_pattern}"
-          else
-            puts "NOT FOUND  #{ind_error.error_pattern}" 
           end
         end
       end
-      if is_new then 
-        example_value = IO.read(ind_result.result_filename)     
+      if is_new then
+        example_value = IO.read(ind_result.result_filename)
         # 1 Filer duplicate outputs - Sometimes the same error happens several times
-        unless samples.include?(example_value) 
+        unless samples.include?(example_value)
           new_error = WorkflowError.new
           new_error.error_code = "E_" + (100000+ind_result.run_id).to_s + "_" + ind_result.name
           new_error.error_message = "Workflow run produced an error for " + ind_result.name
-          new_error.error_name = name + " Error" 
+          new_error.error_name = name + " Error"
           new_error.error_pattern = example_value
-          if Run.exists?(ind_result.run_id) 
+          if Run.exists?(ind_result.run_id)
             # if run still exists assign the run creation date
             new_error.most_recent = Run.find(ind_result.run_id).creation
           else
@@ -443,29 +434,28 @@ class Workflow < ActiveRecord::Base
           new_error.runs_count = 1
           new_error.workflow_id = id
           collect << new_error
-          samples << example_value 
+          samples << example_value
           runs << ind_result.id
         end
       end
     end
-    puts "COLLECTED: #{collect.count}"
-    return collect  
+    return collect
   end
 
 
-  private 
-  #the store wffile method is called after the details are saved    
+  private
+  #the store wffile method is called after the details are saved
   def store_wffile
     # verify if there is actually a file to be saved
     if @file_data
       # create the WORKFLOW_STORE Folder if it does not exist
       FileUtils.mkdir_p File.join WORKFLOW_STORE, "#{id}"
     # create the file and write the data to the file system
-      File.open(workflow_filename, 'wb') do |f|   
+      File.open(workflow_filename, 'wb') do |f|
         f.write(@file_data.read)
       end
       # ensure that the data is only save once by clearing the cache after savig
       @file_data = nil
     end
-  end 
+  end
 end

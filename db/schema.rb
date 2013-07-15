@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130517104649) do
+ActiveRecord::Schema.define(:version => 20130620092551) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(:version => 20130517104649) do
     t.datetime "updated_at",                 :null => false
   end
 
-  add_index "consumer_tokens", ["token"], :name => "index_consumer_tokens_on_token", :unique => true, :length => {"token"=>"100"}
+  add_index "consumer_tokens", ["token"], :name => "index_consumer_tokens_on_token", :unique => true
 
   create_table "credentials", :force => true do |t|
     t.string   "name"
@@ -43,6 +43,25 @@ ActiveRecord::Schema.define(:version => 20130517104649) do
     t.boolean  "default",     :default => false, :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
+  end
+
+  create_table "interaction_entries", :force => true do |t|
+    t.string   "author_name"
+    t.text     "content"
+    t.string   "href"
+    t.string   "in_reply_to"
+    t.text     "input_data"
+    t.string   "interaction_id"
+    t.datetime "published"
+    t.boolean  "response",               :default => false
+    t.text     "result_data"
+    t.string   "result_status"
+    t.string   "run_id"
+    t.string   "taverna_interaction_id"
+    t.text     "title"
+    t.datetime "updated"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "results", :force => true do |t|
@@ -74,6 +93,17 @@ ActiveRecord::Schema.define(:version => 20130517104649) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "user_statistics", :force => true do |t|
+    t.integer  "run_count",          :default => 0
+    t.integer  "mothly_run_average", :default => 0
+    t.datetime "first_run_date"
+    t.datetime "last_run_date"
+    t.integer  "latest_workflow_id", :default => 0
+    t.integer  "user_id"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "email"
@@ -85,6 +115,8 @@ ActiveRecord::Schema.define(:version => 20130517104649) do
     t.string   "auth_token"
     t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
+    t.boolean  "biovel",                 :default => false
+    t.integer  "type_id",                :default => 1
   end
 
   create_table "workflow_errors", :force => true do |t|
@@ -121,20 +153,20 @@ ActiveRecord::Schema.define(:version => 20130517104649) do
   create_table "workflows", :force => true do |t|
     t.string   "name"
     t.string   "title"
-    t.text     "description"
+    t.text     "description",      :limit => 255
     t.string   "author"
     t.string   "workflow_file"
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
-    t.string   "my_experiment_id", :default => "0"
-    t.float    "average_run",      :default => 0.0
-    t.integer  "run_count",        :default => 0
-    t.float    "slowest_run",      :default => 0.0
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
+    t.string   "my_experiment_id",                :default => "0"
+    t.float    "average_run",                     :default => 0.0
+    t.integer  "run_count",                       :default => 0
+    t.float    "slowest_run",                     :default => 0.0
     t.datetime "slowest_run_date"
-    t.float    "fastest_run",      :default => 0.0
+    t.float    "fastest_run",                     :default => 0.0
     t.datetime "fastest_run_date"
-    t.integer  "user_id",          :default => 0
-    t.boolean  "shared",           :default => false
+    t.integer  "user_id",                         :default => 0
+    t.boolean  "shared",                          :default => false
   end
 
 end

@@ -5,18 +5,18 @@
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # * Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
-# 
+#
 # * Redistributions in binary form must reproduce the above copyright notice,
 #   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# 
+#
 # * Neither the names of The University of Manchester nor Cardiff University nor
 #   the names of its contributors may be used to endorse or promote products
 #   derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,33 +28,44 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 # Authors
 #     Abraham Nieva de la Hidalga
+#     Robert Haines
 #
-# Synopsis 
-# 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+# Synopsis
+#
+# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is
 # provided to support easy inspection and execution of workflows.
-# 
+#
 # For more details see http://www.biovel.eu
-# 
+#
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
-# through the grant agreement number 283359. 
-class CreateWorkflowErrors < ActiveRecord::Migration
-  def change
-    create_table :workflow_errors do |t|
-      t.integer  :workflow_id
-      t.string   :error_code
-      t.string   :my_experiment_id
-      t.string   :error_name
-      t.string   :error_pattern
-      t.string   :error_message
-      t.integer  :runs_count
-      t.integer  :ports_count
-      t.datetime :most_recent
+# through the grant agreement number 283359.
 
-      t.timestamps
-    end
-  end
-end
+
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+development:
+  adapter: sqlite3
+  database: db/development.sqlite3
+  pool: 5
+  timeout: 10000
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  adapter: sqlite3
+  database: db/test.sqlite3
+  pool: 5
+  timeout: 5000
+
+production:
+  adapter: sqlite3
+  database: db/production.sqlite3
+  pool: 5
+  timeout: 10000

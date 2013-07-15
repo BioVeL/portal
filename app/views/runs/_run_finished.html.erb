@@ -1,7 +1,7 @@
 <div class='run_state'>
 <h3> Run: <%=h @run.description%></h3>
 <% if active_link?(Workflow.find(@run.workflow_id).my_experiment_id ) %>
-  <%= link_to( 
+  <%= link_to(
       image_tag("myexperiment.png", :height => "15", :alt => "my experiment"),
       Workflow.find(@run.workflow_id).my_experiment_id)  %>
 <% end %>
@@ -25,7 +25,7 @@
         (approx. <%= distance_of_time_in_words(0,(run.end - run.start),
                    [:include_seconds=>true]) %>)
       <%end%></dd>
- </dl> 
+ </dl>
 </div>
 
 

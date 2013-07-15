@@ -6,18 +6,18 @@
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # * Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
-# 
+#
 # * Redistributions in binary form must reproduce the above copyright notice,
 #   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# 
+#
 # * Neither the names of The University of Manchester nor Cardiff University nor
 #   the names of its contributors may be used to endorse or promote products
 #   derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -29,17 +29,17 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 # Authors
 #     Abraham Nieva de la Hidalga
-#      
-# Synopsis 
-# 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+#
+# Synopsis
+#
+# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is
 # provided to support easy inspection and execution of workflows.
-# 
+#
 # For more details see http://www.biovel.eu
-# 
+#
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 %>
@@ -49,21 +49,21 @@
                             height:300px;display:none">
 
 <% if @workflow_errors.count>0 %>
-<%= form_for :file_uploads, 
-      :url => {:controller => 'workflows', :action => 'save_custom_errors'}, 
+<%= form_for :file_uploads,
+      :url => {:controller => 'workflows', :action => 'save_custom_errors'},
       :html => {:multipart => true}, :disable_with => "Saving..." do |f| -%>
   <%= hidden_field_tag "workflow_id", @workflow.id %>
   <%= hidden_field_tag "selected_tab", 'wf_custom_ports' %>
-  <%= hidden_field_tag "selected_choice", 'wf_custom_errors' %> 
+  <%= hidden_field_tag "selected_choice", 'wf_custom_errors' %>
     <h3>
-      This workflow has been executed <%= @workflow.run_count %> 
-      <%= "Time".pluralize(@workflow.run_count)%>        
+      This workflow has been executed <%= @workflow.run_count %>
+      <%= "Time".pluralize(@workflow.run_count)%>
     </h3>
       <p>
         <b>
-          <%= @workflow.get_runs_with_errors_count %> 
+          <%= @workflow.get_runs_with_errors_count %>
           <%= "run".pluralize(@workflow.get_runs_with_errors_count)%>
-          have finished with an error on one or more outputs  
+          have finished with an error on one or more outputs
         </b>
       </p>
       <p>
@@ -72,35 +72,35 @@
         </b>
       <ol>
         <li>
-          Provide an error code   
-        </li>   
-        <li>
-          Provide title for the error   
-        </li>   
-        <li>
-          Provide a custom message to explain what has happened  
+          Provide an error code
         </li>
         <li>
-          Provide a pattern that can be used to detect the error. This can be a 
+          Provide title for the error
+        </li>
+        <li>
+          Provide a custom message to explain what has happened
+        </li>
+        <li>
+          Provide a pattern that can be used to detect the error. This can be a
           phrase or a regular expression
         </li>
-        <li>  
+        <li>
           Repeat 1 - 4 for every error you want to customise
         </li>
-        <li>  
+        <li>
           Click "Save" to save customised error messages
         </li>
-      </ol> 
-      <b>  
-        The custom error description  will be used when a workflow run 
+      </ol>
+      <b>
+        The custom error description  will be used when a workflow run
         containing an error is shown.
       </b>
-   </p>   
-     
+   </p>
+
    <% @workflow_error_codes.each do |item| %>
      <% errorcode = item.error_code %>
       <!-- The example value will be the contents of the error file -->
-     <% example_value = item.error_pattern -%>  
+     <% example_value = item.error_pattern -%>
      <h2> <%= errorcode %></h2>
      <dl class='list_any'>
        <dt class='list_title'>Error Name:</dt>
@@ -112,7 +112,7 @@
          <%= item.error_message %>
        </dd>
      </dl>
-     <h3> 
+     <h3>
        Customise <%= errorcode %>
        <% error_id = item.id.nil? ? 0: item.id %>
        <%= f.check_box  errorcode, :checked => !item.id.nil? -%>
@@ -121,49 +121,49 @@
      <dl class='list_any'>
        <dt class='list_title'>Code:</dt>
        <dd class='list_description'>
-         <%= f.text_area "code_for_#{errorcode}", :value => errorcode, :rows => 1, 
-           :onclick => '$(this).select();', :style =>'width:95%' %> 
-       </dd>       
+         <%= f.text_area "code_for_#{errorcode}", :value => errorcode, :rows => 1,
+           :onclick => '$(this).select();', :style =>'width:95%' %>
+       </dd>
        <dt class='list_title'>Title:</dt>
        <dd class='list_description'>
-         <%= f.text_area "name_for_#{errorcode}", :value => item.error_name, :rows => 1, 
-           :onclick => '$(this).select();', :style =>'width:95%' %> 
+         <%= f.text_area "name_for_#{errorcode}", :value => item.error_name, :rows => 1,
+           :onclick => '$(this).select();', :style =>'width:95%' %>
        </dd>
        <dt class='list_title'>Explanation:</dt>
        <dd class='list_description'>
-         <%= f.text_area "message_for_#{errorcode}", :value => item.error_message, :rows => 1, 
+         <%= f.text_area "message_for_#{errorcode}", :value => item.error_message, :rows => 1,
            :onclick => '$(this).select();', :style =>'width:95%' %>
        </dd>
        <dt class='list_title'>Pattern:</dt>
        <dd class='list_description'>
-         <%= f.text_area "pattern_for_#{errorcode}", :value => item.error_pattern, :rows => 1, 
+         <%= f.text_area "pattern_for_#{errorcode}", :value => item.error_pattern, :rows => 1,
            :onclick => '$(this).select();', :style =>'width:95%' %>
        </dd>
     </dl>
    <% end %>
-   <div title="Save Custom Error" alt="Save Custom Error" style="float:right; padding:10px;"> 
-     <%= submit_tag 'Save' %>  
+   <div title="Save Custom Error" alt="Save Custom Error" style="float:right; padding:10px;">
+     <%= submit_tag 'Save' %>
    </div>
-   <div title="Delete Custom Errors" alt="Delete Custom Errors" style="float:right; padding:10px;"> 
-     <%= submit_tag 'Reset' %>  
+   <div title="Delete Custom Errors" alt="Delete Custom Errors" style="float:right; padding:10px;">
+     <%= submit_tag 'Reset' %>
    </div>
 
-   <div style="clear:both;"> 
+   <div style="clear:both;">
    </div>
   <% end -%> <!--form-->
-<% else %>  
+<% else %>
   <p>
-    <% run_count = @workflow.run_count %> 
+    <% run_count = @workflow.run_count %>
     <% if run_count == 0 then -%>
       <b> This workflow has not been executed in BioVeL Portal </b>
     <% else -%>
-      <b> 
-        This workflow has been <%= run_count %> times in BioVeL Portal with 
+      <b>
+        This workflow has been <%= run_count %> times in BioVeL Portal with
         no errors
       </b>
-    <% end%> 
+    <% end%>
   </p>
 <% end %> <!--if error.count-->
-</div>  
+</div>
 
 

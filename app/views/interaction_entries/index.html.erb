@@ -1,0 +1,49 @@
+<h1>Listing interaction_entries</h1>
+
+<table>
+  <tr>
+    <th>Author name</th>
+    <th>Content</th>
+    <th>Href</th>
+    <th>In reply to</th>
+    <th>Input data</th>
+    <th>Interaction</th>
+    <th>Published</th>
+    <th>Response</th>
+    <th>Result data</th>
+    <th>Result status</th>
+    <th>Run</th>
+    <th>Taverna interaction</th>
+    <th>Title</th>
+    <th>Updated</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @interaction_entries.each do |interaction_entry| %>
+  <tr>
+    <td><%= interaction_entry.author_name %></td>
+    <td><%= interaction_entry.content %></td>
+    <td><%= interaction_entry.href %></td>
+    <td><%= interaction_entry.in_reply_to %></td>
+    <td><%= interaction_entry.input_data %></td>
+    <td><%= interaction_entry.interaction_id %></td>
+    <td><%= interaction_entry.published %></td>
+    <td><%= interaction_entry.response %></td>
+    <td><%= interaction_entry.result_data %></td>
+    <td><%= interaction_entry.result_status %></td>
+    <td><%= interaction_entry.run_id %></td>
+    <td><%= interaction_entry.taverna_interaction_id %></td>
+    <td><%= interaction_entry.title %></td>
+    <td><%= interaction_entry.updated %></td>
+    <td><%= link_to 'Show', interaction_entry %></td>
+    <td><%= link_to 'Edit', edit_interaction_entry_path(interaction_entry) %></td>
+    <td><%= link_to 'Destroy', interaction_entry, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Interaction entry', new_interaction_entry_path %>

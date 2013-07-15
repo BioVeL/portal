@@ -1,0 +1,89 @@
+<%
+# Copyright (c) 2012-2013 Cardiff University, UK.
+# Copyright (c) 2012-2013 The University of Manchester, UK.
+#
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# * Redistributions of source code must retain the above copyright notice,
+#   this list of conditions and the following disclaimer.
+#
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+#
+# * Neither the names of The University of Manchester nor Cardiff University nor
+#   the names of its contributors may be used to endorse or promote products
+#   derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+# Authors
+#     Abraham Nieva de la Hidalga
+#
+# Synopsis
+#
+# BioVeL Portal is a prototype interface to Taverna Server which is
+# provided to support easy inspection and execution of workflows.
+#
+# For more details see http://www.biovel.eu
+#
+# BioVeL is funded by the European Commission 7th Framework Programme (FP7),
+# through the grant agreement number 283359.
+%>
+<% content_for :title, "BioVeL Portal - Users"%>
+<h1>User Management</h1>
+<p>
+  This page shows users registered on BioVeL Portal
+</p>
+
+<table id="biovel_users_table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Admin</th>
+      <th>Runs Count</th>
+      <th>Monthly run average</th>
+      <th>First run</th>
+      <th>Latest run</th>
+      <th>Latest workflow</th>
+      <th>BioVeL</th>
+      <th>User Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @biovel_users.each do |biovel_user| %>
+    <tr>
+      <td><%= unless (biovel_user.id == 0)
+                link_to(biovel_user.name, edit_user_path(biovel_user))
+              else
+                biovel_user.name
+              end
+            %></td>
+      <td><%= biovel_user.email %></td>
+      <td><%= biovel_user.admin	 %></td>
+      <td><%= biovel_user.user_statistic.run_count %></td>
+      <td><%= biovel_user.user_statistic.mothly_run_average %></td>
+      <td><%= biovel_user.user_statistic.first_run_date %></td>
+      <td><%= biovel_user.user_statistic.last_run_date %></td>
+      <td><%= biovel_user.user_statistic.latest_workflow_id %></td>
+      <td><%= biovel_user.biovel %></td>
+      <td><%= biovel_user.type_id %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

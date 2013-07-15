@@ -10,7 +10,7 @@ class CreateWorkflowPorts < ActiveRecord::Migration
       t.integer :port_value_type
       t.string :sample_value
       t.string :sample_file
-      t.string :sample_file_type     
+      t.string :sample_file_type
       t.boolean :show
       t.integer :display_control_id
       t.timestamps

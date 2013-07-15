@@ -1,9 +1,11 @@
-log/*.log
+log/*
 tmp/
 db/*.sqlite3
+config/database.yml
 public/result_store/*
 public/workflow_store/*
 .buildpath
 .project
 .idea
 .rvmrc
+*~

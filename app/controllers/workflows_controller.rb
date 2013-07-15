@@ -5,18 +5,18 @@
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # * Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
-# 
+#
 # * Redistributions in binary form must reproduce the above copyright notice,
 #   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# 
+#
 # * Neither the names of The University of Manchester nor Cardiff University nor
 #   the names of its contributors may be used to endorse or promote products
 #   derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,22 +28,22 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 # Authors
 #     Abraham Nieva de la Hidalga
 #     Finn Baccall
 #     Robert Haines
 #     Alan Williams
-# 
-# Synopsis 
-# 
-# BioVeL Taverna Lite  is a prototype interface to Taverna Server which is 
+#
+# Synopsis
+#
+# BioVeL Portal is a prototype interface to Taverna Server which is
 # provided to support easy inspection and execution of workflows.
-# 
+#
 # For more details see http://www.biovel.eu
-# 
+#
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
-# through the grant agreement number 283359. 
+# through the grant agreement number 283359.
 class WorkflowsController < ApplicationController
   before_filter :login_required, :except => [:index, :show, :download]
   before_filter :get_workflows, :only => :index
@@ -60,9 +60,8 @@ class WorkflowsController < ApplicationController
 
   # GET /workflows/1
   # GET /workflows/1.json
-  def show 
-    puts params
-    @selected_tab = params[:selected_tab]  
+  def show
+    @selected_tab = params[:selected_tab]
     @sources, @source_descriptions = @workflow.get_inputs
     @custom_inputs = @workflow.get_custom_inputs
     @custom_outputs = @workflow.get_custom_outputs
@@ -72,9 +71,6 @@ class WorkflowsController < ApplicationController
     @workflow_errors = @workflow.get_errors
     @workflow_error_codes = @workflow.get_error_codes
 
-    puts "*********************************************"
-    puts @selected_tab.to_s 
-    puts "*********************************************"
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @workflow }
@@ -85,19 +81,19 @@ class WorkflowsController < ApplicationController
   # GET /workflows/new.json
   def new
     search_by =""
-    if !params[:search].nil? 
+    if !params[:search].nil?
       search_by = params[:search].strip
     end
     @workflow = Workflow.new
     @me_workflows = []
     @consumer_tokens=getConsumerTokens
     @services=OAUTH_CREDENTIALS.keys-@consumer_tokens.collect{|c| c.class.service_name}
-    if (!search_by.nil? && search_by!="") 
+    if (!search_by.nil? && search_by!="")
      if @consumer_tokens.count > 0
        # search for my experiment workflows
        @workflows = getmyExperimentWorkflows(@me_workflows, URI::encode(search_by))
      end
-   end    
+   end
    respond_to do |format|
       format.html # new.html.erb
       format.json { render :json => @workflow }
@@ -122,7 +118,6 @@ class WorkflowsController < ApplicationController
     @workflow = Workflow.new(params[:workflow])
     @consumer_tokens=getConsumerTokens
     @services=OAUTH_CREDENTIALS.keys-@consumer_tokens.collect{|c| c.class.service_name}
-    puts "File name:" + @workflow.workflow_filename
     respond_to do |format|
       @workflow.get_details_from_model
       @workflow.user_id = current_user.id
@@ -149,8 +144,7 @@ class WorkflowsController < ApplicationController
       token = @consumer_tokens.first.client
       doc = REXML::Document.new(response.body)
       response=token.request(:get, content_uri)
-      puts response.body
-      
+
       directory = "/tmp"
       File.open(File.join(directory, wf_name), 'wb') do |f|
         f.puts response.body
@@ -176,7 +170,7 @@ class WorkflowsController < ApplicationController
   # PUT /workflows/1.json
   def update
     @workflow = Workflow.find(params[:id])
-     
+
     respond_to do |format|
       if @workflow.update_attributes(params[:workflow])
         format.html { redirect_to @workflow, :notice => 'Workflow was successfully updated.' }
@@ -223,7 +217,7 @@ class WorkflowsController < ApplicationController
   end
 
   def save_custom_inputs
-    action = params[:commit]	   
+    action = params[:commit]
     @workflow = Workflow.find(params[:id])
     @inputs, @input_desc = @workflow.get_inputs
     if action == 'Save'
@@ -235,65 +229,63 @@ class WorkflowsController < ApplicationController
       format.html { redirect_to @workflow, :notice => 'Workflow inputs updated'}
       format.json { head :no_content }
      end
-  end 
+  end
 
-  def save_inputs  
-    @input_desc.each do |indiv_in| 
+  def save_inputs
+    @input_desc.each do |indiv_in|
       i_name = indiv_in[0]
       file_for_i = "file_for_"+i_name
       customise_i = "customise_"+i_name
       display_i = "display_for_"+i_name
       if ((params[:file_uploads].include? i_name) &&
           params[:file_uploads][customise_i] == "1") &&
-          ((params[:file_uploads].include? file_for_i) || 
-           (params[:file_uploads][i_name] != "")) 
+          ((params[:file_uploads].include? file_for_i) ||
+           (params[:file_uploads][i_name] != ""))
         # verify if customised input exists
         wfps = WorkflowPort.where("port_type = ? and name = ?", "1", i_name)
-        if wfps.empty? 
+        if wfps.empty?
           @wfp = WorkflowPort.new()
-          puts "New Port"
-        else 
-          @wfp = wfps[0] 
-          puts "Old Port"
+        else
+          @wfp = wfps[0]
         end
-        #get values for customised input 
+        #get values for customised input
         @wfp.workflow_id = @workflow.id
         @wfp.port_type = 1 # 1 = input
         @wfp.name = i_name
         @wfp.display_control_id = params[:file_uploads][display_i]
         if params[:file_uploads].include? file_for_i
-          #save file 
+          #save file
           @wfp.file_content = params[:file_uploads][file_for_i].tempfile
           @wfp.sample_file =  params[:file_uploads][file_for_i].original_filename
-          @wfp.sample_file_type = params[:file_uploads][file_for_i].content_type   
+          @wfp.sample_file_type = params[:file_uploads][file_for_i].content_type
         end
         if params[:file_uploads][i_name] != ""
           #save value
           @wfp.sample_value = params[:file_uploads][i_name]
-        end 
+        end
         #save the customisation
         @wfp.save
       elsif params[:file_uploads][customise_i] == "0"
         # reset port customisation
         wfps = WorkflowPort.where("port_type = ? and name = ?", "1", i_name)
-        unless wfps.empty? 
-          @wfp = wfps[0] 
+        unless wfps.empty?
+          @wfp = wfps[0]
           @wfp.delete_files
-          @wfp.destroy 
-        end         
+          @wfp.destroy
+        end
       end
     end
   end
 
   def reset_inputs
-    @input_desc.each do |indiv_in| 
+    @input_desc.each do |indiv_in|
       i_name = indiv_in[0]
       wfps = WorkflowPort.where("port_type = ? and name = ?", "1", i_name)
-      unless wfps.empty? 
-        @wfp = wfps[0] 
+      unless wfps.empty?
+        @wfp = wfps[0]
         @wfp.delete_files
-        @wfp.destroy 
-      end         
+        @wfp.destroy
+      end
     end
   end
 
@@ -316,25 +308,23 @@ class WorkflowsController < ApplicationController
   end
 
   def save_outputs
-    @output_desc.each do |indiv_in| 
+    @output_desc.each do |indiv_in|
       i_name = indiv_in[0]
       file_for_i = "file_for_"+i_name
       customise_i = "customise_"+i_name
       display_i = "display_for_"+i_name
       if ((params[:file_uploads].include? i_name) &&
           params[:file_uploads][customise_i] == "1") &&
-          ((params[:file_uploads].include? file_for_i) || 
-           (params[:file_uploads][i_name] != "")) 
+          ((params[:file_uploads].include? file_for_i) ||
+           (params[:file_uploads][i_name] != ""))
         # verify if customised output exists
         wfps = WorkflowPort.where("port_type = ? and name = ?", "2", i_name)
-        if wfps.empty? 
+        if wfps.empty?
           @wfp = WorkflowPort.new()
-          puts "New Port"
-        else 
-          @wfp = wfps[0] 
-          puts "Old Port"
+        else
+          @wfp = wfps[0]
         end
-        #get values for customised output 
+        #get values for customised output
         @wfp.workflow_id = @workflow.id
         @wfp.port_type = 2 # 2 = output
         @wfp.name = i_name
@@ -348,30 +338,30 @@ class WorkflowsController < ApplicationController
         if params[:file_uploads][i_name] != ""
           #save value
           @wfp.sample_value = params[:file_uploads][i_name]
-        end 
+        end
         #save the customisation
         @wfp.save
       elsif params[:file_uploads][customise_i] == "0"
         # reset port customisation
         wfps = WorkflowPort.where("port_type = ? and name = ?", "2", i_name)
-        unless wfps.empty? 
-          @wfp = wfps[0] 
+        unless wfps.empty?
+          @wfp = wfps[0]
           @wfp.delete_files
-          @wfp.destroy 
-        end         
+          @wfp.destroy
+        end
       end
     end
   end
 
   def reset_outputs
-    @output_desc.each do |indiv_out| 
+    @output_desc.each do |indiv_out|
       o_name = indiv_out[0]
       wfps = WorkflowPort.where("port_type = ? and name = ?", "2", o_name)
-      unless wfps.empty? 
-        @wfp = wfps[0] 
+      unless wfps.empty?
+        @wfp = wfps[0]
         @wfp.delete_files
-        @wfp.destroy 
-      end         
+        @wfp.destroy
+      end
     end
   end
 
@@ -403,25 +393,23 @@ class WorkflowsController < ApplicationController
       end
     end
     # check each code to see if it is new and if it is to be saved
-    
-    codes_only.each do |ecode| 
+
+    codes_only.each do |ecode|
       id_for_e      = 'id_for_'+ecode
       code_for_e    = 'code_for_'+ecode
       name_for_e    = 'name_for_'+ ecode
       message_for_e = 'message_for_'+ ecode
       pattern_for_e = 'pattern_for_' + ecode
-      # customise this error? 
-      if (error_codes[ecode] == "1") then  
+      # customise this error?
+      if (error_codes[ecode] == "1") then
         # verify if customised error exists
         wfec = WorkflowError.where("error_code = ?", ecode)
-        if wfec.empty? 
+        if wfec.empty?
           wfe = WorkflowError.new()
-          puts "New Error Code"
-        else 
-          wfe = wfec[0] 
-          puts "Old Error"
+        else
+          wfe = wfec[0]
         end
-        # get values for customised output 
+        # get values for customised output
         wfe.workflow_id      = @workflow.id
         wfe.error_code       = error_codes[code_for_e]
         wfe.my_experiment_id = @workflow.my_experiment_id
@@ -433,10 +421,10 @@ class WorkflowsController < ApplicationController
       elsif error_codes[ecode] == "0"
         # reset error customisation
         wfec = WorkflowError.where("error_code = ?", ecode)
-        unless wfec.empty? 
-          wfe = wfec[0] 
-          wfe.destroy 
-        end         
+        unless wfec.empty?
+          wfe = wfec[0]
+          wfe.destroy
+        end
       end
     end
   end
@@ -450,12 +438,12 @@ class WorkflowsController < ApplicationController
         codes_only << ecode
       end
     end
-    codes_only.each do |indiv_err| 
+    codes_only.each do |indiv_err|
       wfer = WorkflowError.where("error_code = ?", indiv_err)
-      unless wfer.empty? 
-        wfe = wfer[0] 
-        wfe.destroy 
-      end         
+      unless wfer.empty?
+        wfe = wfer[0]
+        wfe.destroy
+      end
     end
   end
 
@@ -484,7 +472,7 @@ class WorkflowsController < ApplicationController
     end
   end
   def getConsumerTokens
-    MyExperimentToken.all :conditions=>  
+    MyExperimentToken.all :conditions=>
       {:user_id=>current_user.id}
   end
 
@@ -492,10 +480,9 @@ class WorkflowsController < ApplicationController
     consumer_tokens = getConsumerTokens
     if consumer_tokens.count > 0
       token = consumer_tokens.first.client
-      # logger.info "private data: "+token.get("/data/index").body
       # URI for the packs, will return all the packs for selected page
       # PROBLEM: how do we know how many pages are there?
-      workflow_uri = "http://www.myexperiment.org/search.xml?query='" + search_by 
+      workflow_uri = "http://www.myexperiment.org/search.xml?query='" + search_by
       workflow_uri += "'&type=workflow&num=100&page="
       # Get the workflows using the request token
       no_workflows = false
@@ -503,8 +490,7 @@ class WorkflowsController < ApplicationController
       begin
         response=token.request(:get, workflow_uri+ page.to_s)
         doc = REXML::Document.new(response.body)
-        logger.info 'DEBUG: Workflow XML Elements: ' + doc.elements.count.to_s
-        if doc.elements['search/workflow'].nil? || 
+        if doc.elements['search/workflow'].nil? ||
            doc.elements['search/workflow'].has_elements?
           no_workflows = true
         else
@@ -513,8 +499,8 @@ class WorkflowsController < ApplicationController
               if(attrbt[0]=='resource')
                 nw_workflow=MeWorkflow.new
                 nw_workflow.my_exp_id = attrbt[1].to_s.split('/').last
-                if get_workflow_permissions(nw_workflow).include?("download")      
-                  nw_workflow.name = p.text           
+                if get_workflow_permissions(nw_workflow).include?("download")
+                  nw_workflow.name = p.text
                   nw_workflow.id = nw_workflow.my_exp_id
                   nw_workflow.uri = attrbt[1]
                   nw_workflow = get_my_exp_workflow(nw_workflow)
@@ -523,12 +509,11 @@ class WorkflowsController < ApplicationController
                   end
                 end
               end
-            end  
+            end
           end
           page +=1
         end
       end while no_workflows == false
-      logger.info 'DEBUG: Workflow Pages: ' + page.to_s
     end
     return workflows
   end
@@ -536,11 +521,10 @@ class WorkflowsController < ApplicationController
     consumer_tokens=getConsumerTokens
     if consumer_tokens.count > 0
       token = consumer_tokens.first.client
-      # logger.info "private data: "+token.get("/data/index").body
       # URI for the packs, will return all the packs for selected page
       # PROBLEM: how do we know how many pages are there?
       workflow_uri = "http://www.myexperiment.org/workflow.xml?id=" +
-                  workflow.id.to_s     
+                  workflow.id.to_s
       # Get the workflow using the request token
       response=token.request(:get, workflow_uri)
       doc = REXML::Document.new(response.body)
@@ -550,7 +534,7 @@ class WorkflowsController < ApplicationController
       workflow.type = doc.elements['workflow/type'].text
       # get permisions
       permissions = get_workflow_permissions(workflow)
-      workflow.can_download = permissions.include?("download")  
+      workflow.can_download = permissions.include?("download")
     end
     return workflow
   end
@@ -560,12 +544,10 @@ class WorkflowsController < ApplicationController
     content_uri =""
     if consumer_tokens.count > 0
       token = consumer_tokens.first.client
-      # logger.info "private data: "+token.get("/data/index").body
       # URI for the workflow
       workflow_uri =  "http://www.myexperiment.org/workflow.xml?id="
-      workflow_uri += workflow.my_exp_id.to_s  
+      workflow_uri += workflow.my_exp_id.to_s
       workflow_uri += '&elements=content-uri'
-      logger.info "DEBUG: "+ workflow_uri
       response=token.request(:get, workflow_uri)
       doc = REXML::Document.new(response.body)
       doc.elements.each('workflow/content-uri') do |u|
@@ -579,12 +561,10 @@ class WorkflowsController < ApplicationController
     elements = []
     if consumer_tokens.count > 0
       token = consumer_tokens.first.client
-      # logger.info "private data: "+token.get("/data/index").body
       # URI for the workflow
       workflow_uri =  "http://www.myexperiment.org/workflow.xml?id="
-      workflow_uri += workflow.my_exp_id.to_s  
+      workflow_uri += workflow.my_exp_id.to_s
       workflow_uri += '&elements=privileges'
-      logger.info "DEBUG: "+ workflow_uri
       response=token.request(:get, workflow_uri)
       doc = REXML::Document.new(response.body)
       doc.elements.each('workflow/privileges/privilege') do |u|
