@@ -8,7 +8,10 @@
         workflow.my_experiment_id) %>
   <% end %>
 
-  <%= render :partial => 'run_results', :locals => {:run => run} %>
+  <% if results.length > 0 %>
+    <%= render :partial => 'run_results',
+      :locals => { :run => run, :results => results } %>
+  <% end %>
 
   <dl class='list_any'>
     <dt class='list_title'>User:</dt>

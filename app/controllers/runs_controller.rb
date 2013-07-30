@@ -77,6 +77,11 @@ class RunsController < ApplicationController
       @workflow = Workflow.find(@run.workflow_id)
       @sinks, @sink_descriptions = @workflow.get_outputs
       @run_error_codes = @run.get_error_codes
+
+      if @run.state == "finished"
+        @results = @run.results.order("name").group("name")
+      end
+
     rescue ActiveRecord::RecordNotFound
       logger.error "Attempt to access an invalid run #{params[:id]}"
       redirect_to runs_url, :flash => {:error => "Error: Selected run cannot be displayed"}
