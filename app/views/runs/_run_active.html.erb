@@ -3,7 +3,7 @@
   <dl class='list_any'>
     <dt class='list_title'>User:</dt>
     <dd class='list_description'>
-      <%= @run.user_id.nil? ? "Guest" : User.find(@run.user_id).name -%>
+      <%= user_name %>
     </dd>
   </dl>
 <% end -%>
