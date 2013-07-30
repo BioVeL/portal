@@ -77,7 +77,6 @@
       <th>Description</th>
       <th>Created</th>
       <th>State</th>
-      <th>Results</th>
       <% if !current_user.nil? && current_user.admin %>
         <th>User</th>
       <% end %>
@@ -93,7 +92,6 @@
       <td><%= run.description %></td>
       <td><%= run.creation.strftime("%Y/%m/%d-%H:%M:%S") %></td>
       <td><%= run.state %></td>
-      <td><%= run.results.count %></td>
       <% if !current_user.nil? && current_user.admin -%>
         <td><%=
             if run.user_id.nil?
