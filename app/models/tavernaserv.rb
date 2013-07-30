@@ -180,7 +180,7 @@ class Tavernaserv < ActiveRecord::Base
           if port.value.is_a?(Array)
             # partial Results are in a list"
             sub_array = port.value
-            save_nested(runid, name, sub_array, port.type[0], port.depth, index = "")
+            save_nested(runid, name, sub_array, port.type, port.depth, index = "")
           elsif port.error?
             save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}.error", port.error)
           else
@@ -197,9 +197,10 @@ class Tavernaserv < ActiveRecord::Base
   def self.save_nested(runid, portname, sub_array, porttype, portdepth, index="")
     (0 .. sub_array.length - 1).each do |i|
       value = sub_array[i]
+      type = porttype[i]
 
       if value.is_a?(Array) then
-        save_nested(runid, portname, value, porttype, portdepth, i.to_s)
+        save_nested(runid, portname, value, type, portdepth, i.to_s)
       else
         if value.nil?
           svrrun = @server.run(Run.find(runid).run_identification,
@@ -207,7 +208,7 @@ class Tavernaserv < ActiveRecord::Base
           value = svrrun.get_output(portname).join.to_s
         end
 
-        save_to_db(portname, porttype, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
+        save_to_db(portname, type, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
       end
     end
   end
