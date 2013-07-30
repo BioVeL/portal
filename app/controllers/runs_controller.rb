@@ -74,7 +74,8 @@ class RunsController < ApplicationController
     begin
       @run = Run.find(params[:id])
       return login_required if current_user.nil? && !@run.user_id.nil?
-      @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
+      @workflow = Workflow.find(@run.workflow_id)
+      @sinks, @sink_descriptions = @workflow.get_outputs
       @run_error_codes = @run.get_error_codes
     rescue ActiveRecord::RecordNotFound
       logger.error "Attempt to access an invalid run #{params[:id]}"
