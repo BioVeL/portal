@@ -42,12 +42,14 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 #!/usr/bin/env ruby
+
 class Tavernaserv < ActiveRecord::Base
 
   # start checking the runs list to see if there are any workflows running
   def self.run_update(*args)
     if args.empty?
       @runs = Run.find(:all, :conditions => ["state = 'running'"])
+
       #If there are runing workflows then verify if they have finished
       for runner in @runs do
         update_this_run(runner)
@@ -63,13 +65,15 @@ class Tavernaserv < ActiveRecord::Base
     #update run details with the values from the server
     check_serv
     svrrun = @server.run(runner.run_identification,
-                         Credential.get_taverna_credentials)
+      Credential.get_taverna_credentials)
+
     unless svrrun.nil?
       # if the run has finished copy the outputs
       if svrrun.status.to_s == 'finished' then
         runner.expiry = svrrun.expiry
         runner.state = svrrun.status.to_s
         runner.end = svrrun.finish_time
+
         # if run finishes copy run output to outputs dir within run
         if runner.results.count == 0
           logger.info "Saving run:#{runner.id} results @ #{Time.now}.\n"
@@ -97,7 +101,8 @@ class Tavernaserv < ActiveRecord::Base
       runner.save
     end
   end
-  def self.update_user_run_stats(user_id = 0, wf_id = 0)
+
+ def self.update_user_run_stats(user_id = 0, wf_id = 0)
     logger.info "Updating user run stats at #{Time.now}.\n"
 
     if user_id.nil?
@@ -119,9 +124,11 @@ class Tavernaserv < ActiveRecord::Base
     else
       months_running = 1
     end
+
     if months_running < 1 then
       months_running = 1
     end
+
     user_statistic.latest_workflow_id = wf_id
     user_statistic.mothly_run_average = user_statistic.run_count/months_running
     user_statistic.save
@@ -140,6 +147,7 @@ class Tavernaserv < ActiveRecord::Base
       wf.fastest_run_date = DateTime.now()
       wf.fastest_run = running_time
     end
+
     if (wf.slowest_run < running_time)
       wf.slowest_run_date = DateTime.now()
 
@@ -164,47 +172,47 @@ class Tavernaserv < ActiveRecord::Base
 
   #this process is called to copy the results to the local result_store
   def self.save_results(runid, outputs)
-    #resultset = {}
     if outputs.nil? or outputs.empty?
       logger.info "##TAVSERV SAVE_RESULTS The workflow has no output ports"
     else
       outputs.each do |name, port|
-      begin
-        if port.value.is_a?(Array)
-          # partial Results are in a list"
-          sub_array = port.value
-          save_nested(runid,name,sub_array,port.type[0],port.depth,index="")
-        elsif port.error?
-          save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}.error", port.error)
-        else
-          save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)
+        begin
+          if port.value.is_a?(Array)
+            # partial Results are in a list"
+            sub_array = port.value
+            save_nested(runid, name, sub_array, port.type[0], port.depth, index = "")
+          elsif port.error?
+            save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}.error", port.error)
+          else
+            save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}", port.value)
+          end
+        rescue
+          save_to_db(name, "Error", port.depth, runid, "#{runid}/result/#{name}.error", "Result cannot be interpreted")
+          logger.info "Update Error Result cannot be interpreted"
         end
-      rescue
-         save_to_db(name, "Error", port.depth, runid, "#{runid}/result/#{name}.error", "Result cannot be interpreted")
-         logger.info "Update Error Result cannot be interpreted"
-      end
       end
     end
-    #resultset
   end
 
   def self.save_nested(runid, portname, sub_array, porttype, portdepth, index="")
     (0 .. sub_array.length - 1).each do |i|
       value = sub_array[i]
+
       if value.is_a?(Array) then
-        save_nested(runid,portname,value,porttype, portdepth, i.to_s)
+        save_nested(runid, portname, value, porttype, portdepth, i.to_s)
       else
         if value.nil?
           svrrun = @server.run(Run.find(runid).run_identification,
-                                   Credential.get_taverna_credentials)
+            Credential.get_taverna_credentials)
           value = svrrun.get_output(portname).join.to_s
         end
+
         save_to_db(portname, porttype, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
       end
     end
   end
 
-  def self.save_to_db(name,mimetype,depth,run,filepath,value)
+  def self.save_to_db(name, mimetype, depth, run, filepath, value)
     result = Result.new
     result.name = name
     result.filetype = mimetype
@@ -212,17 +220,20 @@ class Tavernaserv < ActiveRecord::Base
     result.run_id = run
     result.filepath = filepath
     result.result_file = value
+
     unless verify_if_saved(result) then
       # TAVSERV SAVE TO DB
       result.save
     end
   end
+
   def self.verify_if_saved(result)
     res = Result.where(:name => result.name,
-                    :filetype => result.filetype,
-                    :depth => result.depth,
-                    :run_id => result.run_id,
-                    :filepath => result.filepath)
+      :filetype => result.filetype,
+      :depth => result.depth,
+      :run_id => result.run_id,
+      :filepath => result.filepath)
+
     if res.count > 0 then
       logger.info "##TAVSERV VERIFY: result #{name} already in DB"
       return true;
@@ -231,9 +242,9 @@ class Tavernaserv < ActiveRecord::Base
       return false;
     end
   end
-  def  self.delete_run(run_identification)
+
+  def self.delete_run(run_identification)
     check_serv
-    @server.delete_run(run_identification,
-                         Credential.get_taverna_credentials)
+    @server.delete_run(run_identification, Credential.get_taverna_credentials)
   end
 end
