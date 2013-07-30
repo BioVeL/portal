@@ -112,6 +112,8 @@
         <div id="search_<%= result_group_name %>" class="clearfix"
       	  style="min-height:300px; height:auto !important; height:300px;">
 
+          <b><%= result_group_name %></b> (list output)
+
           <%if !@sink_descriptions[result_group_name].nil? &&
             @sink_descriptions[result_group_name] != "" %>
             <div class="show_description">
@@ -120,17 +122,22 @@
             </div>
           <% end %>
 
-          <% result.each do |r| %>
-            <div class="show_result">
-              <% if r.filetype.to_s =~ /text/ %>
-                <%= format_text_result(r) %>
-              <% elsif r.filetype.to_s =~ /error/ %>
-                <%= simple_format(IO.read(r.result_filename))%>
-              <% else %>
-                <%= image_tag r.result_filepath %>
-              <% end %>
-            </div>
-          <% end %>
+          <ol>
+            <% result.each do |r| %>
+              <li>
+                (<%=h r.filetype.split(/-*/).join %>)
+                <div class="show_result">
+                  <% if r.filetype.to_s =~ /text/ %>
+                    <%= format_text_result(r) %>
+                  <% elsif r.filetype.to_s =~ /error/ %>
+                    <%= simple_format(IO.read(r.result_filename))%>
+                  <% else %>
+                    <%= image_tag r.result_filepath %>
+                  <% end %>
+                </div>
+              </li>
+            <% end %>
+          </ol>
         </div>
       <% end %>
     <% end %>
