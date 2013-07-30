@@ -48,97 +48,91 @@
   <h3>Results</h3>
   <div id="tabs_results">
     <ul>
-      <% for result in run.results.where('depth=0').order('name').each %>
-      <li>
-        <a href="#search_<%= result.name %>">
-          <%= label_tag result.name %>
-        </a>
-      </li>
-      <% end %>
-
-      <% for result in run.results.where('depth <> 0').order('name').group('name').each %>
+      <% results.keys.each do |name| %>
         <li>
-          <a href="#search_<%= result.name %>">
-            <%= label_tag result.name %>
+          <a href="#search_<%= name %>">
+            <%= label_tag name %>
           </a>
         </li>
       <% end %>
     </ul>
 
-    <% for result in run.results.where('depth=0').order('name').each %>
-      <div id="search_<%= result.name %>" class="clearfix"
-      	style="min-height:300px; height:auto !important; height:300px;">
+    <% results.values.each do |result| %>
+      <% unless result.is_a? Array %>
+        <div id="search_<%= result.name %>" class="clearfix"
+        	style="min-height:300px; height:auto !important; height:300px;">
 
-        <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
+          <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
 
-        <div class="download_button">
-          <%= button_to 'Download', :controller => 'results',
-            :action => 'download', :id => result.id %>
-        </div>
-
-        <% if !@sink_descriptions[result.name].nil? &&
-          @sink_descriptions[result.name] != "" %>
-          <div class="show_description">
-            <b>Description</b>
-            <%= simple_format(@sink_descriptions[result.name]) %>
+          <div class="download_button">
+            <%= button_to 'Download', :controller => 'results',
+              :action => 'download', :id => result.id %>
           </div>
-        <% end %>
 
-        <div class="show_result">
-          <% if result.filetype.to_s =~ /text/ %>
-            <%= format_text_result(result) %>
-          <% elsif result.filetype.to_s =~ /error/ %>
-            <!-- Here is where errors should be handled -->
-            <dl class='list_any'>
-              <dt class='list_title'>Error:</dt>
-              <dd class='list_description'>
-                <%= @run_error_codes[result.name].error_name -%>
-              </dd>
-              <dt class='list_title'>Explanation:</dt>
-              <dd class='list_description'>
-                <%= @run_error_codes[result.name].error_message %>
-              </dd>
-              <dt class='list_title'>Text:</dt>
-              <dd class='list_description'>
-                <% error_text = IO.read(result.result_filename) %>
-                <%= render :partial => 'partials/preview_and_detail',
-                  :locals => { :content_label => result.name,
-                  :content => error_text } %>
-              </dd>
-            </dl>
-          <% else %>
-            <%= image_tag result.result_filepath %>
+          <% if !@sink_descriptions[result.name].nil? &&
+            @sink_descriptions[result.name] != "" %>
+            <div class="show_description">
+              <b>Description</b>
+              <%= simple_format(@sink_descriptions[result.name]) %>
+            </div>
           <% end %>
-        </div>
-      </div>
-    <% end %>
 
-    <% for result_g in run.results.where('depth <> 0').order('name').group('name').each %>
-      <% result_group_name = result_g.name %>
-
-      <div id="search_<%= result_group_name %>" class="clearfix"
-      	style="min-height:300px; height:auto !important; height:300px;">
-
-        <%if !@sink_descriptions[result_group_name].nil? &&
-          @sink_descriptions[result_group_name] != "" %>
-          <div class="show_description">
-            <b>Description</b>
-            <%= simple_format(@sink_descriptions[result_group_name]) %>
-          </div>
-        <% end %>
-
-        <% for result in run.results.where('name=?', result_group_name).order('name,filepath').each %>
           <div class="show_result">
             <% if result.filetype.to_s =~ /text/ %>
               <%= format_text_result(result) %>
             <% elsif result.filetype.to_s =~ /error/ %>
-              <%= simple_format(IO.read(result.result_filename))%>
+              <!-- Here is where errors should be handled -->
+              <dl class='list_any'>
+                <dt class='list_title'>Error:</dt>
+                <dd class='list_description'>
+                  <%= @run_error_codes[result.name].error_name -%>
+                </dd>
+                <dt class='list_title'>Explanation:</dt>
+                <dd class='list_description'>
+                  <%= @run_error_codes[result.name].error_message %>
+                </dd>
+                <dt class='list_title'>Text:</dt>
+                <dd class='list_description'>
+                  <% error_text = IO.read(result.result_filename) %>
+                  <%= render :partial => 'partials/preview_and_detail',
+                    :locals => { :content_label => result.name,
+                    :content => error_text } %>
+                </dd>
+              </dl>
             <% else %>
               <%= image_tag result.result_filepath %>
             <% end %>
           </div>
-        <% end %>
-      </div>
+        </div>
+
+      <% else %>
+
+        <% result_group_name = result[0].name %>
+
+        <div id="search_<%= result_group_name %>" class="clearfix"
+      	  style="min-height:300px; height:auto !important; height:300px;">
+
+          <%if !@sink_descriptions[result_group_name].nil? &&
+            @sink_descriptions[result_group_name] != "" %>
+            <div class="show_description">
+              <b>Description</b>
+              <%= simple_format(@sink_descriptions[result_group_name]) %>
+            </div>
+          <% end %>
+
+          <% result.each do |r| %>
+            <div class="show_result">
+              <% if r.filetype.to_s =~ /text/ %>
+                <%= format_text_result(r) %>
+              <% elsif r.filetype.to_s =~ /error/ %>
+                <%= simple_format(IO.read(r.result_filename))%>
+              <% else %>
+                <%= image_tag r.result_filepath %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>

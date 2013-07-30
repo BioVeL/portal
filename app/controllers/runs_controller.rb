@@ -79,7 +79,16 @@ class RunsController < ApplicationController
       @run_error_codes = @run.get_error_codes
 
       if @run.state == "finished"
-        @results = @run.results.order("name").group("name")
+        ports = {}
+        @run.results.order("name").each do |result|
+          if result.depth == 0
+            ports[result.name] = result
+          else
+            ports[result.name] = [] if ports[result.name].nil?
+            ports[result.name] << result
+          end
+        end
+        @results = ports
       end
 
     rescue ActiveRecord::RecordNotFound

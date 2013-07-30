@@ -8,7 +8,7 @@
         workflow.my_experiment_id) %>
   <% end %>
 
-  <% if results.length > 0 %>
+  <% if results.keys.length > 0 %>
     <%= render :partial => 'run_results',
       :locals => { :run => run, :results => results } %>
   <% end %>
