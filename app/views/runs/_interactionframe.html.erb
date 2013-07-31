@@ -49,8 +49,9 @@
     <iframe src=<%= @interaction_uri %>; width="100%"; height="800" id="interactionframe"></iframe>
   <%else%>
     <% if @run.state == "running" %>
-      <h3>Wait....</h3>
-      <img alt='Processing' src='/assets/spinner.gif' width="18" height="18">
+      <h3>Please wait....</h3>
+      <%= image_tag "spinner.gif", :width => 18, :height => 18,
+        :alt => "Processing" %>
     <% end %>
   <% end %>
 </div>
