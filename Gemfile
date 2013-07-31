@@ -63,3 +63,8 @@ gem 'oauth-plugin', ">= 0.4.0.pre1"
 gem "coderay", "~> 1.0.9"
 
 gem "rails_autolink", "~> 1.1.0"
+
+# This gem MUST BE INCLUDED LAST so that it can hook into everything else!
+# In this case we actually stop it from being automatically included here so
+# we can turn it on in the initializers if required.
+gem "rack-mini-profiler", "~> 0.1.28", :require => false
