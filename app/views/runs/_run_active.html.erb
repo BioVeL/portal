@@ -8,4 +8,5 @@
   </dl>
 <% end -%>
 <%= render :partial => 'interactionframe' -%>
-<%= render :partial => 'run_state', :locals => {:run => @run} -%>
+<%= render :partial => 'run_state',
+  :locals => { :run => run, :workflow => workflow } -%>

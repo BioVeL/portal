@@ -68,7 +68,7 @@
         <%end%>
        </dd>
     </dl>
-  <%else workflow = Workflow.find(run.workflow_id)%>
+  <% else %>
     <div class="run_info">
       <% unless workflow.run_count == 0 %>
       <dl class='list_any'>

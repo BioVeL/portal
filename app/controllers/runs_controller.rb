@@ -166,8 +166,9 @@ class RunsController < ApplicationController
 
   def refresh
     @run = Run.find(params[:id])
+    @workflow = Workflow.find(@run.workflow_id)
     @interaction_id, @interaction_uri = get_interaction(@run.run_identification)
-    @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
+    @sinks, @sink_descriptions = @workflow.get_outputs
     respond_to do |format|
       format.js
     end

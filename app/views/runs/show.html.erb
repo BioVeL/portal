@@ -51,8 +51,8 @@
   <%= render :partial => 'run_finished', :locals => { :run => @run,
   	:workflow => @workflow, :results => @results, :user_name => @user_name } %>
 <% else %>
-  <%= render :partial => 'run_active',
-    :locals => { :run => @run, :user_name => @user_name } %>
+  <%= render :partial => 'run_active', :locals => { :run => @run,
+  	:workflow => @workflow, :user_name => @user_name } %>
 <% end -%>
 
 <%= javascript_tag do -%>
