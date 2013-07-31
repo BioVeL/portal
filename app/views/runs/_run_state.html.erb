@@ -88,18 +88,10 @@
         </dt>
       </dl>
       <% end %>
-      <%# unless current_user.nil? %>
-        <%= button_to 'Cancel Run',
-                  run,
-                  :method => :delete,
-                  :data => { :confirm => 'Cancel this Run ' +
-                               run.description +
-                               ' created '+
-                               run.creation.strftime("%d/%m/%Y-%H:%M:%S") +
-                               "?"} %>
-      <%# end %>
+
+      <%= button_to "Stop Run", run, :method => :delete, :data => {
+      	:confirm => "Are you sure you want to stop this run?\n\n" \
+      	  "All progress made so far will be lost!" } %>
     </div>
   <% end %>
-
 </div>
-
