@@ -51,7 +51,8 @@
       <input type="radio" id="custom_input_ports" name="radio">
         <label for="custom_input_ports">
           <a href="javascript:showdiv('wf_custom_inputs')">
-            <img alt='I' src='/assets/inputport.png' width="18" height="18">
+            <%= image_tag "inputport.png", :width => 18, :height => 18,
+              :alt => "Input ports" %>
             <span>Inputs</span>
           </a>
         </label>
@@ -59,7 +60,8 @@
       <input type="radio" id="custom_output_ports" name="radio">
         <label for="custom_output_ports">
           <a href="javascript:showdiv('wf_custom_outputs')">
-            <img alt='I' src='/assets/outputport.png' width="18" height="18">
+            <%= image_tag "outputport.png", :width => 18, :height => 18,
+              :alt => "Output ports" %>
             <span>Outputs</span>
           </a>
         </label>
@@ -67,7 +69,8 @@
         <input type="radio" id="custom_error_handling" name="radio">
           <label for="custom_error_handling">
             <a href="javascript:showdiv('wf_custom_errors')">
-              <img alt='I' src='/assets/info.png' width="18" height="18">
+              <%= image_tag "info.png", :width => 18, :height => 18,
+                :alt => "Error messages" %>
               <span>Error Messages</span>
             </a>
           </label>
