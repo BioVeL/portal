@@ -54,6 +54,7 @@
   <title><%=h yield(:title) %></title>
   <link rel="icon" type="image/png" href="/assets/biovel.png">
   <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= jquery_include_tag :google %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
