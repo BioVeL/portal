@@ -1,5 +1,6 @@
 log/*
 tmp/
+public/assets/
 db/*.sqlite3
 config/database.yml
 public/result_store/*
