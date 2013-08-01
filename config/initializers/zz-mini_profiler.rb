@@ -30,7 +30,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 # Authors
-#     Abraham Nieva de la Hidalga
+#     Robert Haines
 #
 # Synopsis
 #
@@ -41,45 +41,25 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-TliteR3::Application.configure do
-  # Settings specified here will take precedence over those in config/application.rb
 
-  # In the development environment your application's code is reloaded on
-  # every request. This slows down response time but is perfect for development
-  # since you don't have to restart the web server when you make code changes.
-  config.cache_classes = false
+# Be sure to restart your server when you modify this file.
 
-  # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
+# This file is called zz-mini-profiler.rb so that it is called last.
 
-  # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+# We only want this included if it's turned on in the environment file.
+if Rails.configuration.respond_to?(:enable_mini_profiler) && Rails.configuration.enable_mini_profiler
+  require 'rack-mini-profiler'
+  Rack::MiniProfilerRails.initialize!(Rails.application)
+end
 
-  # Don't care if the mailer can't send
-  # config.action_mailer.raise_delivery_errors = false
-  # need to change this depending on the host where the account is stored
-  config.action_mailer.default_url_options = { :host => "localhost:3000" }
+if defined?(Rack::MiniProfiler)
 
-  # Print deprecation notices to the Rails logger
-  config.active_support.deprecation = :log
+  # Don't profile the polling calls.
+  Rack::MiniProfiler.config.pre_authorize_cb = lambda do |env|
+    (env['PATH_INFO'] !~ /refresh/)
+  end
 
-  # Only use best-standards-support built into browsers
-  config.action_dispatch.best_standards_support = :builtin
-
-  # Raise exception on mass assignment protection for Active Record models
-  config.active_record.mass_assignment_sanitizer = :strict
-
-  # Log the query plan for queries taking more than this (works
-  # with SQLite, MySQL, and PostgreSQL)
-  config.active_record.auto_explain_threshold_in_seconds = 0.5
-
-  # Do not compress assets
-  config.assets.compress = false
-
-  # Expands the lines which load the assets
-  config.assets.debug = true
-
-  # Turn rack-mini-profiler on for development
-  config.enable_mini_profiler = true
+  Rack::MiniProfiler.config.position = 'right'
+  Rack::MiniProfiler.config.backtrace_threshold_ms = 5
+  Rack::MiniProfiler.config.storage = Rack::MiniProfiler::MemoryStore
 end

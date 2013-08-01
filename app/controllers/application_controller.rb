@@ -41,6 +41,7 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
+
 class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :current_user
@@ -49,7 +50,19 @@ class ApplicationController < ActionController::Base
   helper_method :user_signed_in?
   helper_method :active_link?
 
+  before_filter :allow_profiler
+
   private
+
+  def allow_profiler
+    return unless profiler_allowed?
+    Rack::MiniProfiler.authorize_request
+  end
+
+  def profiler_allowed?
+    defined?(Rack::MiniProfiler) && !current_user.nil? && current_user.admin?
+  end
+
   # Identify the user currently logged in
   def current_user
     #@current_user ||= User.find(session[:user_id]) if session[:user_id]

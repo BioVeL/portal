@@ -77,4 +77,7 @@ TliteR3::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  # Turn rack-mini-profiler off while testing
+  config.enable_mini_profiler = false
 end
