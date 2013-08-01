@@ -56,7 +56,7 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery_ujs
-//= require jquery.ui.all
+//= require jquery.ui.button
+//= require jquery.ui.tabs
 //= require dataTables/jquery.dataTables
 //= require_tree .
-
