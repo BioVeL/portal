@@ -43,9 +43,25 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 %>
+
 <% content_for :title, "BioVeL Portal - Create Run for " +
                  @workflow.title + "Workflow"%>
+
 <h2> New Run of <%=h @workflow.title%></h2>
+
+<% if current_user.nil? %>
+  <h3>Guest users: please note</h3>
+  <p>
+    You are starting this workflow run as a <b>Guest user</b>. The outputs of
+    this run will be available on this portal for seven days after it
+    finishes, at which point they will be deleted.
+    <br />
+  	If you wish to keep the results for longer than that please
+  	<%= link_to "log in", log_in_url %> before starting a run. If you do not
+    have an account yet you can <%= link_to "sign up", sign_up_url %>.
+  </p>
+<% end %>
+
 <%= form_for :file_uploads,
       :url => {:controller => 'runs', :action => 'new_run'},
       :html => {:multipart => true}, :disable_with => "Initialising Run" do |f| %>
