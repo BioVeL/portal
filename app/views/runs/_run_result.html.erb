@@ -74,7 +74,11 @@
         :content => error_text } %>
     </dd>
   </dl>
-  <% else %>
+  <% elsif result.filetype.to_s =~ /image/ %>
     <%= image_tag result.result_filepath %>
+  <% else %>
+    Sorry, but we cannot display this result type in the Portal.<br />Please
+    download it to your local machine (using the button on the right) and
+    load it into an application which has been designed to display it.
   <% end %>
 </div>
