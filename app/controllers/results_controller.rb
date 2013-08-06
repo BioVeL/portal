@@ -64,4 +64,11 @@ class ResultsController < ApplicationController
     name = ext.empty? ? @result.name : "#{@result.name}.#{ext}"
     send_file path, :type => @result.filetype, :filename => name
   end
+
+  def inlinepdf
+    @result = Result.find(params[:id])
+    send_data File.read(@result.result_filename), :type => "application/pdf",
+      :disposition => "inline", :filename => "#{@result.name}.pdf"
+  end
+
 end

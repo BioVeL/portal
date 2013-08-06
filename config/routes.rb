@@ -17,6 +17,7 @@ TliteR3::Application.routes.draw do
   resources :results do
     member do
       get "download"
+      get "inlinepdf"
     end
   end
 

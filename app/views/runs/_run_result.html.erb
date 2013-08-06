@@ -76,6 +76,12 @@
   </dl>
   <% elsif result.filetype.to_s =~ /image/ %>
     <%= image_tag result.result_filepath %>
+  <% elsif result.filetype.to_s =~ /pdf/ %>
+    If you do not see the PDF document displayed in the browser below, please
+    download it (using the button on the right) and load it into a PDF reader
+    application on your local machine.
+    <iframe class="inline_pdf" src="<%= inlinepdf_result_url(result) %>">
+    </iframe>
   <% else %>
     Sorry, but we cannot display this result type in the Portal.<br />Please
     download it to your local machine (using the button on the right) and
