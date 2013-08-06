@@ -64,11 +64,6 @@
 
           <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
 
-          <div class="download_button">
-            <%= button_to 'Download', :controller => 'results',
-              :action => 'download', :id => result.id %>
-          </div>
-
           <% if !@sink_descriptions[result.name].nil? &&
             @sink_descriptions[result.name] != "" %>
             <div class="show_description">

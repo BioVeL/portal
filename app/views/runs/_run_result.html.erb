@@ -1,4 +1,11 @@
 <div class="show_result">
+  <% unless result.filetype.to_s =~ /error/ %>
+    <div class="download_button">
+      <%= button_to 'Download', :controller => 'results',
+        :action => 'download', :id => result.id %>
+    </div>
+  <% end %>
+
   <% if result.filetype.to_s =~ /text/ %>
     <%= format_text_result(result) %>
   <% elsif result.filetype.to_s =~ /error/ %>

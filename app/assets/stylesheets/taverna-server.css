@@ -738,6 +738,9 @@ h4 {
   -webkit-border-radius: 4px;
   border-radius: 4px;
   position: relative;
+  background-color: hsl(0, 0%, 95%);
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 .download_button{
   float: right;
