@@ -47,8 +47,8 @@
 
 <div class="show_result">
   <% unless result.filetype.to_s =~ /error/ %>
-    <div class="download_button">
-      <%= button_to 'Download', :controller => 'results',
+    <div class="link_img" style="float: right;">
+      <%= link_to 'Download', :controller => 'results',
         :action => 'download', :id => result.id %>
     </div>
   <% end %>

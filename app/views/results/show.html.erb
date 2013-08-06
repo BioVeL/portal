@@ -48,9 +48,9 @@
                                        	height:auto !important;
                                         height:300px; " >
   <b><%= @result.name %></b> (<%=h @result.filetype.split(/-*/).join %>)
-  <div class="download_button">
-    <%= button_to 'Download', :controller => 'results',
-                    :action => 'download', :id => @result.id %>
+  <div class="link_img" style="float: right;">
+    <%= link_to 'Download', :controller => 'results',
+      :action => 'download', :id => @result.id %>
   </div>
   <div class="show_result">
     <% if @result.filetype.to_s =~ /text/ %>
