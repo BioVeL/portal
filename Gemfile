@@ -5,13 +5,9 @@ gem 'rails', '3.2.6'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-group :development do
-  gem 'sqlite3', "~> 1.3.7"
-end
-
-group :production do
-  gem 'mysql', '2.8.1'
-end
+# We need to use mysql in development and production now to ensure that
+# dumped schemas are useful and consistent.
+gem 'mysql', '2.8.1'
 
 gem 'json', "~> 1.7.6"
 
