@@ -1,4 +1,3 @@
-<%
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -31,8 +30,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 # Authors
-#     Abraham Nieva de la Hidalga
-#     Finn Baccall
 #     Robert Haines
 #
 # Synopsis
@@ -44,32 +41,17 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-%>
 
-<div id='footer'>
-  <div style='float: left'>
-    <%= image_tag "fp7.png", :height => 40, :alt => "FP7 logo" %>
-    <%= image_tag "einfrastructure.png", :height => 30,
-      :alt => "e-infrastructure logo" %>
-  </div>
-  <div style='float: left;'>
-    <a href='http://www.biovel.eu'>BioVeL</a>
-        is funded by the European Commission 7th Framework Programme (FP7),
-        through the grant agreement number 283359.
-  </div>
-  <div style='float: right;'>Version <%= TliteR3::VERSION::STRING %></div>
-  <div class='clearer'></div>
-  <div class='copyright' >
-    <p class="copyright" style='text-align: center'>
-      Copyright &#169; 2012 - 2013
-      <a href="http://www.cardiff.ac.uk/" target="_blank">
-        Cardiff University
-      </a>
-      and
-      <a href="http://www.manchester.ac.uk/" target="_blank">
-        The University of Manchester
-      </a>
-    </p>
-  </div>
-</div>
+# Be sure to restart your server when you modify this file.
 
+module TliteR3
+  unless defined? ::TliteR3::VERSION
+    module VERSION
+      MAJOR = 0
+      MINOR = 4
+      PATCH = 0
+
+      STRING = [MAJOR, MINOR, PATCH].compact.join('.')
+    end
+  end
+end
