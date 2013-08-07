@@ -48,7 +48,7 @@
   <h3>Results</h3>
   <div id="tabs_results">
     <ul>
-      <% results.keys.each do |name| %>
+      <% results.keys.sort.each do |name| %>
         <li>
           <a href="#search_<%= name %>">
             <%= label_tag name %>

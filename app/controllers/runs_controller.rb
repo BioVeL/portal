@@ -81,7 +81,7 @@ class RunsController < ApplicationController
 
       if @run.state == "finished"
         ports = {}
-        @run.results.order("name").each do |result|
+        @run.results.each do |result|
           if result.depth == 0
             ports[result.name] = result
           else
