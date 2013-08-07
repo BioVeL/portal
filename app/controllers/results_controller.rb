@@ -65,9 +65,13 @@ class ResultsController < ApplicationController
     send_file path, :type => @result.filetype, :filename => name
   end
 
+  # This is slightly different to the above download method: We know it's a
+  # PDF so we don't need to work out a mime-type or file extension and we need
+  # to send it inline so the browser doesn't treat it like an attachment and
+  # save it straight to disk.
   def inlinepdf
     @result = Result.find(params[:id])
-    send_data File.read(@result.result_filename), :type => "application/pdf",
+    send_file @result.result_filename, :type => "application/pdf",
       :disposition => "inline", :filename => "#{@result.name}.pdf"
   end
 
