@@ -1,4 +1,4 @@
-TliteR3::Application.routes.draw do
+Portal::Application.routes.draw do
 
   resources :interaction_entries
 

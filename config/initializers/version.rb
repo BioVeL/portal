@@ -44,8 +44,8 @@
 
 # Be sure to restart your server when you modify this file.
 
-module TliteR3
-  unless defined? ::TliteR3::VERSION
+module Portal
+  unless defined? ::Portal::VERSION
     module VERSION
       MAJOR = 0
       MINOR = 4
