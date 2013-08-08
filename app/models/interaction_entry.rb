@@ -41,6 +41,7 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
+
 gem 'ratom'
 require 'atom'
 
@@ -51,19 +52,20 @@ class InteractionEntry < ActiveRecord::Base
 
   $feed_ns = "http://ns.taverna.org.uk/2012/interaction"
   $feed_uri = "http://localhost:8080/ah/interaction/notifications?limit=500"
+
   def self.get_interactions
     counter_i = 0
     feed = Atom::Feed.load_feed(URI.parse($feed_uri))
+
     # Go through all the entries in reverse order and add them if they are new
     feed.each_entry do |entry|
       entry_id = entry.id
       interaction_entry = InteractionEntry.find_by_interaction_id(entry_id)
-      if  interaction_entry.nil?
+
+      if interaction_entry.nil?
         counter_i += 1
-        interaction_entry = InteractionEntry.new(:interaction_id=>entry_id)
-          # :author_name, :content, :href, :in_reply_to, :input_data,
-          # :interaction_id, :published, :result_data, :result_status, :run_id,
-          # :title, :updated
+        interaction_entry = InteractionEntry.new(:interaction_id => entry_id)
+
         entry.authors.each do |author|
           if interaction_entry.author_name.nil?
             interaction_entry.author_name = author.name.to_s
@@ -71,14 +73,16 @@ class InteractionEntry < ActiveRecord::Base
             interaction_entry.author_name += " " + author.name.to_s
           end
         end
+
         unless entry.content.nil?
           interaction_entry.content = entry.content.to_s
         end
+
         #interaction_entry.content = entry.content
         entry.links.each do |link|
           if link.rel == "presentation"
             interaction_entry.href = link.to_s
-	  end
+          end
         end
 
         interaction_entry.input_data = entry[$feed_ns, "input-data"].join.to_s
@@ -89,17 +93,21 @@ class InteractionEntry < ActiveRecord::Base
         interaction_entry.title = entry.title
         interaction_entry.updated = entry.updated
         interaction_entry.taverna_interaction_id = entry[$feed_ns, "id"][0]
+
         if interaction_entry.taverna_interaction_id.nil?
           interaction_entry.response = true
         end
+
         unless entry[$feed_ns, "in-reply-to"].nil?
           interaction_entry.in_reply_to = entry[$feed_ns, "in-reply-to"].join.to_s
         end
+
         interaction_entry.save
       else
         return false
       end
     end
+
     return true
   end
 end
