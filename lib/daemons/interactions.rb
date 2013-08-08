@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -31,6 +32,7 @@
 #
 # Authors
 #     Abraham Nieva de la Hidalga
+#     Robert Haines
 #
 # Synopsis
 #
@@ -41,10 +43,34 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-dir_mode: :script
-dir: ../../log
-multiple: false
-backtrace: true
-monitor: false
-ontop: false
-log_output: true
+
+# You might want to change this
+ENV["RAILS_ENV"] ||= "development"
+
+root = File.expand_path(File.dirname(__FILE__))
+root = File.dirname(root) until File.exists?(File.join(root, 'config'))
+Dir.chdir(root)
+
+require File.join(root, "config", "environment")
+
+Rails.logger.info "The interactions daemon started running at #{Time.now}.\n"
+
+$running = true
+Signal.trap("TERM") do
+  $running = false
+  Rails.logger.info "The interactions daemon stopped running at #{Time.now}.\n"
+end
+
+while($running) do
+
+  begin
+    InteractionEntry.get_interactions
+  rescue
+     error_message="#{$!}"
+     Rails.logger.info "Interactions Daemon Error at #{Time.now}."
+     Rails.logger.info error_message
+  ensure
+    sleep 5
+  end
+
+end

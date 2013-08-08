@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -31,6 +32,7 @@
 #
 # Authors
 #     Abraham Nieva de la Hidalga
+#     Robert Haines
 #
 # Synopsis
 #
@@ -41,8 +43,6 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-
-#!/usr/bin/env ruby
 
 # You might want to change this for production mode
 ENV["RAILS_ENV"] ||= "development"
@@ -61,18 +61,14 @@ end
 
 while($running) do
 
-  # Replace this with your code
-  #Rails.logger.auto_flushing = true
-
   begin
     Tavernaserv.run_update
-    InteractionEntry.get_interactions
   rescue
-     @error_message="#{$!}"
-     Rails.logger.info "Updater Daemon Error. "
-     Rails.logger.info @error_message
+     error_message="#{$!}"
+     Rails.logger.info "Run Updater Daemon Error at #{Time.now}."
+     Rails.logger.info error_message
   ensure
-    sleep 10
+    sleep 5
   end
 
 end
