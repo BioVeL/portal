@@ -1,9 +1,15 @@
 log/*
 tmp/
+public/assets/
+
 db/*.sqlite3
+
 config/database.yml
+config/environments/production.rb
+
 public/result_store/*
 public/workflow_store/*
+
 .buildpath
 .project
 .idea

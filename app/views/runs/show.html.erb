@@ -45,13 +45,16 @@
 # through the grant agreement number 283359.
 %>
 
-<% content_for :title, "BioVeL Portal - Run " +
-                 @run.description %>
+<% content_for :title, "BioVeL Portal - Run " + @run.description %>
+
 <% if @run.state == "finished" -%>
-  <%= render :partial => 'run_finished', :locals => {:run => @run} %>
+  <%= render :partial => 'run_finished', :locals => { :run => @run,
+  	:workflow => @workflow, :results => @results, :user_name => @user_name } %>
 <% else %>
-  <%= render :partial => 'run_active', :locals => {:run => @run} %>
+  <%= render :partial => 'run_active', :locals => { :run => @run,
+  	:workflow => @workflow, :user_name => @user_name } %>
 <% end -%>
+
 <%= javascript_tag do -%>
 var run_probe=""
 var interaction_probe=""

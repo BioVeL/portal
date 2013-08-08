@@ -48,38 +48,41 @@
     <ul class='nav'>
       <li class='page_item'>
         <a href='/'>
-          <img alt='Home' src='/assets/biovel.png' width="18" height="18">
+          <%= image_tag "biovel.png", :width => 18, :height => 18,
+            :alt => "Home" %>
           Home
         </a>
       </li>
       <li class='page_item'>
         <a href='/workflows'>
-          <img alt='Workflows' src='/assets/cog.png'>
+          <%= image_tag "cog.png", :alt => "Workflows" %>
           Workflows
         </a>
       </li>
       <li class='page_item'>
         <a href='/runs'>
-          <img alt='Workflow Runs' src='/assets/table.png'>
+          <%= image_tag "table.png", :alt => "Workflow Runs" %>
           Runs
         </a>
       </li>
       <% if !current_user.nil? && current_user.admin %>
         <li class='page_item'>
           <a href='/credentials'>
-            <img alt='Home' src='/assets/taverna-server-logo92x92.png' width="18" height="18">
+            <%= image_tag "taverna-server-logo92x92.png", :width => 18,
+              :height => 18, :alt => "Settings" %>
             Settings
           </a>
         </li>
         <li class='page_item'>
             <a href='/announcements'>
-              <img alt='Announcement' src='/assets/transmit.png' width="18" height="18">
+              <%= image_tag "transmit.png", :width => 18, :height => 18,
+                :alt => "Announcements" %>
               Notices
             </a>
         </li>
         <li class='page_item'>
           <a href='/users'>
-            <%= image_tag "user.png", :alt => "U" %>
+            <%= image_tag "user.png", :alt => "Users" %>
             Users
           </a>
         </li>

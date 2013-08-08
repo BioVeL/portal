@@ -449,7 +449,7 @@ class Workflow < ActiveRecord::Base
     # verify if there is actually a file to be saved
     if @file_data
       # create the WORKFLOW_STORE Folder if it does not exist
-      FileUtils.mkdir_p File.join WORKFLOW_STORE, "#{id}"
+      FileUtils.mkdir_p(File.join(WORKFLOW_STORE, "#{id}"), :mode => 0700)
     # create the file and write the data to the file system
       File.open(workflow_filename, 'wb') do |f|
         f.write(@file_data.read)

@@ -41,7 +41,8 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-TliteR3::Application.configure do
+
+Portal::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # In the development environment your application's code is reloaded on
@@ -79,4 +80,7 @@ TliteR3::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # Turn rack-mini-profiler on for development
+  config.enable_mini_profiler = true
 end

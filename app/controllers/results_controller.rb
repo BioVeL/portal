@@ -41,19 +41,38 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-require 'mime/types'
+
+require "mime/types"
+
 class ResultsController < ApplicationController
-  before_filter :admin_required, :except => [:download]
+  before_filter :admin_required, :except => [:download, :inlinepdf]
+
   def index
     @results = Result.all
   end
+
   def show
     @result = Result.find(params[:id])
   end
+
   def download
     @result = Result.find(params[:id])
     path = @result.result_filename
-    filetype = MIME::Types.type_for(path)
-    send_file path, :type=>filetype, :name => @result.name
+
+    type = MIME::Types[@result.filetype].first
+    ext = type.nil? ? "" : type.extensions.first
+    name = ext.empty? ? @result.name : "#{@result.name}.#{ext}"
+    send_file path, :type => @result.filetype, :filename => name
   end
+
+  # This is slightly different to the above download method: We know it's a
+  # PDF so we don't need to work out a mime-type or file extension and we need
+  # to send it inline so the browser doesn't treat it like an attachment and
+  # save it straight to disk.
+  def inlinepdf
+    @result = Result.find(params[:id])
+    send_file @result.result_filename, :type => "application/pdf",
+      :disposition => "inline", :filename => "#{@result.name}.pdf"
+  end
+
 end

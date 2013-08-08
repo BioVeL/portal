@@ -42,7 +42,8 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-TliteR3::Application.configure do
+
+Portal::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # Code is not reloaded between requests
@@ -60,7 +61,6 @@ TliteR3::Application.configure do
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
-  config.assets.precompile += %w( reset.css taverna-server.css )
 
   # Generate digests for assets URLs
   config.assets.digest = true
@@ -95,9 +95,9 @@ TliteR3::Application.configure do
 
   # Disable delivery errors, bad email addresses will be ignored
   # Don't care if the mailer can't send
-#  config.action_mailer.raise_delivery_errors = false
+  #  config.action_mailer.raise_delivery_errors = false
   # need to change this depending on the host where the account is stored
-  config.action_mailer.default_url_options = { :host => "tavlitedev.biovel.eu" }
+  config.action_mailer.default_url_options = { :host => "localhost" }
 
   # Enable threaded mode
   # config.threadsafe!
@@ -112,4 +112,7 @@ TliteR3::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
+
+  # Toggle rack-mini-profiler
+  config.enable_mini_profiler = false
 end

@@ -41,9 +41,10 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-dir_mode: script
+dir_mode: :script
 dir: ../../log
 multiple: false
 backtrace: true
 monitor: false
 ontop: false
+log_output: true

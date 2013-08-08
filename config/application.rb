@@ -57,7 +57,7 @@ end
 # Workaround critical XML parsing bug.
 ActionDispatch::ParamsParser::DEFAULT_PARSERS.delete(Mime::XML)
 
-module TliteR3
+module Portal
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -106,5 +106,7 @@ module TliteR3
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    config.assets.precompile += ["jquery.js"]
   end
 end

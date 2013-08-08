@@ -84,7 +84,7 @@ class Result < ActiveRecord::Base
     # verify if there is actually a file to be saved
     if @file_data
       # create the WORKFLOW_STORE Folder if it does not exist
-      FileUtils.mkdir_p File.join RESULT_STORE, self.filepath
+      FileUtils.mkdir_p(File.join(RESULT_STORE, self.filepath), :mode => 0700)
       # create the file and write the data to the file system
       File.open(result_filename, 'wb') do |f|
         f.write(@file_data)

@@ -43,6 +43,7 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 %>
+
 <% unless current_user.nil?
      if current_user.admin
        content_for :title, "BioVeL Portal - Runs for all users"
@@ -53,7 +54,8 @@
    else
      content_for :title, "BioVeL Portal - Runs for Guest user"
    end -%>
-<h1><%= "Guest" if current_user.nil? %> Runs</h1>
+
+<h1><%= "Guest " if current_user.nil? %>Runs</h1>
 
 <p>This page lists workflow runs created using BioVeL Portal.</p>
 <p>
@@ -65,66 +67,62 @@
     Guest runs are periodically deleted! <%= link_to 'Register', sign_up_path%>
     to keep run results for longer.
   </p>
-<%end%>
-<%running=0%>
-<table id="runs_table">
- <thead>
-  <tr>
-    <th>Description</th>
-    <th>Created</th>
-    <th>State</th>
-    <th>Results</th>
-    <% if !current_user.nil? && current_user.admin %>
-      <th>User</th>
-    <% end %>
-    <th>Operations</th>
-  </tr>
-    </thead>
-    <tbody>
+<% end %>
 
-<% @runs.each do |run| %>
-  <% if run.state =='running'
-       running += 1
-     end%>
-  <tr>
-    <td><%= run.description %></td>
-    <td><%= run.creation.strftime("%Y/%m/%d-%H:%M:%S") %></td>
-    <td><%= run.state %></td>
-    <td><%= run.results.count %></td>
-    <% if !current_user.nil? && current_user.admin -%>
-      <td><%=
+<% running = 0 %>
+
+<table id="runs_table">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Created</th>
+      <th>State</th>
+      <% if !current_user.nil? && current_user.admin %>
+        <th>User</th>
+      <% end %>
+      <th>Operations</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  <% @runs.each do |run| %>
+    <% running += 1 if run.state =='running' %>
+
+    <tr>
+      <td><%= run.description %></td>
+      <td><%= run.creation.strftime("%Y/%m/%d-%H:%M:%S") %></td>
+      <td><%= run.state %></td>
+      <% if !current_user.nil? && current_user.admin -%>
+        <td><%=
             if run.user_id.nil?
               'Guest'
             else
               User.find(run.user_id).name
             end
             %></td>
-    <% end -%>
-    <td>
-    <div title="Click to see run details" alt="Click to see run details" style="float:left">
-      <%= link_to 'Details', run, :class => "link_img" %>
-    </div>
-    <% if !current_user.nil? -%>
-    <div title="Click to delete run" alt="Click to delete run" style="float:left">
-      <%= link_to 'Delete',
-                  run,
-                  :method => :delete,
-                  :data => { :confirm => 'Delete Run ' +
-                               run.description +
-                               ' created '+
+      <% end -%>
+      <td>
+        <div title="Click to see run details" alt="Click to see run details" style="float:left">
+          <%= link_to 'Details', run, :class => "link_img" %>
+        </div>
+        <% if !current_user.nil? -%>
+          <div title="Click to delete run" alt="Click to delete run" style="float:left">
+            <%= link_to 'Delete', run, :method => :delete,
+                  :data => { :confirm => 'Delete Run ' + run.description +
+                               ' created ' +
                                run.creation.strftime("%d/%m/%Y-%H:%M:%S") +
                                "?"}, :class => "link_img_rem" %>
-    </div>
-    </td>
-    <% end -%>
-
-  </tr>
-
-<% end %>
-  <tbody>
+          </div>
+        <% end -%>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
 </table>
+
 <br />
-<%if @runs.count == 0 %>
+
+<% if @runs.count == 0 %>
   <br />
   No runs have been generated
 <% end %>

@@ -5,13 +5,9 @@ gem 'rails', '3.2.6'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-group :development do
-  gem 'sqlite3', "~> 1.3.7"
-end
-
-group :production do
-  gem 'mysql', '2.8.1'
-end
+# We need to use mysql in development and production now to ensure that
+# dumped schemas are useful and consistent.
+gem 'mysql', '2.8.1'
 
 gem 'json', "~> 1.7.6"
 
@@ -31,6 +27,7 @@ group :assets do
 end
 
 gem 'jquery-rails', "~> 3.0.1"
+gem "jquery-rails-cdn", "~> 1.0.1"
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0', :require => 'bcrypt'
@@ -63,3 +60,8 @@ gem 'oauth-plugin', ">= 0.4.0.pre1"
 gem "coderay", "~> 1.0.9"
 
 gem "rails_autolink", "~> 1.1.0"
+
+# This gem MUST BE INCLUDED LAST so that it can hook into everything else!
+# In this case we actually stop it from being automatically included here so
+# we can turn it on in the initializers if required.
+gem "rack-mini-profiler", "~> 0.1.28", :require => false

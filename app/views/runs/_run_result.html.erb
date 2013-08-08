@@ -32,6 +32,7 @@
 #
 # Authors
 #     Abraham Nieva de la Hidalga
+#     Robert Haines
 #
 # Synopsis
 #
@@ -43,55 +44,47 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 %>
-<div id="runstate">
-  <dl class='list_any'>
-    <dt class='list_title'>Current State:</dt>
-    <dd class='list_description'><%= run.state %></dd>
-    <dt class='list_title'>The run was started at:</dt>
+
+<div class="show_result">
+  <% unless result.filetype.to_s =~ /error/ %>
+    <div class="link_img" style="float: right;">
+      <%= link_to 'Download', :controller => 'results',
+        :action => 'download', :id => result.id %>
+    </div>
+  <% end %>
+
+  <% if result.filetype.to_s =~ /text/ %>
+    <%= format_text_result(result) %>
+  <% elsif result.filetype.to_s =~ /error/ %>
+    <!-- Here is where errors should be handled -->
+    <dl class='list_any'>
+      <dt class='list_title'>Error:</dt>
+      <dd class='list_description'>
+        <%= @run_error_codes[result.name].error_name -%>
+      </dd>
+    <dt class='list_title'>Explanation:</dt>
     <dd class='list_description'>
-      <%= run.start.strftime("%d/%m/%Y - %H:%M:%S") %>
+      <%= @run_error_codes[result.name].error_message %>
+    </dd>
+    <dt class='list_title'>Text:</dt>
+    <dd class='list_description'>
+      <% error_text = IO.read(result.result_filename) %>
+      <%= render :partial => 'partials/preview_and_detail',
+        :locals => { :content_label => result.name,
+        :content => error_text } %>
     </dd>
   </dl>
-
-  <% if run.state == "finished" %>
-    <dl class='list_any'>
-      <dt class='list_title'>The run finished at:</dt>
-      <dd class='list_description'>
-        <%= run.end.strftime("%d/%m/%Y - %H:%M:%S") %>
-      </dd>
-      <dt class='list_title'>Running Time:</dt>
-      <dd class='list_description'>
-        <%= (run.end - run.start).round() %> seconds
-        <%unless (run.end - run.start).round()<60%>
-          (approx. <%= distance_of_time_in_words(0,(run.end - run.start),
-                   [:include_seconds=>true]) %>)
-        <%end%>
-       </dd>
-    </dl>
+  <% elsif result.filetype.to_s =~ /image/ %>
+    <%= image_tag result.result_filepath %>
+  <% elsif result.filetype.to_s =~ /pdf/ %>
+    If you do not see the PDF document displayed in the browser below, please
+    download it (using the button on the right) and load it into a PDF reader
+    application on your local machine.
+    <iframe class="inline_pdf" src="<%= inlinepdf_result_url(result) %>">
+    </iframe>
   <% else %>
-    <div class="run_info">
-      <% unless workflow.run_count == 0 %>
-      <dl class='list_any'>
-        <dt class='list_title'>
-          Estimated time to finish:
-        </dt>
-        <dd class='list_description'>
-          <%= distance_of_time_in_words(0,workflow.average_run.round(),true) %>
-          (<%= workflow.average_run.round() %> seconds on average calculated
-          after <%= workflow.run_count %> runs)
-         </dd>
-      <dl>
-      <% else %>
-      <dl class='list_any'>
-        <dt class='list_title'>
-          This is the first time this workflow is executed in the BioVeL Portal
-        </dt>
-      </dl>
-      <% end %>
-
-      <%= button_to "Stop Run", run, :method => :delete, :data => {
-      	:confirm => "Are you sure you want to stop this run?\n\n" \
-      	  "All progress made so far will be lost!" } %>
-    </div>
+    Sorry, but we cannot display this result type in the Portal.<br />Please
+    download it to your local machine (using the button on the right) and
+    load it into an application which has been designed to display it.
   <% end %>
 </div>

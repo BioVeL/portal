@@ -1,4 +1,3 @@
-<%
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -31,7 +30,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 # Authors
-#     Abraham Nieva de la Hidalga
+#     Robert Haines
 #
 # Synopsis
 #
@@ -42,56 +41,17 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-%>
-<div id="runstate">
-  <dl class='list_any'>
-    <dt class='list_title'>Current State:</dt>
-    <dd class='list_description'><%= run.state %></dd>
-    <dt class='list_title'>The run was started at:</dt>
-    <dd class='list_description'>
-      <%= run.start.strftime("%d/%m/%Y - %H:%M:%S") %>
-    </dd>
-  </dl>
 
-  <% if run.state == "finished" %>
-    <dl class='list_any'>
-      <dt class='list_title'>The run finished at:</dt>
-      <dd class='list_description'>
-        <%= run.end.strftime("%d/%m/%Y - %H:%M:%S") %>
-      </dd>
-      <dt class='list_title'>Running Time:</dt>
-      <dd class='list_description'>
-        <%= (run.end - run.start).round() %> seconds
-        <%unless (run.end - run.start).round()<60%>
-          (approx. <%= distance_of_time_in_words(0,(run.end - run.start),
-                   [:include_seconds=>true]) %>)
-        <%end%>
-       </dd>
-    </dl>
-  <% else %>
-    <div class="run_info">
-      <% unless workflow.run_count == 0 %>
-      <dl class='list_any'>
-        <dt class='list_title'>
-          Estimated time to finish:
-        </dt>
-        <dd class='list_description'>
-          <%= distance_of_time_in_words(0,workflow.average_run.round(),true) %>
-          (<%= workflow.average_run.round() %> seconds on average calculated
-          after <%= workflow.run_count %> runs)
-         </dd>
-      <dl>
-      <% else %>
-      <dl class='list_any'>
-        <dt class='list_title'>
-          This is the first time this workflow is executed in the BioVeL Portal
-        </dt>
-      </dl>
-      <% end %>
+# Be sure to restart your server when you modify this file.
 
-      <%= button_to "Stop Run", run, :method => :delete, :data => {
-      	:confirm => "Are you sure you want to stop this run?\n\n" \
-      	  "All progress made so far will be lost!" } %>
-    </div>
-  <% end %>
-</div>
+module Portal
+  unless defined? ::Portal::VERSION
+    module VERSION
+      MAJOR = 0
+      MINOR = 4
+      PATCH = 0
+
+      STRING = [MAJOR, MINOR, PATCH].compact.join('.')
+    end
+  end
+end

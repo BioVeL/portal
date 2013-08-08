@@ -1,4 +1,4 @@
-TliteR3::Application.routes.draw do
+Portal::Application.routes.draw do
 
   resources :interaction_entries
 
@@ -14,7 +14,12 @@ TliteR3::Application.routes.draw do
     end
   end
 
-  resources :results
+  resources :results do
+    member do
+      get "download"
+      get "inlinepdf"
+    end
+  end
 
   resources :password_resets
 
@@ -75,12 +80,6 @@ TliteR3::Application.routes.draw do
   # mapping for the redirection when downloading a workflow
   match 'workflows/:id/download/', :controller => 'workflows', :action => 'download'
   #*****************************************************
-
-  #*****************************************************
-  # mapping for the redirection when downloading a result
-  match 'results/:id/download/', :controller => 'results', :action => 'download'
-  #*****************************************************
-
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.

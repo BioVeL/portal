@@ -74,8 +74,24 @@ class RunsController < ApplicationController
     begin
       @run = Run.find(params[:id])
       return login_required if current_user.nil? && !@run.user_id.nil?
-      @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
+      @workflow = Workflow.find(@run.workflow_id)
+      @sinks, @sink_descriptions = @workflow.get_outputs
       @run_error_codes = @run.get_error_codes
+      @user_name = @run.user_id.nil? ? "Guest" : current_user.name
+
+      if @run.state == "finished"
+        ports = {}
+        @run.results.each do |result|
+          if result.depth == 0
+            ports[result.name] = result
+          else
+            ports[result.name] = [] if ports[result.name].nil?
+            ports[result.name] << result
+          end
+        end
+        @results = ports
+      end
+
     rescue ActiveRecord::RecordNotFound
       logger.error "Attempt to access an invalid run #{params[:id]}"
       redirect_to runs_url, :flash => {:error => "Error: Selected run cannot be displayed"}
@@ -150,8 +166,9 @@ class RunsController < ApplicationController
 
   def refresh
     @run = Run.find(params[:id])
+    @workflow = Workflow.find(@run.workflow_id)
     @interaction_id, @interaction_uri = get_interaction(@run.run_identification)
-    @sinks, @sink_descriptions = Workflow.find(@run.workflow_id).get_outputs
+    @sinks, @sink_descriptions = @workflow.get_outputs
     respond_to do |format|
       format.js
     end

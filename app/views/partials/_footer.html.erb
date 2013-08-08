@@ -48,19 +48,20 @@
 
 <div id='footer'>
   <div style='float: left'>
-    <img alt='FP7' src='/assets/fp7.png'  height="40">
-    <img alt='e-infrastructure' src='/assets/einfrastructure.png' height="30">
+    <%= image_tag "fp7.png", :height => 40, :alt => "FP7 logo" %>
+    <%= image_tag "einfrastructure.png", :height => 30,
+      :alt => "e-infrastructure logo" %>
   </div>
   <div style='float: left;'>
     <a href='http://www.biovel.eu'>BioVeL</a>
         is funded by the European Commission 7th Framework Programme (FP7),
         through the grant agreement number 283359.
   </div>
-  <div style='float: right;'>Beta Version 0.4.0</div>
+  <div style='float: right;'>Version <%= Portal::VERSION::STRING %></div>
   <div class='clearer'></div>
   <div class='copyright' >
     <p class="copyright" style='text-align: center'>
-      Copyright &#169; 2012 - 2013
+      Copyright &#169; 2012 - <%= Time.now.year -%>
       <a href="http://www.cardiff.ac.uk/" target="_blank">
         Cardiff University
       </a>
@@ -71,4 +72,3 @@
     </p>
   </div>
 </div>
-
