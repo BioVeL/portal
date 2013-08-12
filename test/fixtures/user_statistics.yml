@@ -50,8 +50,6 @@ one:
   first_run_date: 2013-06-11 16:21:16
   last_run_date: 2013-06-11 16:21:16
   latest_workflow_id: 1
-  is_biovel: false
-  user_type: 1
   user_id: 1
 
 two:
@@ -60,6 +58,4 @@ two:
   first_run_date: 2013-06-11 16:21:16
   last_run_date: 2013-06-11 16:21:16
   latest_workflow_id: 1
-  is_biovel: false
-  user_type: 1
   user_id: 1

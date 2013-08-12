@@ -45,10 +45,14 @@
 require 'test_helper'
 
 class WorkflowsControllerTest < ActionController::TestCase
+  setup do
+    @workflow = workflows(:one)
+  end
+
   test "should get index" do
     get :index
     assert_response :success
-    assert_not_nil assigns(:workflows)
+    assert_not_nil assigns(:shared_workflows)
   end
 
   test "should get new" do
@@ -65,23 +69,23 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test "should show workflow" do
-    get :show, :id => workflows(:one).to_param
+    get :show, :id => workflows(:one)
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => workflows(:one).to_param
+    get :edit, :id => workflows(:one)
     assert_response :success
   end
 
   test "should update workflow" do
-    put :update, :id => workflows(:one).to_param, :workflow => { }
+    put :update, :id => @workflow, :workflow => { }
     assert_redirected_to workflow_path(assigns(:workflow))
   end
 
   test "should destroy workflow" do
     assert_difference('Workflow.count', -1) do
-      delete :destroy, :id => workflows(:one).to_param
+      delete :destroy, :id => workflows(:one)
     end
 
     assert_redirected_to workflows_path
