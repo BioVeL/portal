@@ -78,8 +78,8 @@ class Tavernaserv < ActiveRecord::Base
         if runner.results.count == 0
           logger.info "Saving run:#{runner.id} results @ #{Time.now}.\n"
           #logger.info "#no results recorded for this run"
-          outputs = svrrun.output_ports
-          save_results(runner.id, outputs)
+
+          save_results(runner.id, svrrun)
           runner.save
           running_time = runner.end - runner.start
 
@@ -171,7 +171,8 @@ class Tavernaserv < ActiveRecord::Base
 
 
   #this process is called to copy the results to the local result_store
-  def self.save_results(runid, outputs)
+  def self.save_results(runid, svrrun)
+    outputs = svrrun.output_ports
     if outputs.nil? or outputs.empty?
       logger.info "##TAVSERV SAVE_RESULTS The workflow has no output ports"
     else
@@ -180,7 +181,7 @@ class Tavernaserv < ActiveRecord::Base
           if port.value.is_a?(Array)
             # partial Results are in a list"
             sub_array = port.value
-            save_nested(runid, name, sub_array, port.type, port.depth, index = "")
+            save_nested(runid, svrrun, name, sub_array, port.type, port.depth)
           elsif port.error?
             save_to_db(name, port.type, port.depth, runid, "#{runid}/result/#{name}.error", port.error)
           else
@@ -194,19 +195,27 @@ class Tavernaserv < ActiveRecord::Base
     end
   end
 
-  def self.save_nested(runid, portname, sub_array, porttype, portdepth, index="")
+  def self.save_nested(runid, svrrun, portname, sub_array, porttype, portdepth, index="")
     (0 .. sub_array.length - 1).each do |i|
       value = sub_array[i]
       type = porttype[i]
 
       if value.is_a?(Array) then
-        save_nested(runid, portname, value, type, portdepth, i.to_s)
+        save_nested(runid, svrrun, portname, value, type, portdepth, i.to_s)
       else
-        if value.nil?
-          svrrun = @server.run(Run.find(runid).run_identification,
-            Credential.get_taverna_credentials)
-          value = svrrun.get_output(portname).join.to_s
+        # This is a bit a hack for now. It won't do anything clever for errors
+        # within lists of depth > 1. Taverna Player fixes this.
+        if type == "error"
+          begin
+            value = svrrun.output_port(portname)[i].error
+          rescue
+            # If there's not really an error here?
+            value = "Error. There was no message from the underlying service, sorry."
+          end
         end
+
+        # Final catch all!
+        value = "<null>" if value.nil?
 
         save_to_db(portname, type, portdepth, runid, "#{runid}/result/#{portname}#{index=='' ? '' :'/' + index }/#{i}", value)
       end
