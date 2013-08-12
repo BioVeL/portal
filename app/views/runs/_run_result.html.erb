@@ -70,7 +70,7 @@
     <dd class='list_description'>
       <% error_text = IO.read(result.result_filename) %>
       <%= render :partial => 'partials/preview_and_detail',
-        :locals => { :content_label => result.name,
+        :locals => { :content_label => "#{result.name}_#{result.id}",
         :content => error_text } %>
     </dd>
   </dl>
