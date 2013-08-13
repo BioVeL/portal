@@ -74,7 +74,7 @@
         :content => error_text } %>
     </dd>
   </dl>
-  <% elsif result.filetype.to_s =~ /image/ %>
+  <% elsif result.filetype.to_s =~ /image\/(jpeg|png|gif|bmp)/ %>
     <%= image_tag result.result_filepath %>
   <% elsif result.filetype.to_s =~ /pdf/ %>
     If you do not see the PDF document displayed in the browser below, please

@@ -77,7 +77,7 @@ class RunsController < ApplicationController
       @workflow = Workflow.find(@run.workflow_id)
       @sinks, @sink_descriptions = @workflow.get_outputs
       @run_error_codes = @run.get_error_codes
-      @user_name = @run.user_id.nil? ? "Guest" : current_user.name
+      @user_name = @run.user_id.nil? ? "Guest" : @run.user.name
 
       if @run.state == "finished"
         ports = {}

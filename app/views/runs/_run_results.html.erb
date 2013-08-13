@@ -62,7 +62,7 @@
         <div id="search_<%= result.name %>" class="clearfix"
         	style="min-height:300px; height:auto !important; height:300px;">
 
-          <b><%= result.name %></b> (<%=h result.filetype.split(/-*/).join %>)
+          <b><%= result.name %></b> (<%=h result.filetype %>)
 
           <% if !@sink_descriptions[result.name].nil? &&
             @sink_descriptions[result.name] != "" %>
@@ -96,7 +96,7 @@
           <ol>
             <% result.each do |r| %>
               <li>
-                (<%=h r.filetype.split(/-*/).join %>)
+                (<%=h r.filetype %>)
                 <%= render :partial => "run_result",
                   :locals => { :result => r } %>
               </li>
