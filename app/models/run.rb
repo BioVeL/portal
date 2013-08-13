@@ -34,7 +34,7 @@
 #
 # Synopsis
 #
-# BioVeL Portal is a prototype interface to Taverna Server which is provided to 
+# BioVeL Portal is a prototype interface to Taverna Server which is provided to
 # support easy inspection and execution of workflows.
 #
 # For more details see http://www.biovel.eu
@@ -45,7 +45,8 @@ class Run < ActiveRecord::Base
   attr_accessible :creation, :description, :end, :expiry, :run_identification,
     :start, :state, :user_id, :workflow_id
 
-  # every run is linked to a workflow, trough workflow_id
+  # Every run is owned by a user and linked to a workflow
+  belongs_to :user
   belongs_to :workflow
 
   # a run can have many results
