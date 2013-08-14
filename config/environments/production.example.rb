@@ -113,6 +113,10 @@ Portal::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
+  # Google analytics tracking (change the code!):
+  config.enable_google_analytics = false
+  GA.tracker = "UA-xxxxxx-x"
+
   # Toggle rack-mini-profiler
   config.enable_mini_profiler = false
 end

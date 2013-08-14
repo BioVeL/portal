@@ -61,6 +61,10 @@ gem "coderay", "~> 1.0.9"
 
 gem "rails_autolink", "~> 1.1.0"
 
+# Google analytics needs to be turned on for each environment configuration in
+# which it is required
+gem "google-analytics-rails", "~> 0.0.4"
+
 # This gem MUST BE INCLUDED LAST so that it can hook into everything else!
 # In this case we actually stop it from being automatically included here so
 # we can turn it on in the initializers if required.

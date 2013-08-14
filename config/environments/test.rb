@@ -79,6 +79,9 @@ Portal::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 
+  # Google analytics tracking off while testing
+  config.enable_google_analytics = false
+
   # Turn rack-mini-profiler off while testing
   config.enable_mini_profiler = false
 end
