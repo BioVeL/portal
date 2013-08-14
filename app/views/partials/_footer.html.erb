@@ -57,7 +57,13 @@
         is funded by the European Commission 7th Framework Programme (FP7),
         through the grant agreement number 283359.
   </div>
-  <div style='float: right;'>Version <%= Portal::VERSION::STRING %></div>
+  <div style='float: right; text-align: right;'>
+    <a href='/about'>
+      <%= image_tag "powered_by_taverna.png",
+        :height => 24, :style => "margin-right: 0; margin-bottom: 1em;" %></a>
+    <br />
+  	Version <%= Portal::VERSION::STRING %>
+  </div>
   <div class='clearer'></div>
   <div class='copyright' >
     <p class="copyright" style='text-align: center'>
