@@ -72,11 +72,8 @@
       <%= f.text_field 'run_name', :value => @workflow.title, :rows => 1,
         :style =>'width:95%', :class => "pre-filled" %>
     </dd>
-  <% unless @sources.length()>0%>
-    <p>
-      Identifier: <%= cookies[:run_identification] %>
-    </p>
-  <% else %>
+
+  <% if @sources.length > 0 %>
     <h2>
       Input Parameters
     </h2>
