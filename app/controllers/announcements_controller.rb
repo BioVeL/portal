@@ -42,7 +42,10 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 class AnnouncementsController < ApplicationController
+
+  before_filter :authenticate_user!
   before_filter :admin_required
+
   # GET /announcements
   # GET /announcements.json
   def index

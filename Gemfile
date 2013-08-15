@@ -57,6 +57,9 @@ gem 'mongrel', "1.2.0.pre2"
 # Connect to my Experiment using oauth-plugin to gemfile
 gem 'oauth-plugin', ">= 0.4.0.pre1"
 
+# User authentication
+gem 'devise', "~> 3.0.2"
+
 gem "coderay", "~> 1.0.9"
 
 gem "rails_autolink", "~> 1.1.0"

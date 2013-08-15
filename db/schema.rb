@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130620092551) do
+ActiveRecord::Schema.define(:version => 20130815090135) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(:version => 20130620092551) do
     t.datetime "updated_at",                 :null => false
   end
 
-  add_index "consumer_tokens", ["token"], :name => "index_consumer_tokens_on_token", :unique => true, :length => {"token"=>"100"}
+  add_index "consumer_tokens", ["token"], :name => "index_consumer_tokens_on_token", :unique => true, :length => {"token"=>100}
 
   create_table "credentials", :force => true do |t|
     t.string   "name"
@@ -107,17 +107,21 @@ ActiveRecord::Schema.define(:version => 20130620092551) do
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "email"
-    t.string   "password_hash"
-    t.string   "password_salt"
+    t.string   "encrypted_password"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
     t.boolean  "admin",                  :default => false, :null => false
-    t.string   "auth_token"
-    t.string   "password_reset_token"
-    t.datetime "password_reset_sent_at"
+    t.string   "authentication_token"
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
     t.boolean  "biovel",                 :default => false
     t.integer  "type_id",                :default => 1
+    t.datetime "remember_created_at"
   end
+
+  add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "workflow_errors", :force => true do |t|
     t.integer  "workflow_id"
