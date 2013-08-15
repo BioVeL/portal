@@ -64,116 +64,116 @@
 
 <%= form_for :file_uploads,
       :url => {:controller => 'runs', :action => 'new_run'},
-      :html => {:multipart => true}, :disable_with => "Initialising Run" do |f| %>
+      :html => {:multipart => true, :id => "new-run-form"}, :disable_with => "Initialising Run" do |f| %>
   <%= hidden_field_tag "workflow_id", @workflow.id %>
-  <dl class='list_any'>
-    <dt class='list_title'>Run Name:</dt>
-    <dd class='list_description'>
-      <%= f.text_field 'run_name', :value => @workflow.title, :rows => 1,
-        :style =>'width:95%', :class => "pre-filled" %>
-    </dd>
+  <br />
+  <div class="input-details" style="border: solid 1px transparent;">
+    <dt><%= f.label :run_name %></dt>
+    <dd><%= f.text_field :run_name, :value => @workflow.title,
+      :class => "pre-filled" %></dd>
+  </div>
 
   <% if @sources.length > 0 %>
-    <h2>
-      Input Parameters
-    </h2>
     <% @custom_inputs.each do |item| %>
       <% portname = item.name %>
       <% example_value = @sources[portname].blank? ? "": @sources[portname] -%>
-      <h3><%= label_tag portname %></h3>
-      <% if item.id.nil? then -%>
+
+      <div class="input-details">
+
+      <h2>Input: <%= portname %></h2>
+
+      <% if item.id.nil? %>
         <!-- If not customised show default view -->
-        <dl class='list_any'>
-          <% unless @descriptions[portname].blank? %>
-          <dt class='list_title'>Description:</dt>
-          <dd class='list_description'>
-            <%=@descriptions[portname].blank? ? "Not Provided" : simple_format(@descriptions[portname]) -%>
-          </dd>
-          <% end %>
-          <% unless example_value.blank? -%>
-          <dt class='list_title'>Example Value:</dt>
-          <dd class='list_description'>
+
+        <% unless @descriptions[portname].blank? %>
+          <dt>Description</dt>
+          <dd><%= @descriptions[portname] %></dd>
+        <% end %>
+
+        <% unless example_value.blank? -%>
+          <dt>Example Value:</dt>
+          <dd>
             <%= render :partial => 'partials/preview_and_detail',
               :locals => {:content_label => "cit_"+ portname, :content => example_value } %>
           </dd>
-          <dt class='list_title'> </dt>
-          <dd class='list_description'>
-          <b>
+
+          <dt>&nbsp;</dt>
+          <dd>
             The example value is automatically entered in the box below.
             Click to edit it or enter a new value.
-          </b>
           </dd>
-          <% end -%>
-        </dl>
-        <dl class='list_any'>
-          <dt class='list_title'>Enter Value:</dt>
-          <dd class='list_description'>
-            <%= f.text_area portname, :value => example_value, :rows => 1,
-              :style =>'width:95%', :class => "pre-filled" %>
-          </dd>
-          <dt class='list_title'>Select File:</dt>
-          <dd class='list_description'>
-            <%= f.file_field  "file_for_#{portname}", :style =>'width:95%'%>
-          </dd>
-        </dl>
-      <% else -%>
-      <!-- If customised show custom sample and/or file -->
-        <dl class='list_any'>
-          <dt class='list_title'>Description:</dt>
-          <dd class='list_description'>
-            <%=@descriptions[portname].blank? ? "Not Provided" : simple_format(@descriptions[portname]) -%>
-          </dd>
-        <% if (item.display_control_id == 1) || item.display_control_id == 2 then -%>
-        <!-- get input from value field -->
-          <dt class='list_title'>Example Value:</dt>
-          <dd class='list_description'>
-            <%= render :partial => 'partials/preview_and_detail',
-              :locals => {:content_label => portname, :content => item.sample_value } %>
-          </dd>
-          <dd class='list_description'>
+        <% end %>
 
-            The example value is automatically entered in the box below.
-            Click to edit it or enter a new value.
+        <dt>Enter Value</dt>
+        <dd>
+          <%= f.text_area portname, :value => example_value, :rows => 2,
+            :class => "pre-filled" %>
+        </dd>
+        <dt>Select File</dt>
+        <dd>
+          <%= f.file_field  "file_for_#{portname}" %>
+        </dd>
 
-          </dd>
-        </dl>
-        <dl class='list_any'>
-          <dt class='list_title'>Enter Value:</dt>
-          <dd class='list_description'>
-            <%= f.text_area portname, :value => item.sample_value, :rows => 1,
-              :style =>'width:95%', :class => "pre-filled" %>
-          </dd>
-        <% end -%>
-        <% if (item.display_control_id == 1) || item.display_control_id == 3 then -%>
-         <!-- get input from file field -->
-          <dt class='list_title'>Example File (<%=item.sample_file%>) content:</dt>
-          <% if item.sample_file_type.to_s =~ /text/ then
+      <% else %>
+        <!-- If customised show custom sample and/or file -->
+
+        <dt>Description</dt>
+        <dd>
+          <%= @descriptions[portname].blank? ? "Not Provided" : @descriptions[portname] %>
+        </dd>
+
+        <% if (item.display_control_id == 1) || item.display_control_id == 2 %>
+          <!-- get input from value field -->
+            <dt>Example Value</dt>
+            <dd>
+              <%= render :partial => 'partials/preview_and_detail',
+                :locals => {:content_label => portname, :content => item.sample_value } %>
+            </dd>
+
+            <dt>&nbsp;</dt>
+            <dd>
+              The example value is automatically entered in the box below.
+              Click to edit it or enter a new value.
+            </dd>
+
+            <dt>Enter Value</dt>
+            <dd>
+              <%= f.text_area portname, :value => item.sample_value,
+                :rows => 2, :class => "pre-filled" %>
+            </dd>
+          <% end # custom value field %>
+
+          <% if (item.display_control_id == 1) || item.display_control_id == 3 %>
+            <!-- get input from file field -->
+
+            <dt>Example File (<%=item.sample_file%>) content</dt>
+            <% if item.sample_file_type.to_s =~ /text/
                example_file_text = IO.read(item.sample_file_actual_path)
              else
                example_file_text = item.samplefile.to_s() + ' (' + item.sample_file_type.to_s()  + ')'
-             end -%>
-          <dd class='list_description'>
-            <%= render :partial => 'partials/preview_and_detail',
-              :locals => {:content_label => portname, :content => example_file_text } %>
-          </dd>
-          <%= f.hidden_field portname, :value => "need_file" %>
-          <%= f.hidden_field "default_file_for_#{portname}", :value => item.sample_file_actual_path %>
-          <dt class='list_title'>Select File:</dt>
-          <dd class='list_description'>
-            <%= f.file_field  "file_for_#{portname}", :style =>'width:95%'%>
-          </dd>
-        <% end -%>
-        </dl>
-      <% end -%>
-    <% end %>
-  <% end %>
-  <div style="float:right;position:relative;">
-    <b>
-      Provide input values and click to execute
-    </b><br/>
+             end %>
+            <dd>
+              <%= render :partial => 'partials/preview_and_detail',
+                :locals => {:content_label => portname, :content => example_file_text } %>
+            </dd>
+
+            <%= f.hidden_field portname, :value => "need_file" %>
+            <%= f.hidden_field "default_file_for_#{portname}",
+              :value => item.sample_file_actual_path %>
+
+            <dt>Select File</dt>
+            <dd>
+              <%= f.file_field "file_for_#{portname}" %>
+            </dd>
+          <% end # custom file field %>
+
+      <% end # item.id.nil? %>
+      </div>
+    <% end # custom inputs loop %>
+  <% end # sources > 0 %>
+
+  <div>
+    <h2>Provide input values and click to execute</h2>
     <%= submit_tag 'Start Run', :disable_with => "Starting..." %>
   </div>
-<% end %>
-
-
-
+<% end # form %>
