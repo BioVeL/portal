@@ -34,6 +34,7 @@
 #     Abraham Nieva de la Hidalga
 #     Alan Williams
 #     Finn Bacall
+#     Robert Haines
 #
 # Synopsis
 #
@@ -57,6 +58,7 @@
   <%= jquery_include_tag :google %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <%= analytics_init if Rails.configuration.enable_google_analytics %>
 </head>
 <body>
       <% unless current_announcements.empty? %>
@@ -92,24 +94,6 @@
       </div>
     </div>
   </div>
-  <%= render :partial=> '/partials/powered_by' %>
   <%= render :partial=> '/partials/footer' %>
-<!--<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-36866046-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script');
-    ga.type = 'text/javascript';
-    ga.async = true;
-    ga.src = ('https:' ==
-                document.location.protocol ? 'https://ssl' : 'http://www') +
-                 '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>-->
 </body>
 </html>

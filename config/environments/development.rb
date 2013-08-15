@@ -81,6 +81,10 @@ Portal::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
+  # Google analytics tracking (change the code!):
+  config.enable_google_analytics = false
+  GA.tracker = "UA-xxxxxx-x"
+
   # Turn rack-mini-profiler on for development
   config.enable_mini_profiler = true
 end

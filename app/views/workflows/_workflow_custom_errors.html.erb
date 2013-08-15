@@ -122,22 +122,22 @@
        <dt class='list_title'>Code:</dt>
        <dd class='list_description'>
          <%= f.text_area "code_for_#{errorcode}", :value => errorcode, :rows => 1,
-           :onclick => '$(this).select();', :style =>'width:95%' %>
+           :style =>'width:95%', :class => "pre-filled" %>
        </dd>
        <dt class='list_title'>Title:</dt>
        <dd class='list_description'>
          <%= f.text_area "name_for_#{errorcode}", :value => item.error_name, :rows => 1,
-           :onclick => '$(this).select();', :style =>'width:95%' %>
+           :style =>'width:95%', :class => "pre-filled" %>
        </dd>
        <dt class='list_title'>Explanation:</dt>
        <dd class='list_description'>
          <%= f.text_area "message_for_#{errorcode}", :value => item.error_message, :rows => 1,
-           :onclick => '$(this).select();', :style =>'width:95%' %>
+           :style =>'width:95%', :class => "pre-filled" %>
        </dd>
        <dt class='list_title'>Pattern:</dt>
        <dd class='list_description'>
          <%= f.text_area "pattern_for_#{errorcode}", :value => item.error_pattern, :rows => 1,
-           :onclick => '$(this).select();', :style =>'width:95%' %>
+           :style =>'width:95%', :class => "pre-filled" %>
        </dd>
     </dl>
    <% end %>
