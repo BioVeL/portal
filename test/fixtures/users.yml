@@ -48,12 +48,10 @@
 one:
   name: Abraham
   email: a@example.com
-  password_hash: $2a$10$I2SYNvln8VuhF9u818YRoejmcrckU9bdGy17TZbCOtbkRC1M.V1L6
-  password_salt: $2a$10$I2SYNvln8VuhF9u818YRoe
+  encrypted_password: $2a$10$I2SYNvln8VuhF9u818YRoejmcrckU9bdGy17TZbCOtbkRC1M.V1L6
 
 # Rob:password2
 two:
   name: Rob
   email: r@example.com
-  password_hash: $2a$10$0MstMo3emMjxSP9UiUbhIOXUfcf279eyhLJfLSSKLKU2F34waN5V2
-  password_salt: $2a$10$0MstMo3emMjxSP9UiUbhIO
+  encrypted_password: $2a$10$0MstMo3emMjxSP9UiUbhIOXUfcf279eyhLJfLSSKLKU2F34waN5V2
