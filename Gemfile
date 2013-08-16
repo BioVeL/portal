@@ -7,7 +7,7 @@ gem 'rails', '3.2.6'
 
 # We need to use mysql in development and production now to ensure that
 # dumped schemas are useful and consistent.
-gem 'mysql', '2.8.1'
+gem "mysql2", "~> 0.3.13"
 
 gem 'json', "~> 1.7.6"
 
