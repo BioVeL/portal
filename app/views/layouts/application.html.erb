@@ -61,39 +61,44 @@
   <%= analytics_init if Rails.configuration.enable_google_analytics %>
 </head>
 <body>
-      <% unless current_announcements.empty? %>
-      <div id="announcement">
-        <% for announcement in current_announcements %>
-          <%=h announcement.message %><br/>
-        <% end %>
+<div id="wrap">
+  <%= render :partial=> '/partials/navigation' %>
+
+  <% unless current_announcements.empty? %>
+    <div id="announcement">
+      <% current_announcements.each do |announcement| %>
+        <%=h announcement.message %><br/>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="container"  id="content">
+    <% if flash[:notice] %>
+      <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= flash[:notice]%>
+      </div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div class="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= flash[:alert ]%>
+      </div>
+    <% end %>
+    <% if flash[:error] %>
+      <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= flash[:error]%>
       </div>
     <% end %>
 
 
-    <%= render :partial=> '/partials/header' %>
-    <%= render :partial=> '/partials/navigation' %>
-  <div class='container' id='container-main'>
-    <div id='content'>
-      <div class='hfeed' id='primary'>
-        <div class='outer-enclosed'>
-          <%= render :partial=> '/partials/user_log_in' %>
-          <div class='hentry'>
-            <div>
-              <% if flash[:notice] %>
-                <p style="color: green"><%= flash[:notice]%></p>
-              <% elsif flash[:error] %>
-                <p></p>
-                <div id="error_explanation">
-                  <p style="color: red"><%= flash[:error]%></p>
-                </div>
-              <% end %>
-              <%= yield %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <%= yield %>
+
+    <br/>
   </div>
-  <%= render :partial=> '/partials/footer' %>
+  <div id="push"></div>
+</div>
+<%= render :partial=> '/partials/footer' -%>
 </body>
 </html>

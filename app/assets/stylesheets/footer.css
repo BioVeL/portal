@@ -31,7 +31,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 # Authors
-#     Abraham Nieva de la Hidalga
+#     Finn Bacall
 #
 # Synopsis
 #
@@ -44,63 +44,38 @@
 # through the grant agreement number 283359.
 */
 
-pre {
-  background-color: #eee;
-  padding: 10px;
-  font-size: 11px;
+/* http://getbootstrap.com/2.3.2/examples/sticky-footer-navbar.html */
+
+/* To push footer down */
+html, body {
+    height: 100%;
 }
 
-#notice {
-  color: green;
+#wrap {
+    height: auto !important;
+    margin: 0 auto -140px;
+    min-height: 100%;
 }
 
-.field_with_errors {
-  padding: 2px;
-  background-color: red;
-  display: table;
+#wrap > .container {
+    padding-top: 60px;
 }
 
-#error_explanation {
-  width: 450px;
-  border: 2px solid red;
-  padding: 7px;
-  padding-bottom: 0;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-  h2 {
-    text-align: left;
-    font-weight: bold;
-    padding: 5px 5px 5px 15px;
-    font-size: 12px;
-    margin: -7px;
-    margin-bottom: 0px;
-    background-color: #c00;
-    color: #fff;
-  }
-  ul li {
-    font-size: 12px;
-    list-style: square;
+#push, #footer {
+    padding-top: 20px;
+    height: 120px;
+}
+
+#footer {
+  font-size:80%;
+  background-color: #99cc33;
+}
+
+@media (max-width: 767px) {
+  #footer {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
-
- dl.wf_snip,dt.wf_snip, dd.wf_snip {font-weight: normal; clear: both;}
- dt.wf_snip { width:100%;  font-weight: bold; }
-
-dl.list_any {
- width:100%;
- overflow:hidden;
-}
-dt.list_title  {
- font-weight: bold;
- font-size: 12px;
- float:left;
- width:20%; /* adjust the width; make sure the total of both is 100% */
-}
-dd.list_description  {
- font-size: 12px;
- float:left;
- width:80%; /* adjust the width; make sure the total of both is 100% */
-}
-
-
-

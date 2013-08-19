@@ -46,35 +46,40 @@
 # through the grant agreement number 283359.
 %>
 
-<div id='footer'>
-  <div style='float: left'>
-    <%= image_tag "fp7.png", :height => 40, :alt => "FP7 logo" %>
-    <%= image_tag "einfrastructure.png", :height => 30,
-      :alt => "e-infrastructure logo" %>
-  </div>
-  <div style='float: left;'>
-    <a href='http://www.biovel.eu'>BioVeL</a>
+<div id="footer">
+  <div class="container">
+    <div class="row-fluid">
+      <div class="span3">
+        <%= image_tag "fp7.png", :height => 40, :alt => "FP7 logo" %>
+        <%= image_tag "einfrastructure.png", :height => 30,
+                      :alt => "e-infrastructure logo" %>
+      </div>
+      <div class="span7">
+        <a href='http://www.biovel.eu'>BioVeL</a>
         is funded by the European Commission 7th Framework Programme (FP7),
         through the grant agreement number 283359.
-  </div>
-  <div style='float: right; text-align: right;'>
-    <a href='/about'>
-      <%= image_tag "powered_by_taverna.png",
-        :height => 24, :style => "margin-right: 0; margin-bottom: 1em;" %></a>
-    <br />
-  	Version <%= Portal::VERSION::STRING %>
-  </div>
-  <div class='clearer'></div>
-  <div class='copyright' >
-    <p class="copyright" style='text-align: center'>
-      Copyright &#169; 2012 - <%= Time.now.year -%>
-      <a href="http://www.cardiff.ac.uk/" target="_blank">
-        Cardiff University
-      </a>
-      and
-      <a href="http://www.manchester.ac.uk/" target="_blank">
-        The University of Manchester
-      </a>
-    </p>
+      </div>
+      <div class="span2">
+        <a href='/about'>
+          <%= image_tag "powered_by_taverna.png",
+                        :style => "margin-right: 0; margin-bottom: 1em; height: 24px" %></a>
+        <br />
+        Version <%= Portal::VERSION::STRING %>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class='span12'>
+        <p class="copyright" style='text-align: center'>
+          Copyright &#169; 2012 - <%= Time.now.year -%>
+          <a href="http://www.cardiff.ac.uk/" target="_blank">
+            Cardiff University
+          </a>
+          and
+          <a href="http://www.manchester.ac.uk/" target="_blank">
+            The University of Manchester
+          </a>
+        </p>
+      </div>
+    </div>
   </div>
 </div>

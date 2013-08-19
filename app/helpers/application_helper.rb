@@ -63,4 +63,26 @@ module ApplicationHelper
   def current_announcements
     @current_announcements ||= Announcement.current_announcements(session[:announcement_hide_time])
   end
+
+  def navigation_link(text, url, icon = nil, active = false)
+    content_tag(:li, :class => (active ? 'active' : nil)) do
+      link_to(url) do
+        %(<b class="#{icon}"></b> #{text}).html_safe
+      end
+    end
+  end
+
+  # Devise helper methods, needed to successfully use the login form in the navbar
+  def resource_name
+    :user
+  end
+
+  def resource
+    @resource ||= User.new
+  end
+
+  def devise_mapping
+    @devise_mapping ||= Devise.mappings[:user]
+  end
+
 end

@@ -61,17 +61,14 @@
     border-color: #77BB11 #bbb866;
 }
 .header{ background-color: #BBEA3E; }
-.container { margin: 0 auto; }
-#content {  }
 
 /* Logo */
 
-.biovel-logo { position: relative; float:left; width: 150px; height: 24 px; }
+.biovel-logo { position: relative; float:left; width: 150px; height: 24px; }
 .biovel-logo img {position: absolute; top: -4px; left: 10px; }
 
 
 .header-title { float: left; margin: 12px 0 0 10px; font-weight: bold;}
-#logo, .header-title { font-size: 32px; line-height: 20px; color: #287621; }
 .header-title:hover { text-decoration: none; }
 .logomaj{color: black;}
 #tagline { color: #333; }
@@ -90,8 +87,6 @@
   width: auto;
   border-right: 1px solid #DDDA88;
 }
-
-#content { /*padding-top: 10px;*/ }
 
 #window { position: relative; height: 260px; }
 .inline-list { position: absolute; top: 100px; right: 0px;}
@@ -167,63 +162,16 @@ margin-bottom: 20px;*/ }
 
 /* ******************** from css/base.css ********************* */
 
-/* Document Body */
-body, input, textarea { font: 16px/1.5 Helvetica, Arial, sans-serif; }
-/*body, input, textarea { font: 13px/1.5 Georgia, "Times New Roman", Times, serif; }*/
-body { background-color: #EEEB99; }
-
 /* Font Styles */
 .serif { font-family: Arial, Helvetica, sans-serif; /*font-family: Georgia, "Times New Roman", Times, serif;*/ }
 .sans-serif { font-family: Arial, Helvetica, sans-serif; }
 
 /* Vertical Rhythm  */
 .entry-meta { margin-bottom: 10px; }
-p, pre, ul, ol, blockquote, address, fieldset, form, .gallery-row, .comment-list ul, .comment-list ol { margin-bottom: 20px; }
 /*.hentry*/.post, .widget, .comment, .navigation-links { margin-bottom: 40px; }
 /* remove margins from #footer p */
 /*.footer p { margin: 0; }*/
 
-
-
-/* Menu */
-.nav { font-size: 14px; font-family: Helvetica, Arial, sans-serif; float: left; line-height: 1; color: #287621; width: 100%; }
-.nav, .nav * { list-style: none; margin-left: 0; }
-.nav li { float: left; padding: 0; position: relative; }
-.nav ul li { font-size: 14px; width: 100%; }
-
-.nav a { display: block; position: relative; color: #287621;  padding: 6px 14px; }
-
-/* Hides items under top menu */
-.nav ul { position: absolute; top: -9999em; width: 20em; /* left offset of submenus need to match (see below) */ }
-
-/* Shows submenus */
-.nav li:hover ul,
-.nav li.nav-hover ul { left: 0px; top: 29px; /* match top ul list item height */ z-index: 99; }
-
-/* Hides all sub items (4 levels deep) */
-.nav li:hover li ul,
-.nav li.nav-hover li ul,
-.nav li li:hover li ul,
-.nav li li.nav-hover li ul,
-.nav li li li:hover li ul,
-.nav li li li.nav-hover li ul { top: -999em; }
-
-/* On :hover, displays all sub items (4 levels deep) */
-.nav li li:hover ul,
-.nav li li.nav-hover ul /*,
-
-
-/* Nav Skin */
-.nav { /*border: 1px solid; border-color: #aaa #ddd #ddd #aaa;*/ }
-.nav ul { /*border: 1px solid #ddd; border-bottom: none; */}
-.nav ul li a { border-bottom: 1px dashed #777; }
-.nav li:hover ul,
-
-.nav a { color: black; /*border-right: 1px solid #ccc;*/ }
-.nav a:hover { text-decoration: none;}
-
-.nav ul a { border-right: none; }
-.nav li:hover, .nav li.nav-hover,
 
 /* Highlight current item in sidebar menu */
 
@@ -251,15 +199,6 @@ a:hover { text-decoration: underline; }
 
 .entry-content a.more-link { text-decoration: underline; color: #333; }
 .entry-content a.more-link:hover { text-decoration: none; }
-
-/* Headings */
-h1, h2, h3, h4, h5, h6 { font-weight: normal; clear: both; }
-h1 { font-size: 18px; line-height: 18px; padding: 5px 0px; font-family: Helvetica,Arial,sans-serif; font-weight: bold; }
-h2 { font-size: 16px; line-height: 16px; padding: 5px 0px; font-family: Helvetica,Arial,sans-serif; font-weight: bold; }
-h3 { font-size: 14px; line-height: 14px; padding: 5px 0px; font-family: Helvetica,Arial,sans-serif; font-weight: bold; }
-h4 { font-size: 14px; line-height: 14px; padding: 5px 0px; }
-h5 { font-size: 12px; line-height: 12px; padding: 5px 0px; }
-h6 { font-size: 10px; line-height: 10px; }
 
 /* Side bar */
 .aside { font-family: Arial, Helvetica, sans-serif; }
@@ -309,8 +248,6 @@ pre { white-space: pre; overflow: auto; padding: 10px; border: 1px solid #ddd; c
 code { padding: 0px 3px; }
 
 /* Lists: (ul, ol, dl) */
-ul, ol, { margin-left: 15px; }
-.nav { margin-left: 0px; }
 .entry-content ul, .entry-content ol, #search-query { margin-left: 25px; }
 
 li ul, li ol { margin-bottom: 0; }
@@ -450,19 +387,6 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
             -webkit-border-radius: 10px;
             word-wrap: break-word ;}
 
-.outer-enclosed {
-    background: url("cogs.jpg") repeat-y top right #FFFFCC;
-    color: #333;
-    padding: 5px 15px 15px 15px;
-    word-wrap: break-word;
-    border-style: solid;
-    border-width: 0 1px;
-    border-color: #bbb866;
-    min-height:400px;
-    height:auto !important;
-    height:400px;
-}
-
 .ddet_div {
 	  padding: 8px;
 	  background: #F4F4F4;
@@ -583,14 +507,6 @@ h4 {
   display: block;
   margin: auto;
   border: 1px solid #666;
-}
-
-#footer {
-  background-color: #ffffcc;
-  padding: 1em;
-  color: #355710;
-  vertical-align: middle;
-  border: 1px solid #77BB11;
 }
 
 #footer img {

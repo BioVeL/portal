@@ -53,11 +53,36 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require reset
  *= require_self
  *= require vendor
  *= require jquery.ui.button
  *= require jquery.ui.tabs
  *= require jquery.ui.accordion
  *= require dataTables/jquery.dataTables
- *= require_tree .
+ *= require scaffolds
+ *= require coderay
+ *= require runs
+ *= require workflows
+ *= require taverna-server
+ *= require footer
  */
+
+
+// Bootstrap customization
+$navbarBackground: #bbea3e;
+$navbarBackgroundHighlight: #77bb11;
+$navbarLinkColor: #333;
+$bodyBackground: #ffffcc;
+
+// BioVeL medium green #77bb11
+// BioVeL medium-light green #99cc33
+// BioVeL light green #bbea3e
+// BioVeL light yellow #ffffcc
+
+@import "bootstrap";
+@import "bootstrap-responsive";
+
+body {
+  background: url("cogs.jpg") repeat-y scroll right top #ffffcc;
+}

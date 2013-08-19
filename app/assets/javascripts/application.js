@@ -60,6 +60,7 @@
 //= require jquery.ui.tabs
 //= require jquery.ui.accordion
 //= require dataTables/jquery.dataTables
+//= require bootstrap
 //= require_tree .
 
 // This class ("pre-filled") handles the text selection policy of pre-filled
