@@ -57,21 +57,21 @@
 
 <% if !current_user.nil? %>
   <div title="Add a new workflow" alt="Add a new workflow" style="float:right; padding:10px;">
-    <%= link_to 'Add Workflow', new_workflow_path, :class => "link_img" %>
+    <%= link_to 'Add Workflow', new_workflow_path, :class => "btn" %>
   </div>
   <h2>Private</h2>
-  <%= render 'workflows' %>
+  <%= render 'workflows', :workflows => @workflows %>
 <% end -%>
 
 <% if @shared_workflows.count != 0 -%>
   <h2>Public</h2>
-<% if current_user.nil? -%>
-  <p>
-    <%= link_to 'Register', new_user_registration_path %> to upload your own workflows and to
-    search for workflows on
-    <%= link_to 'my experiment', 'http://www.myexperiment.org' %>
-  </p>
-<%end%>
-  <%= render 'workflows_public' %>
-<% end -%>
-<br/><br/>
+  <% if current_user.nil? -%>
+    <p>
+      <%= link_to 'Register', new_user_registration_path %> to upload your own workflows and to
+      search for workflows on
+      <%= link_to 'my experiment', 'http://www.myexperiment.org' %>
+    </p>
+  <%end%>
+  <%= render 'workflows', :workflows => @shared_workflows %>
+<% end %>
+

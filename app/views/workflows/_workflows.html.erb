@@ -44,21 +44,20 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 %>
-<table id="private_workflows">
+<table id="private_workflows" class="table">
   <thead>
     <tr>
       <th>Title</th>
       <th>Author(s)</th>
-      <% if current_user.admin -%>
+      <% if user_signed_in? && current_user.admin -%>
         <th>Owner</th>
       <% end -%>
       <th>Uploaded</th>
-      <th>Updated</th>
       <th>Operations</th>
     </tr>
   </thead>
   <tbody>
-  <% @workflows.each do |workflow| %>
+  <% workflows.each do |workflow| %>
     <tr>
       <td title="<%= workflow.description %>" alt="<%= workflow.description %>">
         <dl class="wf_snip">
@@ -69,7 +68,7 @@
     <td>
       <%= workflow.author %>
     </td>
-    <% if current_user.admin -%>
+    <% if user_signed_in? && current_user.admin -%>
       <td>
         <% if workflow.user_id !=0 %>
           <%=User.find(workflow.user_id).name %>
@@ -79,29 +78,25 @@
       </td>
     <% end -%>
     <td><%= workflow.created_at.strftime("%Y/%m/%d %H:%M") %></td>
-    <td><%= workflow.updated_at.strftime("%Y/%m/%d %H:%M") %></td>
     <td>
-    <div title="Run workflow" alt="Run workflow" style="float:left">
-      <%= link_to 'Run', {:controller => 'runs' ,
-          :action => 'new_run', :id => workflow.id}, :class => "link_img" %>
-    </div>
-    <div title="Download workflow" alt="Download workflow" style="float:left">
-      <%= link_to 'Download', {:controller => 'workflows' ,
-          :action => 'download', :id => workflow.id}, :class => "link_img" %>
-    </div>
-    <div title="toggle workflow sharing" alt="toggle workflow sharing" style="float:left">
-      <% if workflow.shared? -%>
-        <%= link_to "Make private", make_private_workflow_path(workflow), :method => :put, :class => "link_img"%>
-      <% else -%>
-        <%= link_to "Make public", make_public_workflow_path(workflow), :method => :put, :class => "link_img" %>
-      <% end -%>
-    </div>
-    <div title="Remove workflow" alt="Remove workflow" style="float:left">
-      <%= link_to 'Remove', workflow, :class => "link_img_rem",
-          :method => :delete,
-          :data => { :confirm => 'Remove this workflow: ' +
-                       workflow.title.to_s + "?" } %>
-    </div>    </td>
+      <div class="btn-group">
+        <%= link_to 'Run', {:controller => 'runs' ,
+            :action => 'new_run', :id => workflow.id}, :class => "btn btn-mini" %>
+        <%= link_to 'Download', {:controller => 'workflows' ,
+            :action => 'download', :id => workflow.id}, :class => "btn btn-mini" %>
+        <% if workflow.user == current_user %>
+          <% if workflow.shared? -%>
+            <%= link_to "Make private", make_private_workflow_path(workflow), :method => :put, :class => "btn btn-mini"%>
+          <% else -%>
+            <%= link_to "Make public", make_public_workflow_path(workflow), :method => :put, :class => "btn btn-mini" %>
+          <% end -%>
+          <%= link_to 'Remove', workflow, :class => "btn btn-mini btn-danger",
+              :method => :delete,
+              :data => { :confirm => 'Remove this workflow: ' +
+                           workflow.title.to_s + "?" } %>
+        <% end %>
+      </div>
+    </td>
   </tr>
   <% end -%>
   </tbody>

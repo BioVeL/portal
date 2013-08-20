@@ -45,7 +45,7 @@
 %>
 <h1>Listing announcements</h1>
 
-<table id="announcements_table">
+<table id="announcements_table" class="table">
   <thead>
   <tr>
     <th>Message</th>
@@ -61,16 +61,12 @@
       <td><%= announcement.starts_at %></td>
       <td><%= announcement.ends_at %></td>
       <td>
-        <div title="See announcement" alt="See announcement" style="float:left">
-          <%= link_to 'Show', announcement, :class => "link_img"%>
-        </div>
-        <div title="Edit announcement" alt="Edit announcement" style="float:left">
+        <div class="btn-group">
+          <%= link_to 'Show', announcement, :class => "btn btn-mini"%>
           <%= link_to 'Edit', edit_announcement_path(announcement),
-            :class => "link_img"%>
-        </div>
-        <div title="Delete announcement" alt="Delete announcement" style="float:left">
+            :class => "btn btn-mini"%>
           <%= link_to 'Delete', announcement, :method => :delete,
-            :data => { :confirm => 'Are you sure?' }, :class => "link_img_rem"%>
+            :data => { :confirm => 'Are you sure?' }, :class => "btn btn-mini btn-danger"%>
         </div>
       </td>
     </tr>
@@ -80,4 +76,4 @@
 
 <br />
 
-<%= link_to 'New Announcement', new_announcement_path %>
+<%= link_to 'New Announcement', new_announcement_path, :class => 'btn' %>

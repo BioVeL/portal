@@ -71,7 +71,7 @@
 
 <% running = 0 %>
 
-<table id="runs_table">
+<table id="runs_table" class="table">
   <thead>
     <tr>
       <th>Description</th>
@@ -102,18 +102,16 @@
             %></td>
       <% end -%>
       <td>
-        <div title="Click to see run details" alt="Click to see run details" style="float:left">
-          <%= link_to 'Details', run, :class => "link_img" %>
-        </div>
-        <% if !current_user.nil? -%>
-          <div title="Click to delete run" alt="Click to delete run" style="float:left">
+        <div class="btn-group">
+          <%= link_to 'Details', run, :class => "btn btn-mini" %>
+          <% if !current_user.nil? -%>
             <%= link_to 'Delete', run, :method => :delete,
-                  :data => { :confirm => 'Delete Run ' + run.description +
-                               ' created ' +
-                               run.creation.strftime("%d/%m/%Y-%H:%M:%S") +
-                               "?"}, :class => "link_img_rem" %>
-          </div>
-        <% end -%>
+                        :data => { :confirm => 'Delete Run ' + run.description +
+                            ' created ' +
+                            run.creation.strftime("%d/%m/%Y-%H:%M:%S") +
+                            "?"}, :class => "btn btn-mini btn-danger" %>
+          <% end -%>
+        </div>
       </td>
     </tr>
   <% end %>
