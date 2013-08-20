@@ -55,11 +55,11 @@
  *
  *= require reset
  *= require_self
- *= require vendor
+ * require vendor
  *= require jquery.ui.button
  *= require jquery.ui.tabs
  *= require jquery.ui.accordion
- *= require dataTables/jquery.dataTables
+ * require dataTables/jquery.dataTables
  *= require scaffolds
  *= require coderay
  *= require runs
@@ -68,21 +68,40 @@
  *= require footer
  */
 
+@import "_colours";
 
 // Bootstrap customization
-$navbarBackground: #bbea3e;
-$navbarBackgroundHighlight: #77bb11;
+$navbarBackground: $biovelLightGreen;
+$navbarBackgroundHighlight: $biovelDarkGreen;
 $navbarLinkColor: #333;
-$bodyBackground: #ffffcc;
-
-// BioVeL medium green #77bb11
-// BioVeL medium-light green #99cc33
-// BioVeL light green #bbea3e
-// BioVeL light yellow #ffffcc
+$bodyBackground: #ffffdd;
+$successBackground: lighten($biovelLightGreen, 20%);
+$warningBackground: #fcf8b3;
 
 @import "bootstrap";
 @import "bootstrap-responsive";
 
 body {
-  background: url("cogs.jpg") repeat-y scroll right top #ffffcc;
+  background: url("cogs.png") repeat-y scroll right top $bodyBackground;
 }
+
+div.notice {
+  background-color: #ffffff;
+  padding: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125);
+}
+
+// Fixes to allow logo in navbar
+.navbar .brand {
+  max-height: 40px;
+  overflow: visible;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.navbar .brand > img {
+  height: 30px;
+  margin: 5px;
+  vertical-align: middle;
+}
+

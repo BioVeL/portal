@@ -59,7 +59,7 @@
 //= require jquery.ui.button
 //= require jquery.ui.tabs
 //= require jquery.ui.accordion
-//= require dataTables/jquery.dataTables
+// require dataTables/jquery.dataTables
 //= require bootstrap
 //= require_tree .
 

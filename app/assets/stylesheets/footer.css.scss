@@ -46,6 +46,8 @@
 
 /* http://getbootstrap.com/2.3.2/examples/sticky-footer-navbar.html */
 
+@import "_colours";
+
 /* To push footer down */
 html, body {
     height: 100%;
@@ -67,8 +69,7 @@ html, body {
 }
 
 #footer {
-  font-size:80%;
-  background-color: #99cc33;
+  background-color: $biovelYellow;
 }
 
 @media (max-width: 767px) {
