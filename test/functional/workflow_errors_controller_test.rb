@@ -62,30 +62,50 @@ class WorkflowErrorsControllerTest < ActionController::TestCase
 
   test "should create workflow_error" do
     assert_difference('WorkflowError.count') do
-      post :create, workflow_error: { error_code: @workflow_error.error_code, error_message: @workflow_error.error_message, error_name: @workflow_error.error_name, error_pattern: @workflow_error.error_pattern, most_recent: @workflow_error.most_recent, my_experiment_id: @workflow_error.my_experiment_id, ports_count: @workflow_error.ports_count, runs_count: @workflow_error.runs_count, workflow_id: @workflow_error.workflow_id }
+      post :create, :workflow_error => {
+        :error_code => @workflow_error.error_code,
+        :error_message => @workflow_error.error_message,
+        :error_name => @workflow_error.error_name,
+        :error_pattern => @workflow_error.error_pattern,
+        :most_recent => @workflow_error.most_recent,
+        :my_experiment_id => @workflow_error.my_experiment_id,
+        :ports_count => @workflow_error.ports_count,
+        :runs_count => @workflow_error.runs_count,
+        :workflow_id => @workflow_error.workflow_id
+      }
     end
 
     assert_redirected_to workflow_error_path(assigns(:workflow_error))
   end
 
   test "should show workflow_error" do
-    get :show, id: @workflow_error
+    get :show, :id => @workflow_error
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @workflow_error
+    get :edit, :id => @workflow_error
     assert_response :success
   end
 
   test "should update workflow_error" do
-    put :update, id: @workflow_error, workflow_error: { error_code: @workflow_error.error_code, error_message: @workflow_error.error_message, error_name: @workflow_error.error_name, error_pattern: @workflow_error.error_pattern, most_recent: @workflow_error.most_recent, my_experiment_id: @workflow_error.my_experiment_id, ports_count: @workflow_error.ports_count, runs_count: @workflow_error.runs_count, workflow_id: @workflow_error.workflow_id }
+    put :update, :id => @workflow_error, :workflow_error => {
+      :error_code => @workflow_error.error_code,
+      :error_message => @workflow_error.error_message,
+      :error_name => @workflow_error.error_name,
+      :error_pattern => @workflow_error.error_pattern,
+      :most_recent => @workflow_error.most_recent,
+      :my_experiment_id => @workflow_error.my_experiment_id,
+      :ports_count => @workflow_error.ports_count,
+      :runs_count => @workflow_error.runs_count,
+      :workflow_id => @workflow_error.workflow_id
+    }
     assert_redirected_to workflow_error_path(assigns(:workflow_error))
   end
 
   test "should destroy workflow_error" do
     assert_difference('WorkflowError.count', -1) do
-      delete :destroy, id: @workflow_error
+      delete :destroy, :id => @workflow_error
     end
 
     assert_redirected_to workflow_errors_path

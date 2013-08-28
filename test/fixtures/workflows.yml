@@ -51,6 +51,7 @@ one:
   description: MyString
   author: MyString
   workflow_file: MyString
+  shared: true
 
 two:
   name: MyString
@@ -58,3 +59,4 @@ two:
   description: MyString
   author: MyString
   workflow_file: MyString
+  shared: false

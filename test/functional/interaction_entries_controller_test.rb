@@ -41,6 +41,7 @@
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
+
 require 'test_helper'
 
 class InteractionEntriesControllerTest < ActionController::TestCase
@@ -61,30 +62,60 @@ class InteractionEntriesControllerTest < ActionController::TestCase
 
   test "should create interaction_entry" do
     assert_difference('InteractionEntry.count') do
-      post :create, interaction_entry: { author_name: @interaction_entry.author_name, content: @interaction_entry.content, href: @interaction_entry.href, in_reply_to: @interaction_entry.in_reply_to, input_data: @interaction_entry.input_data, interaction_id: @interaction_entry.interaction_id, published: @interaction_entry.published, response: @interaction_entry.response, result_data: @interaction_entry.result_data, result_status: @interaction_entry.result_status, run_id: @interaction_entry.run_id, taverna_interaction_id: @interaction_entry.taverna_interaction_id, title: @interaction_entry.title, updated: @interaction_entry.updated }
+      post :create, :interaction_entry => {
+        :author_name => @interaction_entry.author_name,
+        :content => @interaction_entry.content,
+        :href => @interaction_entry.href,
+        :in_reply_to => @interaction_entry.in_reply_to,
+        :input_data => @interaction_entry.input_data,
+        :interaction_id => @interaction_entry.interaction_id,
+        :published => @interaction_entry.published,
+        :response => @interaction_entry.response,
+        :result_data => @interaction_entry.result_data,
+        :result_status => @interaction_entry.result_status,
+        :run_id => @interaction_entry.run_id,
+        :taverna_interaction_id => @interaction_entry.taverna_interaction_id,
+        :title => @interaction_entry.title,
+        :updated => @interaction_entry.updated
+      }
     end
 
     assert_redirected_to interaction_entry_path(assigns(:interaction_entry))
   end
 
   test "should show interaction_entry" do
-    get :show, id: @interaction_entry
+    get :show, :id => @interaction_entry
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @interaction_entry
+    get :edit, :id => @interaction_entry
     assert_response :success
   end
 
   test "should update interaction_entry" do
-    put :update, id: @interaction_entry, interaction_entry: { author_name: @interaction_entry.author_name, content: @interaction_entry.content, href: @interaction_entry.href, in_reply_to: @interaction_entry.in_reply_to, input_data: @interaction_entry.input_data, interaction_id: @interaction_entry.interaction_id, published: @interaction_entry.published, response: @interaction_entry.response, result_data: @interaction_entry.result_data, result_status: @interaction_entry.result_status, run_id: @interaction_entry.run_id, taverna_interaction_id: @interaction_entry.taverna_interaction_id, title: @interaction_entry.title, updated: @interaction_entry.updated }
+    put :update, :id => @interaction_entry, :interaction_entry => {
+      :author_name => @interaction_entry.author_name,
+      :content => @interaction_entry.content,
+      :href => @interaction_entry.href,
+      :in_reply_to => @interaction_entry.in_reply_to,
+      :input_data => @interaction_entry.input_data,
+      :interaction_id => @interaction_entry.interaction_id,
+      :published => @interaction_entry.published,
+      :response => @interaction_entry.response,
+      :result_data => @interaction_entry.result_data,
+      :result_status => @interaction_entry.result_status,
+      :run_id => @interaction_entry.run_id,
+      :taverna_interaction_id => @interaction_entry.taverna_interaction_id,
+      :title => @interaction_entry.title,
+      :updated => @interaction_entry.updated
+    }
     assert_redirected_to interaction_entry_path(assigns(:interaction_entry))
   end
 
   test "should destroy interaction_entry" do
     assert_difference('InteractionEntry.count', -1) do
-      delete :destroy, id: @interaction_entry
+      delete :destroy, :id => @interaction_entry
     end
 
     assert_redirected_to interaction_entries_path
