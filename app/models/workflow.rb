@@ -53,16 +53,23 @@ class Workflow < ActiveRecord::Base
                   :slowest_run, :slowest_run_date, :fastest_run,
                   :fastest_run_date
 
+  # A workflow is owned by a user
+  belongs_to :user
+
   # a workflow can have many runs
   has_many :runs
+
   # a workflow can have many ports
   has_many :workflow_ports
+
   # after the workflow details have been written to the DB
   # write the workflow file to the filesystem
   after_save :store_wffile
+
   # Validate the workflow file
   validate :validate_file_is_included, :on=>:create
   validate :validate_file_is_t2flow
+
   # Validate that there is a file is selected
   def validate_file_is_included
     if workflow_file.nil? && @file_data.nil?
