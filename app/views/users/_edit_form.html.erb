@@ -55,13 +55,16 @@
       </div>
     <% end %>
     <p>
-      <%= f.label :name, "Username" %><br />
+      <%= f.label :name, "Display name" %><br />
       <%= f.text_field :name %>
     </p>
     <p>
       <%= f.label :email %><br />
       <%= f.text_field :email %>
-    </p>      <p>
+    </p>
+
+    <% if current_user.admin? %>
+    <p>
       <%= f.label :admin %><br />
       <%= f.check_box :admin %>
     </p>
@@ -73,6 +76,8 @@
       <%= f.label 'User Type' %><br />
       <%= f.select :type_id, [['user',1],['tester',2],['developer',3],['other',4]] %>
     </p>
+    <% end %>
+
     <p class="button"><%= f.submit %></p>
   <% end %>
 

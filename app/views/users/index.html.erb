@@ -66,23 +66,23 @@
   </thead>
 
   <tbody>
-  <% @biovel_users.each do |biovel_user| %>
+  <% @users.each do |user| %>
     <tr>
-      <td><%= unless (biovel_user.id == 0)
-                link_to(biovel_user.name, edit_user_path(biovel_user))
+      <td><%= unless (user.id == 0)
+                link_to(user.name, edit_user_path(user))
               else
-                biovel_user.name
+                user.name
               end
             %></td>
-      <td><%= biovel_user.email %></td>
-      <td><%= biovel_user.admin	 %></td>
-      <td><%= biovel_user.user_statistic.run_count %></td>
-      <td><%= biovel_user.user_statistic.mothly_run_average %></td>
-      <td><%= biovel_user.user_statistic.first_run_date %></td>
-      <td><%= biovel_user.user_statistic.last_run_date %></td>
-      <td><%= biovel_user.user_statistic.latest_workflow_id %></td>
-      <td><%= biovel_user.biovel %></td>
-      <td><%= biovel_user.type_id %></td>
+      <td><%= user.email %></td>
+      <td><%= user.admin	 %></td>
+      <td><%= user.user_statistic.run_count %></td>
+      <td><%= user.user_statistic.mothly_run_average %></td>
+      <td><%= user.user_statistic.first_run_date %></td>
+      <td><%= user.user_statistic.last_run_date %></td>
+      <td><%= user.user_statistic.latest_workflow_id %></td>
+      <td><%= user.biovel %></td>
+      <td><%= user.type_id %></td>
     </tr>
   <% end %>
   </tbody>

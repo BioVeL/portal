@@ -6,7 +6,7 @@
   <div><%= f.label :email %><br />
   <%= f.email_field :email, :autofocus => true %></div>
 
-  <div><%= f.label :name %><br />
+  <div><%= f.label :name, "Display name" %><br />
   <%= f.text_field :name %></div>
 
   <div><%= f.label :password %><br />
@@ -19,3 +19,4 @@
 <% end %>
 
 <%= render "users/benefits" %>
+<div class="clearer"></div>

@@ -45,10 +45,10 @@
 # through the grant agreement number 283359.
 %>
 <div class='container'>
-  <div id="user_log_in">
+  <div class="user_log_in">
     <%= image_tag "user.png", :alt => "User" %>
     <% if user_signed_in? %>
-      <b><%= current_user.name %></b> |
+      <%= link_to current_user.name, edit_user_path(current_user), :class => "user_log_in_link" %> |
       <%= link_to image_tag("door_out.png", :alt => "Logout") + ' Log out', destroy_user_session_path, :method => :delete %>
     <% else %>
       <b>Guest</b> |
