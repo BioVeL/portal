@@ -45,7 +45,7 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 class WorkflowsController < ApplicationController
-  before_filter :login_required, :except => [:index, :show, :download]
+  before_filter :authenticate_user!, :except => [:index, :show, :download]
   before_filter :get_workflows, :only => :index
   before_filter :get_workflow, :only => :show
 

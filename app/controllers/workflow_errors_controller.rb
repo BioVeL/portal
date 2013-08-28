@@ -42,7 +42,10 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 class WorkflowErrorsController < ApplicationController
+
+  before_filter :authenticate_user!
   before_filter :admin_required
+
   # GET /workflow_errors
   # GET /workflow_errors.json
   def index

@@ -45,6 +45,8 @@
 require "mime/types"
 
 class ResultsController < ApplicationController
+
+  before_filter :authenticate_user!, :except => [:download, :inlinepdf]
   before_filter :admin_required, :except => [:download, :inlinepdf]
 
   def index

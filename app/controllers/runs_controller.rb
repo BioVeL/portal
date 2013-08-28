@@ -45,7 +45,7 @@
 gem 'ratom'
 require 'atom'
 class RunsController < ApplicationController
-  before_filter :login_required, :except => [:new_run, :show, :refresh,
+  before_filter :authenticate_user!, :except => [:new_run, :show, :refresh,
                                              :refresh_list, :interaction,
                                              :index, :destroy]
 
