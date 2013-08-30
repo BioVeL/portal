@@ -623,7 +623,7 @@ h4 {
   border-radius: 4px;
 }
 
-#user_log_in {
+.user_log_in {
   position:relative;
   margin-top: -35px;
   margin-bottom: 0px;
@@ -637,6 +637,15 @@ h4 {
   border-radius: 8px;
   font-size: 14px;
   font-family: Helvetica, Arial, sans-serif;
+}
+
+.user_log_in_link {
+  color: rgb(153, 0, 0);
+  font-weight: bold;
+}
+
+.user_log_in img {
+  vertical-align: middle;
 }
 
 .authentication {

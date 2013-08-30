@@ -44,6 +44,11 @@ GEM
       daemons
       multi_json (~> 1.0)
       rails (~> 3.0)
+    devise (3.0.2)
+      bcrypt-ruby (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      warden (~> 1.2.3)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -97,6 +102,7 @@ GEM
       multi_json (~> 1.0)
       multi_xml (~> 0.5)
       rack (~> 1.2)
+    orm_adapter (0.4.0)
     polyglot (0.3.3)
     rack (1.4.5)
     rack-cache (1.2)
@@ -159,6 +165,8 @@ GEM
     uglifier (2.1.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
+    warden (1.2.3)
+      rack (>= 1.0)
 
 PLATFORMS
   ruby
@@ -168,6 +176,7 @@ DEPENDENCIES
   coderay (~> 1.0.9)
   coffee-rails (~> 3.2.1)
   daemons-rails (~> 1.1.2)
+  devise (~> 3.0.2)
   google-analytics-rails (~> 0.0.4)
   jquery-datatables-rails (~> 1.11.2)
   jquery-rails (~> 3.0.1)

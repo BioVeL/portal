@@ -50,7 +50,7 @@ class OauthConsumersController < ApplicationController
   # Eg. for devise
   #
   #   before_filter :authenticate_user!, :only=>:index
-  before_filter :login_required, :only=>:index
+  before_filter :authenticate_user!, :only=>:index
 
   def index
     @consumer_tokens=ConsumerToken.all :conditions=>{:user_id=>current_user.id}

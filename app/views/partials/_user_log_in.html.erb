@@ -45,26 +45,15 @@
 # through the grant agreement number 283359.
 %>
 <div class='container'>
-  <div id="user_log_in">
-    <% if !current_user.nil? %>
-      <%= image_tag "user.png", :alt => "User" %>
-      <b><%= current_user.name %></b> |
-      <a href='/log_out'>
-        <%= image_tag "door_out.png", :alt => "Logout" %>
-        Log Out
-      </a>
+  <div class="user_log_in">
+    <%= image_tag "user.png", :alt => "User" %>
+    <% if user_signed_in? %>
+      <%= link_to current_user.name, edit_user_path(current_user), :class => "user_log_in_link" %> |
+      <%= link_to image_tag("door_out.png", :alt => "Logout") + ' Log out', destroy_user_session_path, :method => :delete %>
     <% else %>
-      Guest
-      <%= image_tag "user.png", :alt => "User" %> |
-      <a href='/log_in'>
-        <%= image_tag 'door_in.png', :alt => 'Login' %>
-        Log In
-      </a>
-     |
-      <a href='/sign_up'>
-        <%= image_tag 'book_open.png', :alt => 'Register' %>
-        Register
-      </a>
+      <b>Guest</b> |
+      <%= link_to image_tag("door_in.png", :alt => "Login") + ' Log in', new_user_session_path %> |
+      <%= link_to image_tag("book_open.png", :alt => "Register") + ' Register', new_user_registration_path %>
     <%end%>
   </div>
 </div>

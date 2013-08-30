@@ -64,7 +64,7 @@
 
 <% if current_user.nil? -%>
   <p>
-    Guest runs are periodically deleted! <%= link_to 'Register', sign_up_path%>
+    Guest runs are periodically deleted! <%= link_to 'Register', new_user_registration_path %>
     to keep run results for longer.
   </p>
 <% end %>

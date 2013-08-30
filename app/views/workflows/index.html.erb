@@ -67,7 +67,7 @@
   <h2>Public</h2>
 <% if current_user.nil? -%>
   <p>
-    <%= link_to 'Register', sign_up_path%> to upload your own workflows and to
+    <%= link_to 'Register', new_user_registration_path %> to upload your own workflows and to
     search for workflows on
     <%= link_to 'my experiment', 'http://www.myexperiment.org' %>
   </p>
