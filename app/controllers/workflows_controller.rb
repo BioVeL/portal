@@ -65,7 +65,8 @@ class WorkflowsController < ApplicationController
 
     @workflow_profile = TavernaLite::WorkflowProfile.find_by_workflow_id(@workflow)
     if @workflow_profile.nil? 
-      @workflow_profile = TavernaLite::WorkflowProfile.new(:workflow_id=>67) 
+      @workflow_profile = TavernaLite::WorkflowProfile.new() 
+      @workflow_profile.workflow = @workflow 
     end
     @sources, @source_descriptions = @workflow.get_inputs
     @custom_inputs = @workflow_profile.get_custom_inputs
