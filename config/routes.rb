@@ -4,9 +4,6 @@ Portal::Application.routes.draw do
   devise_for :users
 
   resources :interaction_entries
-
-  resources :workflow_errors
-
   match '/about_portal' => 'about_portal#index'
   match '/cookies' => 'about_portal#cookies'
   match '/about' => 'about_portal#index'

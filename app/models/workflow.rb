@@ -232,17 +232,17 @@ class Workflow < ActiveRecord::Base
 
   def get_custom_inputs
     # 1 Get custom inputs
-    custom_inputs = WorkflowPort.get_custom_ports(id, 1)
+    custom_inputs = TavernaLite::WorkflowPort.get_custom_ports(id, 1)
     # 2 Get all inputs
     model = get_model
     # 3 Add missing ports (if any) to the list
     model.sources().each{|source|
       if (custom_inputs).where("name='#{source.name}'").count() == 0 then
         # missing input
-        missing_port = WorkflowPort.new()
+        missing_port = TavernaLite::WorkflowPort.new()
         missing_port.name = source.name
         missing_port.workflow_id = id
-        missing_port.port_type = 1          # id of inputs
+        missing_port.port_type_id = 1          # id of inputs
         missing_port.display_control_id = 1 # default display control
         example_values = source.example_values
         if ((!example_values.nil?) && (example_values.size == 1)) then
@@ -258,17 +258,17 @@ class Workflow < ActiveRecord::Base
   end
   def get_custom_outputs
     # 1 Get custom inputs
-    custom_outputs = WorkflowPort.get_custom_ports(id, 2)
+    custom_outputs = TavernaLite::WorkflowPort.get_custom_ports(id, 2)
     # 2 Get all inputs
     model = get_model
     # 3 Add missing ports (if any) to the list
     model.sinks().each{|sink|
       if (custom_outputs).where("name='#{sink.name}'").count() == 0 then
         # missing output
-        missing_port = WorkflowPort.new()
+        missing_port = TavernaLite::WorkflowPort.new()
         missing_port.name = sink.name
         missing_port.workflow_id = id
-        missing_port.port_type = 2          # id of outputs
+        missing_port.port_type_id = 2          # id of outputs
         missing_port.display_control_id = 1 # default display control
         example_values = sink.example_values
         if ((!example_values.nil?) && (example_values.size == 1)) then
@@ -389,7 +389,7 @@ class Workflow < ActiveRecord::Base
 
   def get_error_codes
     error_codes =
-      WorkflowError.where('workflow_id = ?',id)
+      TavernaLite::WorkflowError.where('workflow_id = ?',id)
     unhandled =  unhandled_errors
 
     return error_codes | unhandled
@@ -405,7 +405,7 @@ class Workflow < ActiveRecord::Base
     bad_results =
       Result.where("filetype=? ",'error').joins(:run).where("workflow_id = ?", id)
     error_codes =
-      WorkflowError.where('workflow_id = ?',id)
+      TavernaLite::WorkflowError.where('workflow_id = ?',id)
     collect = []
     samples = []
     runs = []
@@ -428,7 +428,7 @@ class Workflow < ActiveRecord::Base
           new_error.error_code = "E_" + (100000+ind_result.run_id).to_s + "_" + ind_result.name
           new_error.error_message = "Workflow run produced an error for " + ind_result.name
           new_error.error_name = name + " Error"
-          new_error.error_pattern = example_value
+          new_error.pattern = example_value
           if Run.exists?(ind_result.run_id)
             # if run still exists assign the run creation date
             new_error.most_recent = Run.find(ind_result.run_id).creation

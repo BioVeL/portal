@@ -62,14 +62,19 @@ class WorkflowsController < ApplicationController
   # GET /workflows/1.json
   def show
     @selected_tab = params[:selected_tab]
+
+    @workflow_profile = TavernaLite::WorkflowProfile.find_by_workflow_id(@workflow)
+    if @workflow_profile.nil? 
+      @workflow_profile = TavernaLite::WorkflowProfile.new(:workflow_id=>67) 
+    end
     @sources, @source_descriptions = @workflow.get_inputs
-    @custom_inputs = @workflow.get_custom_inputs
-    @custom_outputs = @workflow.get_custom_outputs
+    @custom_inputs = @workflow_profile.get_custom_inputs
+    @custom_outputs = @workflow_profile.get_custom_outputs
     @sinks, @sink_descriptions = @workflow.get_outputs
     @processors = @workflow.get_processors
     @ordered_processors = @workflow.get_processors_in_order
-    @workflow_errors = @workflow.get_errors
-    @workflow_error_codes = @workflow.get_error_codes
+    @workflow_errors = @workflow_profile.get_errors
+    @workflow_error_codes = @workflow_profile.get_error_codes
 
     respond_to do |format|
       format.html # show.html.erb
