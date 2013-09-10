@@ -1,4 +1,5 @@
 Portal::Application.routes.draw do
+  mount TavernaLite::Engine => "/taverna_lite"
 
   devise_for :users
 

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.6'
+gem 'rails', '3.2.14'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -67,6 +67,8 @@ gem "rails_autolink", "~> 1.1.0"
 # Google analytics needs to be turned on for each environment configuration in
 # which it is required
 gem "google-analytics-rails", "~> 0.0.4"
+
+gem 'taverna_lite', path: "~/Rails/Rails3/taverna_lite"
 
 # This gem MUST BE INCLUDED LAST so that it can hook into everything else!
 # In this case we actually stop it from being automatically included here so

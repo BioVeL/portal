@@ -1,4 +1,3 @@
-<%
 # Copyright (c) 2012-2013 Cardiff University, UK.
 # Copyright (c) 2012-2013 The University of Manchester, UK.
 #
@@ -36,39 +35,17 @@
 # Synopsis
 #
 # BioVeL Taverna Lite  is a prototype interface to Taverna Server which is
-# provided to support easy inspection and execution of workflows.
+# provided to support easy inspection and modification of workflows.
 #
 # For more details see http://www.biovel.eu
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-%>
-<% if @workflow.title.nil?
-     wf_title="No Title"
-   else
-     wf_title = @workflow.title
-   end
- %>
-<% content_for :title, "BioVeL Portal - Workflow: " + wf_title %>
 
-<h1><%= "Details of Workflow: " + wf_title %></h1>
-<% if active_link?(@workflow.my_experiment_id ) %>
-  <%= link_to(
-      image_tag("myexperiment.png", :height => "15", :alt => "my experiment"),
-      @workflow.my_experiment_id)  %>
-<% end %>
-<p/>
-
-<%= render :partial => 'workflow_tabs'%>
-<div id="createrun" style="float:right;position:relative;">
-  <b>Click to execute workflow</b>
-  <%= button_to 'Create Run', :controller => 'runs', :action => 'new_run',
-  :id => @workflow %>
-</div>
-  <%= link_to 'Edit', taverna_lite.edit_workflow_profile_path(@workflow) %>
-<br/><br/><br/><br/>
-<%= javascript_tag do -%>
-  $("#tabs_wf_parts").tabs();
-<% end -%>
-
-
+# ENGINE CONFIGURATION FILE ****************************************************
+# Need to tell the engine the names of the classes that will be used for
+# handling users, workflows, runs and results in the main application
+TavernaLite.author_class = "User"
+TavernaLite.workflow_class = "Workflow"
+TavernaLite.run_class = "Run"
+TavernaLite.result_class = "Result"

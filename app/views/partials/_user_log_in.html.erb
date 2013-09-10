@@ -48,8 +48,8 @@
   <div class="user_log_in">
     <%= image_tag "user.png", :alt => "User" %>
     <% if user_signed_in? %>
-      <%= link_to current_user.name, edit_user_path(current_user), :class => "user_log_in_link" %> |
-      <%= link_to image_tag("door_out.png", :alt => "Logout") + ' Log out', destroy_user_session_path, :method => :delete %>
+      <%= link_to current_user.name, main_app.edit_user_path(current_user), :class => "user_log_in_link" %> |
+      <%= link_to image_tag("door_out.png", :alt => "Logout") + ' Log out', main_app.destroy_user_session_path, :method => :delete %>
     <% else %>
       <b>Guest</b> |
       <%= link_to image_tag("door_in.png", :alt => "Login") + ' Log in', new_user_session_path %> |
