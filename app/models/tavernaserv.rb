@@ -102,7 +102,7 @@ class Tavernaserv < ActiveRecord::Base
     end
   end
 
- def self.update_user_run_stats(user_id = 0, wf_id = 0)
+  def self.update_user_run_stats(user_id = 0, wf_id = 0)
     logger.info "Updating user run stats at #{Time.now}.\n"
 
     if user_id.nil?
