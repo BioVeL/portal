@@ -230,58 +230,6 @@ class Workflow < ActiveRecord::Base
     return [sinks,descriptions]
   end
 
-#  def get_custom_inputs
-#    # 1 Get custom inputs
-#    custom_inputs = TavernaLite::WorkflowPort.get_custom_ports(id, 1)
-#    # 2 Get all inputs
-#    model = get_model
-#    # 3 Add missing ports (if any) to the list
-#    model.sources().each{|source|
-#      if (custom_inputs).where("name='#{source.name}'").count() == 0 then
-#        # missing input
-#        missing_port = TavernaLite::WorkflowPort.new()
-#        missing_port.name = source.name
-#        missing_port.workflow_id = id
-#        missing_port.port_type_id = 1          # id of inputs
-#        missing_port.display_control_id = 1 # default display control
-#        example_values = source.example_values
-#        if ((!example_values.nil?) && (example_values.size == 1)) then
-#          missing_port.sample_value = example_values[0]
-#        else
-#          missing_port.sample_value = ""
-#        end
-#        custom_inputs << missing_port
-#      end
-#    }
-#    # 4 Return the list of custom inputs
-#    return custom_inputs
-#  end
-  def get_custom_outputs
-    # 1 Get custom inputs
-    custom_outputs = TavernaLite::WorkflowPort.get_custom_ports(id, 2)
-    # 2 Get all inputs
-    model = get_model
-    # 3 Add missing ports (if any) to the list
-    model.sinks().each{|sink|
-      if (custom_outputs).where("name='#{sink.name}'").count() == 0 then
-        # missing output
-        missing_port = TavernaLite::WorkflowPort.new()
-        missing_port.name = sink.name
-        missing_port.workflow_id = id
-        missing_port.port_type_id = 2          # id of outputs
-        missing_port.display_control_id = 1 # default display control
-        example_values = sink.example_values
-        if ((!example_values.nil?) && (example_values.size == 1)) then
-          missing_port.sample_value = example_values[0]
-        else
-          missing_port.sample_value = ""
-        end
-        custom_outputs << missing_port
-      end
-    }
-    # 4 Return the list of custom inputs
-    return custom_outputs
-  end
   def get_processors
     return nil
     # get the workflow t2flow model
@@ -346,22 +294,6 @@ class Workflow < ActiveRecord::Base
 
     #return the list of processors with their orders
     return ordered_processors
-  end
-
-  def get_errors
-    # need a model for storing error handling information and some benchmarks
-    # workflow_id, error_id, error_name, error_pattern, error_message,
-    # runs_count, ports_count, most_recent
-    # 1 check en results to see if there are results associated to errors
-    bad_results = filter_errors
-    # 2 Filter all duplicates, present only unique error messages
-    #   must open every error file, if different from ones already in leave else
-    #   do not add to final list of bad results
-    # 3 filter those errors that have been handled i.e. check if error file
-    #   contains a recognised error_pattern if it does then remove the error
-    #   from set
-    # 4 return the rest as unhandled error occurrences
-    return bad_results
   end
 
   def get_runs_with_errors_count
