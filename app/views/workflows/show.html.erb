@@ -79,11 +79,11 @@
     </div>  
   <% end -%>
   <div title="Download this workflow" alt="Download this workflow" style="float:left">
-    <%= link_to 'download', {:controller => 'workflows' ,
+    <%= link_to 'Download', {:controller => 'workflows' ,
           :action => 'download', :id => @workflow.id}, :class => "link_img" %>
   </div>
   <div title="Copy this workflow" alt="Copy this workflow" style="float:left">
-    <%= link_to 'copy', taverna_lite.edit_workflow_profile_path(@workflow), 
+    <%= link_to 'Copy', taverna_lite.edit_workflow_profile_path(@workflow), 
           :class => "link_img" %>
   </div>
   <div title="Run this workflow" alt="Run this workflow" style="float:left">
