@@ -230,32 +230,32 @@ class Workflow < ActiveRecord::Base
     return [sinks,descriptions]
   end
 
-  def get_custom_inputs
-    # 1 Get custom inputs
-    custom_inputs = TavernaLite::WorkflowPort.get_custom_ports(id, 1)
-    # 2 Get all inputs
-    model = get_model
-    # 3 Add missing ports (if any) to the list
-    model.sources().each{|source|
-      if (custom_inputs).where("name='#{source.name}'").count() == 0 then
-        # missing input
-        missing_port = TavernaLite::WorkflowPort.new()
-        missing_port.name = source.name
-        missing_port.workflow_id = id
-        missing_port.port_type_id = 1          # id of inputs
-        missing_port.display_control_id = 1 # default display control
-        example_values = source.example_values
-        if ((!example_values.nil?) && (example_values.size == 1)) then
-          missing_port.sample_value = example_values[0]
-        else
-          missing_port.sample_value = ""
-        end
-        custom_inputs << missing_port
-      end
-    }
-    # 4 Return the list of custom inputs
-    return custom_inputs
-  end
+#  def get_custom_inputs
+#    # 1 Get custom inputs
+#    custom_inputs = TavernaLite::WorkflowPort.get_custom_ports(id, 1)
+#    # 2 Get all inputs
+#    model = get_model
+#    # 3 Add missing ports (if any) to the list
+#    model.sources().each{|source|
+#      if (custom_inputs).where("name='#{source.name}'").count() == 0 then
+#        # missing input
+#        missing_port = TavernaLite::WorkflowPort.new()
+#        missing_port.name = source.name
+#        missing_port.workflow_id = id
+#        missing_port.port_type_id = 1          # id of inputs
+#        missing_port.display_control_id = 1 # default display control
+#        example_values = source.example_values
+#        if ((!example_values.nil?) && (example_values.size == 1)) then
+#          missing_port.sample_value = example_values[0]
+#        else
+#          missing_port.sample_value = ""
+#        end
+#        custom_inputs << missing_port
+#      end
+#    }
+#    # 4 Return the list of custom inputs
+#    return custom_inputs
+#  end
   def get_custom_outputs
     # 1 Get custom inputs
     custom_outputs = TavernaLite::WorkflowPort.get_custom_ports(id, 2)
