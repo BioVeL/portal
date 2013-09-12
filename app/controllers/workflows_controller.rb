@@ -64,9 +64,9 @@ class WorkflowsController < ApplicationController
     @selected_tab = params[:selected_tab]
 
     @workflow_profile = TavernaLite::WorkflowProfile.find_by_workflow_id(@workflow)
-    if @workflow_profile.nil? 
-      @workflow_profile = TavernaLite::WorkflowProfile.new() 
-      @workflow_profile.workflow = @workflow 
+    if @workflow_profile.nil?
+      @workflow_profile = TavernaLite::WorkflowProfile.new()
+      @workflow_profile.workflow = @workflow
     end
     @sources, @source_descriptions = @workflow.get_inputs
     @custom_inputs = @workflow_profile.get_custom_inputs

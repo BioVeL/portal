@@ -76,7 +76,7 @@
         <%= link_to "Make public", make_public_workflow_path(@workflow),
               :method => :put, :class => "link_img" %>
       <% end %>
-    </div>  
+    </div>
   <% end -%>
   <div title="Download this workflow" alt="Download this workflow" style="float:left">
     <%= link_to 'Download', {:controller => 'workflows' ,
@@ -89,9 +89,9 @@
   <div title="Run this workflow" alt="Run this workflow" style="float:left">
     <%= link_to 'Run', {:controller => 'runs', :action => 'new_run',
           :id => @workflow }, :class => "link_img" %>
-</div> 
+  </div>
 </div>
-<br/><br/><br/><br/>
+<br/><br/>
 <%= javascript_tag do -%>
   $("#tabs_wf_parts").tabs();
 <% end -%>
