@@ -2,6 +2,7 @@ PATH
   remote: ~/Rails/Rails3/taverna_lite
   specs:
     taverna_lite (0.0.1)
+      jquery-ui-rails (~> 4.0.2)
       rails (~> 3.2.14)
       taverna-t2flow (~> 0.4.3)
 
