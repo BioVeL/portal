@@ -47,6 +47,9 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
+Bundler.require
+require "taverna_player"
+
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
   Bundler.require(*Rails.groups(:assets => %w(development test)))
@@ -55,7 +58,7 @@ if defined?(Bundler)
 end
 
 # Workaround critical XML parsing bug.
-ActionDispatch::ParamsParser::DEFAULT_PARSERS.delete(Mime::XML)
+#ActionDispatch::ParamsParser::DEFAULT_PARSERS.delete(Mime::XML)
 
 module Portal
   class Application < Rails::Application

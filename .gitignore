@@ -1,11 +1,13 @@
 log/*
 tmp/
 public/assets/
+public/system/
 
 db/*.sqlite3
 
 config/database.yml
 config/environments/production.rb
+config/initializers/taverna_player.rb
 
 public/result_store/*
 public/workflow_store/*

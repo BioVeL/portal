@@ -44,16 +44,16 @@ gem 'bcrypt-ruby', '~> 3.0.0', :require => 'bcrypt'
 # To use debugger
 # gem 'ruby-debug'
 
-# Taverna Server Gem
-gem 't2-server', "~> 0.9.3"
 # T2flow gem to parse and read workflows
 gem 'taverna-t2flow', "~> 0.4.3"
-# RATOM to read and parse Atom feeds
-gem 'ratom', "~> 0.7.2"
-# Daemons for handling background tasks
-gem 'daemons-rails', "~> 1.1.2"
-# Mongrel for dev server
-gem 'mongrel', "1.2.0.pre2"
+
+# Taverna Player for workflow execution and management
+gem "taverna-player", "~> 0.0.1", :path => "/home/hainesr/work/taverna/src/taverna-player"
+gem "t2-server", "~> 1.0.0", :path => "/home/hainesr/work/taverna/src/t2-server-gem"
+
+# Unicorn for dev server
+gem "unicorn-rails"
+
 # Connect to my Experiment using oauth-plugin to gemfile
 gem 'oauth-plugin', ">= 0.4.0.pre1"
 

@@ -2,8 +2,6 @@ Portal::Application.routes.draw do
 
   devise_for :users
 
-  resources :interaction_entries
-
   resources :workflow_errors
 
   match '/about_portal' => 'about_portal#index'
@@ -13,13 +11,6 @@ Portal::Application.routes.draw do
   resources :workflow_ports do
     member do
       post "download"
-    end
-  end
-
-  resources :results do
-    member do
-      get "download"
-      get "inlinepdf"
     end
   end
 
@@ -35,21 +26,9 @@ Portal::Application.routes.draw do
 
   resources :announcements
 
-  resources :credentials
-
   resources :users, :except => [:create, :destroy, :show]
 
-  resources :runs
-
-  #*****************************************************
-  # mapping for refreshing runs list
-  get 'runs_refresh_list'  => 'runs#refresh_list'
-  # mapping for refreshing results if run has not finished
-  match 'runs/refresh/:id'  => 'runs#refresh'
-  match 'runs/interaction/:id/:interactionid' => 'runs#interaction'
-  #*****************************************************
-
-
+  mount TavernaPlayer::Engine, :at => "/"
 
   resources :workflows do
     member do
@@ -60,15 +39,6 @@ Portal::Application.routes.draw do
       post "save_custom_errors"
     end
   end
-  #*****************************************************
-  # mapping for the redirection when checking results
-  match 'runs/', :controller => 'runs', :action => 'update_all'
-  #*****************************************************
-
-  #*****************************************************
-  # mapping for the redirection when creating a new run
-  match 'workflows/:id/newrun/', :controller => 'runs', :action => 'new_run'
-  #*****************************************************
 
   #*****************************************************
   # mapping for the redirection when downloading a workflow

@@ -70,8 +70,9 @@
         <td><%= workflow.updated_at.strftime("%Y/%m/%d %H:%M") %></td>
         <td>
           <div title="Run workflow" alt="Run workflow" style="float:left">
-            <%= link_to 'Run', {:controller => 'runs',
-              :action => 'new_run', :id => workflow.id}, :class => "link_img" %>
+            <%= link_to "Run",
+              taverna_player.new_run_path(:workflow_id => workflow.id),
+              :class => "link_img" %>
           </div>
           <div title="Download workflow" alt="Download workflow" style="float:left">
             <%= link_to 'Download', {:controller => 'workflows' ,
