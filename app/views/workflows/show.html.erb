@@ -60,14 +60,16 @@
 <p/>
 
 <%= render :partial => 'workflow_tabs'%>
-<div id="createrun" style="float:right;position:relative;">
+<div id="createrun">
   <b>Click to execute workflow</b>
-  <%= button_to 'Create Run', :controller => 'runs', :action => 'new_run',
-  :id => @workflow %>
+  <br/>
+  <%= link_to "Run this workflow",
+    taverna_player.new_run_path(:workflow_id => @workflow.id),
+    :class => "link_img" %>
 </div>
-<br/><br/><br/><br/>
-<%= javascript_tag do -%>
+
+<div class="clearer"></div>
+
+<%= javascript_tag do %>
   $("#tabs_wf_parts").tabs();
-<% end -%>
-
-
+<% end %>
