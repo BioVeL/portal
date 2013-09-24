@@ -697,7 +697,7 @@ h4 {
 }
 
 .link_img {
-  float: left;
+  display: inline-block;
   text-decoration: none;
   margin-right: 2px;
   text-align: center;
@@ -720,7 +720,7 @@ h4 {
 }
 
 .link_img_rem {
-  float: left;
+  display: inline-block;
   text-decoration: none;
   color: white;
   margin-right: 2px;
