@@ -1,0 +1,36 @@
+<h1>Service Credentials</h1>
+
+<br />
+
+<table id="credentials-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>URI</th>
+      <th>Login</th>
+      <th>Operations</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @service_credentials.each do |service_credential| %>
+    <tr>
+      <td><%= link_to service_credential.name, service_credential %></td>
+      <td><%= service_credential.description %></td>
+      <td><%= service_credential.uri %></td>
+      <td><%= service_credential.login %></td>
+      <td>
+        <%= link_to 'Edit', edit_service_credential_path(service_credential),
+          :class => "link_img" %>
+        <%= link_to 'Remove', service_credential, :method => :delete,
+          :data => { :confirm => 'Are you sure?' }, :class => "link_img_rem" %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br />
+
+<%= link_to 'New Service Credential', new_service_credential_path,
+  :class => "link_img" %>

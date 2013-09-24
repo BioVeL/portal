@@ -43,7 +43,7 @@
 // through the grant agreement number 283359.
 (function() {
   jQuery(function() {
-    return $('#servers_table').dataTable({
+    return $('#credentials-table').dataTable({
       sPaginationType: "full_numbers",
       "iDisplayLength": 10,
       "bJQueryUI": true,
