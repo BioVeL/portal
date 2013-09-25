@@ -1,0 +1,84 @@
+<div class="run-heading">
+  <span class="run-massive">
+  	Setup new run of workflow: &quot;<%= @workflow.title %>&quot;
+  </span>
+</div>
+
+<% if current_user.nil? %>
+  <div class="run-input-details">
+    <dt>
+      <span style="color: rgb(153, 0, 0);">Guest users: please note</span>
+    </dt>
+    <dd>
+      You are starting this workflow run as a <b>Guest user</b>. The outputs
+      of this run will be available on this portal for seven days after it
+      finishes, at which point they will be deleted.
+      <br />
+  	  If you wish to keep the results for longer than that please
+      <%= link_to "log in", main_app.new_user_session_path %> before
+      starting a run. If you do not have an account yet you can
+      <%= link_to "sign up", main_app.new_user_registration_url %>.
+    </dd>
+  </div>
+<% end %>
+
+<%= form_for @run, :html => {:multipart => true} do |f| %>
+  <%= f.hidden_field :workflow_id, :value => @workflow.id %>
+  <%= f.hidden_field :embedded %>
+
+  <div class="run-input-details">
+    <dt><%= f.label :name, "Run name" %></dt>
+    <dd><%= f.text_field :name, :class => "pre-filled" %></dd>
+  </div>
+
+  <% @inputs.each do |input| %>
+    <div class="run-input-details">
+      <div class="run-heading">
+      <span class="run-large"><b>Input: <%= input[:name] %></b></span>
+      </div>
+
+      <% unless input[:description].blank? %>
+        <dt>Description</dt>
+        <dd><%= input[:description] %></dd>
+      <% end %>
+
+      <% unless input[:example].blank? %>
+        <dt>Example value</dt>
+        <dd>
+          <%= render :partial => 'partials/preview_and_detail',
+            :locals => { :content_label => "input_" + input[:name],
+              :content => input[:example] } %>
+        </dd>
+
+        <dt>&nbsp;</dt>
+        <dd>
+          The example value is automatically entered in the box below.
+          Click to edit or enter a new value directly or choose a file.
+        </dd>
+      <% else %>
+        <dt>&nbsp;</dt>
+        <dd>
+          Set this input by entering data directly or choosing a file.
+        </dd>
+      <% end %>
+
+      <%= f.fields_for :inputs, input[:model] do |input_fields| %>
+        <%= input_fields.hidden_field :name %>
+
+        <dt>Enter value<br />or<br />Select file</dt>
+        <dd>
+          <%= input_fields.text_area :value, :rows => 3, :class => "pre-filled" %>
+          <br />
+          <%= input_fields.file_field :file %>
+        </dd>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.submit 'Start Run' %>
+    <% unless @run.embedded? %>
+      <%= link_to 'Cancel', :back, :class => "link_img" %>
+    <% end %>
+  </div>
+<% end %>

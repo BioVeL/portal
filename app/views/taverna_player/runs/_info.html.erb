@@ -1,0 +1,26 @@
+
+<div id="run-info">
+  <dl>
+    <dt>Taverna Server ID:</dt>
+    <dd><%= run.run_id || "Not available" %></dd>
+
+    <dt>Taverna Server Status:</dt>
+    <dd><%= run.state %></dd>
+
+    <dt>Created:</dt>
+    <dd><%= run.create_time || "Not available" %></dd>
+
+    <dt>Started:</dt>
+    <dd><%= run.start_time || "Not available" %></dd>
+
+    <dt>Finished:</dt>
+    <dd><%= run.finish_time || "Not available" %></dd>
+
+    <dt>Taverna Server Log:</dt>
+    <% if run.log.blank? %>
+      <dd>Not available</dd>
+    <% else %>
+      <dd><%= link_to "Download", run.log.url, :class => "link_img" %></dd>
+    <% end %>
+  </dl>
+</div>

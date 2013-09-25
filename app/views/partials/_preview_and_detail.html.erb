@@ -1,20 +1,16 @@
-<% if ((content.nil?) || content.blank?) then
-     content = "Not Provided"
-   end -%>
-<div id="<%='snip_'+ content_label %>" class="contentdiv">
-  <%= content.blank? ? "Not Provided" : content[0,79]+(content.length > 80 ? "..." : "")  -%>
+<% content = "Not Provided" if content.blank? %>
+
+<div id="<%= 'snip_' + content_label %>" class="contentdiv">
+  <%= simple_format(content[0,79] + (content.length > 80 ? "..." : "")) %>
 </div>
-<% if content.length > 80 -%>
-  <div id="<%='dialog_'+ content_label %>" style="display:none" class="contentdiv">
+<% if content.length > 80 %>
+  <div id="<%= 'dialog_' + content_label %>" style="display:none" class="contentdiv">
     <%= simple_format(content) %>
   </div>
   <div style="float:left;">
    <%= link_to "more",
-      "javascript:snip_full('dialog_#{content_label}','snip_#{content_label}',
-       'switch_#{content_label}');", :id=>"switch_#{content_label}",
-       :class => "link_img", :title=>"show all", :alt=>"show all" -%>
+     "javascript:snip_full('dialog_#{content_label}','snip_#{content_label}','switch_#{content_label}');",
+     :id => "switch_#{content_label}", :class => "link_img",
+     :title=>"show all", :alt=>"show all" %>
   </div>
-<% end -%>
-
-
-
+<% end %>

@@ -1,0 +1,37 @@
+
+<div id="run-outputs">
+  <% if run.outputs.size > 0 %>
+    <span class="run-large run-heading">Outputs</span>
+    <%= link_to "Download All", run.results.url, :class => "link_img" %>
+
+    <div id="output-tabs">
+      <ul>
+      <% run.outputs.each do |output| %>
+        <li>
+          <a href="#tab_<%= output.name %>"><%= label_tag output.name %></a>
+        </li>
+      <% end %>
+      </ul>
+
+    <% run.outputs.each do |output| %>
+      <div id="tab_<%= output.name %>" class="clearfix run-tab-content">
+        <span class="run-large run-heading"><%= output.name %></span>
+        <%= "(#{output.metadata[:type]})" if output.depth == 0 %>
+        <p>
+          <%= show_output(run, output) %>
+        </p>
+      </div>
+    <% end%>
+    </div>
+
+    <%= javascript_tag do %>
+      $("#output-tabs").tabs();
+    <% end %>
+  <% elsif run.finished? %>
+    This workflow has no outputs.
+  <% elsif run.cancelled? %>
+    This run was cancelled before any outputs were produced.
+  <% else %>
+    Waiting for run to finish...
+  <% end %>
+</div>

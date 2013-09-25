@@ -1,0 +1,35 @@
+<div class="run-heading">
+  <span class="run-massive">Run: <%= @run.name %></span>
+</div>
+
+<%= render :partial => "status", :locals => { :run => @run } %>
+
+<%= render :partial => "interaction", :locals =>
+  { :run => @run, :interaction => @interaction } %>
+
+<div id="run-ports">
+  <h3>Outputs</h3>
+  <div>
+    <%= render :partial => "outputs", :locals => { :run => @run } %>
+  </div>
+
+  <h3>Inputs</h3>
+  <% if @run.inputs.size > 0 %>
+    <%= render :partial => "inputs", :locals => { :run => @run } %>
+  <% else %>
+    <div>This workflow has no inputs.</div>
+  <% end %>
+
+  <h3>Advanced information</h3>
+  <div>
+    <%= render :partial => "info", :locals => { :run => @run } %>
+  </div>
+</div>
+
+<%= render :partial => "button", :locals => { :run => @run } %>
+
+<div class="clearer"></div>
+
+<% unless @run.finished? || @run.cancelled? %>
+  <%= render :partial => "poll", :locals => { :reload => run_path(@run) } %>
+<% end %>

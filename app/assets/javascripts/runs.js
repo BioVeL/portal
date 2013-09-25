@@ -41,6 +41,15 @@
 //
 // BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 // through the grant agreement number 283359.
+
+$(function() {
+  $("#input-tabs").tabs();
+  $("#run-ports").accordion({
+    collapsible: true,
+    heightStyle: "content"
+  });
+});
+
 function uploadFile(fileList, targetName) {
     if (fileList == null) { return; }
     var file = fileList[0];
@@ -53,7 +62,7 @@ function uploadFile(fileList, targetName) {
 
 (function() {
   jQuery(function() {
-    return $('#runs_table').dataTable({
+    return $('#runs-table').dataTable({
       //sPaginationType: "full_numbers",
       "iDisplayLength": 25,
       "oLanguage": {
@@ -67,6 +76,3 @@ function uploadFile(fileList, targetName) {
     });
   });
 }).call(this);
-
-
-
