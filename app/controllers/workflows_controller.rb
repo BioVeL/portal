@@ -466,9 +466,9 @@ class WorkflowsController < ApplicationController
     @workflow = Workflow.find(params[:id])
 
     if current_user.nil?
-      return login_required if !@workflow.shared?
+      return authenticate_user! if !@workflow.shared?
     else
-      return login_required if @workflow.user_id != current_user.id
+      return authenticate_user! if @workflow.user_id != current_user.id
     end
   end
   def getConsumerTokens
