@@ -1,0 +1,15 @@
+
+<%= render :partial => "taverna_player/runs/embedded/status", :locals => { :run => @run } %>
+
+<%= render :partial => "interaction", :locals =>
+  { :run => @run, :interaction => @interaction } %>
+
+<%= render :partial => "taverna_player/runs/embedded/outputs", :locals => { :run => @run } %>
+
+<%= render :partial => "taverna_player/runs/embedded/button", :locals => { :run => @run } %>
+
+<div class="clearer"></div>
+
+<% unless @run.finished? || @run.cancelled? %>
+  <%= render :partial => "poll", :locals => { :reload => run_path(@run) } %>
+<% end %>

@@ -1,0 +1,8 @@
+<div id="run-button">
+  <% if run.finished? %>
+    <%= link_to 'Restart', new_embedded_run_path(run), :class => "link_img" %>
+  <% else %>
+    <%= link_to "Cancel", cancel_run_path(run.id), :method => :put,
+      :data => { confirm: "Are you sure?" }, :class => "link_img_rem" %>
+  <% end %>
+</div>

@@ -1,0 +1,59 @@
+<div class="run-heading">
+  <span class="run-massive">
+  	Run this Taverna Workflow: &quot;<%= @workflow.title %>&quot;
+  </span>
+</div>
+
+<%= form_for @run, :html => {:multipart => true} do |f| %>
+  <%= f.hidden_field :workflow_id, :value => @workflow.id %>
+  <%= f.hidden_field :embedded %>
+  <%= f.hidden_field :name, :value => "Embedded Run" %>
+
+  <% @inputs.each do |input| %>
+    <div class="run-input-details">
+      <div class="run-heading">
+      <span class="run-large"><b>Input: <%= input[:name] %></b></span>
+      </div>
+
+      <% unless input[:description].blank? %>
+        <dt>Description</dt>
+        <dd><%= input[:description] %></dd>
+      <% end %>
+
+      <% unless input[:example].blank? %>
+        <dt>Example value</dt>
+        <dd>
+          <%= render :partial => 'partials/preview_and_detail',
+            :locals => { :content_label => "input_" + input[:name],
+              :content => input[:example] } %>
+        </dd>
+
+        <dt>&nbsp;</dt>
+        <dd>
+          The example value is automatically entered in the box below.
+          Click to edit or enter a new value directly or choose a file.
+        </dd>
+      <% else %>
+        <dt>&nbsp;</dt>
+        <dd>
+          Set this input by entering data directly or choosing a file.
+        </dd>
+      <% end %>
+
+      <%= f.fields_for :inputs, input[:model] do |input_fields| %>
+        <%= input_fields.hidden_field :name %>
+
+        <dt>Enter value<br />or<br />Select file</dt>
+        <dd>
+          <%= input_fields.text_area :value, :rows => 3, :class => "pre-filled" %>
+          <br />
+          <%= input_fields.file_field :file %>
+        </dd>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.submit 'Start Workflow Run' %>
+  </div>
+<% end %>

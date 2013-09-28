@@ -1,0 +1,27 @@
+
+<div id="run-inputs">
+  <span class="run-large run-heading">Inputs</span>
+
+  <div id="input-tabs">
+    <ul>
+    <% run.inputs.each do |input| %>
+      <li>
+        <a href="#tab_<%= input.name %>"><%= label_tag input.name %></a>
+      </li>
+    <% end %>
+    </ul>
+
+    <% run.inputs.each do |input| %>
+    <div id="tab_<%= input.name %>" class="clearfix run-tab-content">
+      <span class="run-large run-heading"><%= input.name %></span>
+      <p>
+      <% unless input.file.blank? %>
+        <%= link_to input.file_file_name, input.file.url %>
+      <% else %>
+        <%= input.value %>
+      <% end %>
+      </p>
+    </div>
+    <% end%>
+  </div>
+</div>
