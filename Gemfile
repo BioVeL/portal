@@ -73,4 +73,4 @@ gem 'taverna_lite', path: "~/Rails/Rails3/taverna_lite"
 # This gem MUST BE INCLUDED LAST so that it can hook into everything else!
 # In this case we actually stop it from being automatically included here so
 # we can turn it on in the initializers if required.
-gem "rack-mini-profiler", "~> 0.1.28", :require => false
+# gem "rack-mini-profiler", "~> 0.1.28", :require => false

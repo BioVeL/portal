@@ -61,31 +61,3 @@
 //= require jquery.ui.accordion
 //= require dataTables/jquery.dataTables
 //= require_tree .
-
-// This class ("pre-filled") handles the text selection policy of pre-filled
-// form elements.
-//
-// When the pre-filled value is still unedited select all text upon first
-// click, then never select all again unless moving away from the element,
-// then back again. Also, once the original value has been changed, don't
-// select all.
-$(document).ready(function() {
-  $('.pre-filled').each(function() {
-    var original_value = this.value
-    var selected = false
-
-    $(this).select(function() {
-      selected = true
-    });
-
-    $(this).blur(function() {
-      selected = false;
-    });
-
-    $(this).click(function() {
-      if (selected == false && this.value == original_value) {
-        $(this).select();
-      }
-    });
-  });
-});

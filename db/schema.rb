@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130924162459) do
+ActiveRecord::Schema.define(:version => 20130927111044) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -86,6 +86,14 @@ ActiveRecord::Schema.define(:version => 20130924162459) do
     t.integer  "user_id"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
+  end
+
+  create_table "taverna_lite_alternative_components", :force => true do |t|
+    t.integer  "component_id"
+    t.integer  "alternative_id"
+    t.string   "note"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "taverna_lite_port_types", :force => true do |t|

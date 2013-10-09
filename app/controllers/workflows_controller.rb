@@ -52,6 +52,13 @@ class WorkflowsController < ApplicationController
   # GET /workflows
   # GET /workflows.json
   def index
+    @workflows = Workflow.all
+    if TavernaLite::WorkflowComponent.all.count>0 then
+      @workflows = Workflow.find(:all,
+        :conditions=>['id not in (?)',
+          TavernaLite::WorkflowComponent.select(:workflow_id).map(&:workflow_id)])
+    end
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @workflows }
