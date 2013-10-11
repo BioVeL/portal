@@ -47,9 +47,9 @@ gem 'bcrypt-ruby', '~> 3.0.0', :require => 'bcrypt'
 # T2flow gem to parse and read workflows
 gem 'taverna-t2flow', "~> 0.4.3"
 
-# Taverna Player for workflow execution and management
-gem "taverna-player", "~> 0.0.1", :path => "/home/hainesr/work/taverna/src/taverna-player"
-gem "t2-server", "~> 1.0.0", :path => "/home/hainesr/work/taverna/src/t2-server-gem"
+# Taverna Player for workflow execution and run management
+gem "taverna-player", :git => "git://github.com/myGrid/taverna-player", :branch => "master"
+gem "t2-server", :git => "git://github.com/myGrid/t2-server-gem", :branch => "next"
 
 # Unicorn for dev server
 gem "unicorn-rails"

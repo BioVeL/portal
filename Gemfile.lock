@@ -1,5 +1,7 @@
-PATH
-  remote: /home/hainesr/work/taverna/src/t2-server-gem
+GIT
+  remote: git://github.com/myGrid/t2-server-gem
+  revision: fc7ca73426d649695be056be6550756ffa6a1f45
+  branch: next
   specs:
     t2-server (1.0.0)
       hirb (>= 0.4.0)
@@ -7,8 +9,10 @@ PATH
       ratom (~> 0.7.2)
       taverna-baclava (~> 1.0.0)
 
-PATH
-  remote: /home/hainesr/work/taverna/src/taverna-player
+GIT
+  remote: git://github.com/myGrid/taverna-player
+  revision: 695acdbe779e5dea04cb33b76e07feb865d283a7
+  branch: master
   specs:
     taverna-player (0.0.1)
       coderay (~> 1.0.9)
@@ -57,7 +61,7 @@ GEM
     builder (3.0.4)
     climate_control (0.0.3)
       activesupport (>= 3.0)
-    cocaine (0.5.1)
+    cocaine (0.5.2)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.0.9)
     coffee-rails (3.2.2)
@@ -224,8 +228,8 @@ DEPENDENCIES
   rails (= 3.2.14)
   rails_autolink (~> 1.1.0)
   sass-rails (~> 3.2.3)
-  t2-server (~> 1.0.0)!
-  taverna-player (~> 0.0.1)!
+  t2-server!
+  taverna-player!
   taverna-t2flow (~> 0.4.3)
   therubyracer (~> 0.11.3)
   uglifier (>= 1.0.3)
