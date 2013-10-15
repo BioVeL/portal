@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131010150147) do
+ActiveRecord::Schema.define(:version => 20131015133058) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(:version => 20131010150147) do
     t.string   "sample_file_type"
     t.boolean  "show"
     t.text     "old_example"
+    t.integer  "example_type_id"
   end
 
   create_table "taverna_lite_workflow_profiles", :force => true do |t|
