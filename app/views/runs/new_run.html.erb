@@ -150,7 +150,6 @@
             <% if item.sample_file_type.to_s =~ /text/
                example_file_text = IO.read(item.sample_file_actual_path)
              else
-               #example_file_text = item.samplefile.to_s() + ' (' + item.sample_file_type.to_s()  + ')'
                example_file_text = item.sample_file.to_s() + ' (' + item.sample_file_type.to_s()  + ')'
              end %>
             <dd>

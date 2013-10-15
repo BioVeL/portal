@@ -240,7 +240,13 @@ class WorkflowsController < ApplicationController
 
   def get_workflow
     @workflow = Workflow.find(params[:id])
+    if current_user.nil?
+      return authenticate_user! if !@workflow.shared?
+    else
+      return authenticate_user! if @workflow.user_id != current_user.id
+    end
   end
+
   def getConsumerTokens
     MyExperimentToken.all :conditions=>
       {:user_id=>current_user.id}
