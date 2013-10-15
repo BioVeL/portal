@@ -84,7 +84,7 @@
            <dt class='list_title'>Example Value:</dt>
            <dd class='list_description'>
              <%= render :partial => 'partials/preview_and_detail',
-               :locals => {:content_label => portname, :content => item.sample_value } %>
+               :locals => {:content_label => portname, :content => item.example } %>
            </dd>
          <% end -%>
          <% if (item.display_control_id == 1) || item.display_control_id == 3 then -%>
