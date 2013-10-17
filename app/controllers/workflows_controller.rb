@@ -53,10 +53,15 @@ class WorkflowsController < ApplicationController
   # GET /workflows.json
   def index
     @workflows = Workflow.all
-    if TavernaLite::WorkflowComponent.all.count>0 then
+    if TavernaLite::WorkflowComponent.all.count>0 && current_user.admin then
       @workflows = Workflow.find(:all,
-        :conditions=>['id not in (?)',
+        :conditions=>['id NOT IN (?)',
           TavernaLite::WorkflowComponent.select(:workflow_id).map(&:workflow_id)])
+    else
+      @workflows = Workflow.find(:all,
+        :conditions=>['id NOT IN (?) AND user_id = ?',
+          TavernaLite::WorkflowComponent.select(:workflow_id).map(&:workflow_id),
+          current_user.id])
     end
 
     respond_to do |format|
