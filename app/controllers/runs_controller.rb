@@ -336,7 +336,7 @@ class RunsController < ApplicationController
    if cookies[:run_identification]==""
       # if workflow has inputs
       @sources, @descriptions = @workflow.get_inputs
-      @custom_inputs = @workflow.get_custom_inputs
+      @custom_inputs = TavernaLite::WorkflowProfile.new(:workflow_id=>@workflow.id).get_custom_inputs
     else
       save_run(run, run_name)
     end

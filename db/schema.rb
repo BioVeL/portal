@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130815090135) do
+ActiveRecord::Schema.define(:version => 20131015133058) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -86,6 +86,75 @@ ActiveRecord::Schema.define(:version => 20130815090135) do
     t.integer  "user_id"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
+  end
+
+  create_table "taverna_lite_alternative_components", :force => true do |t|
+    t.integer  "component_id"
+    t.integer  "alternative_id"
+    t.string   "note"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "taverna_lite_port_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "taverna_lite_workflow_components", :force => true do |t|
+    t.integer  "workflow_id"
+    t.integer  "license_id"
+    t.integer  "version"
+    t.string   "family"
+    t.string   "name"
+    t.string   "registry"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "taverna_lite_workflow_errors", :force => true do |t|
+    t.integer  "workflow_id"
+    t.string   "error_code"
+    t.string   "name"
+    t.string   "pattern"
+    t.string   "message"
+    t.integer  "run_count"
+    t.integer  "port_count"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "taverna_lite_workflow_ports", :force => true do |t|
+    t.integer  "workflow_id"
+    t.integer  "port_type_id"
+    t.string   "name"
+    t.string   "old_name"
+    t.text     "description"
+    t.text     "old_description"
+    t.integer  "order"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.integer  "display_control_id"
+    t.string   "example"
+    t.string   "sample_file"
+    t.string   "sample_file_type"
+    t.boolean  "show"
+    t.text     "old_example"
+    t.integer  "example_type_id"
+  end
+
+  create_table "taverna_lite_workflow_profiles", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created"
+    t.datetime "modified"
+    t.integer  "license_id"
+    t.integer  "author_id"
+    t.integer  "version"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "workflow_id"
   end
 
   create_table "tavernaservs", :force => true do |t|

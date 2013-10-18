@@ -45,18 +45,18 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :active_link?
-  before_filter :allow_profiler
+  #before_filter :allow_profiler
 
   private
 
-  def allow_profiler
-    return unless profiler_allowed?
-    Rack::MiniProfiler.authorize_request
-  end
+#  def allow_profiler
+#    return unless profiler_allowed?
+#    Rack::MiniProfiler.authorize_request
+#  end
 
-  def profiler_allowed?
-    defined?(Rack::MiniProfiler) && !current_user.nil? && current_user.admin?
-  end
+#  def profiler_allowed?
+#    defined?(Rack::MiniProfiler) && !current_user.nil? && current_user.admin?
+#  end
 
   # detect if a user is logged in as administrator
   def admin_required

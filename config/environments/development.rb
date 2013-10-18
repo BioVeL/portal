@@ -86,5 +86,5 @@ Portal::Application.configure do
   GA.tracker = "UA-xxxxxx-x"
 
   # Turn rack-mini-profiler on for development
-  config.enable_mini_profiler = true
+#  config.enable_mini_profiler = true
 end

@@ -35,11 +35,17 @@
 # Synopsis
 #
 # BioVeL Taverna Lite  is a prototype interface to Taverna Server which is
-# provided to support easy inspection and execution of workflows.
+# provided to support easy inspection and modification of workflows.
 #
 # For more details see http://www.biovel.eu
 #
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
-module WorkflowErrorsHelper
-end
+
+# ENGINE CONFIGURATION FILE ****************************************************
+# Need to tell the engine the names of the classes that will be used for
+# handling users, workflows, runs and results in the main application
+TavernaLite.author_class = "User"
+TavernaLite.workflow_class = "Workflow"
+TavernaLite.run_class = "Run"
+TavernaLite.result_class = "Result"
