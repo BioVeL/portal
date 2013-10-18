@@ -54,8 +54,9 @@ gem 'ratom', "~> 0.7.2"
 gem 'daemons-rails', "~> 1.1.2"
 # Mongrel for dev server
 gem 'mongrel', "1.2.0.pre2"
-# Connect to my Experiment using oauth-plugin to gemfile
-gem 'oauth-plugin', ">= 0.4.0.pre1"
+# Connect to myExperiment using oauth-plugin to gemfile.
+# Note, oauth-plugin >= 0.5.0 does not work with Ruby 1.8
+gem 'oauth-plugin', "~> 0.4.1"
 
 # User authentication
 gem 'devise', "~> 3.0.2"
