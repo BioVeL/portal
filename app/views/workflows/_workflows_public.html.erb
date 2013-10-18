@@ -77,15 +77,6 @@
             <%= link_to 'Download', {:controller => 'workflows' ,
                 :action => 'download', :id => workflow.id}, :class => "link_img" %>
           </div>
-          <% unless current_user.nil? -%>
-            <div title="Copy workflow" alt="Copy this workflow" style="float:left">
-              <%= link_to 'Copy',
-                    taverna_lite.copy_workflow_profile_path(workflow,
-                      :user_id => current_user.id),
-                    :method => :get,
-                    :class => "link_img" %>
-            </div>
-          <% end -%>
         </td>
       </tr>
     <% end -%>

@@ -49,11 +49,17 @@
     <li><a href="#wf_inputs">Inputs</a></li>
     <li><a href="#wf_outputs">Outputs</a></li>
     <li><a href="#wf_statistics">Statistics</a></li>
+    <% if (!current_user.nil?) && ((current_user.id == @workflow.user_id) || current_user.admin) -%>
+    <li><a href="#wf_custom_ports">Customise</a></li>
+    <% end -%>
   </ul>
-  <%= render :partial => 'workflow_description' %>
-  <%= render :partial => 'workflow_inputs' %>
-  <%= render :partial => 'workflow_outputs' %>
-  <%= render :partial => 'workflow_stats' %>
+  <%= render :partial => 'workflow_description', :locals => {:workflow => @workflow} %>
+  <%= render :partial => 'workflow_inputs', :locals => {:workflow => @workflow} %>
+  <%= render :partial => 'workflow_outputs', :locals => {:workflow => @workflow} %>
+  <%= render :partial => 'workflow_stats', :locals => {:workflow => @workflow} %>
+  <% if (!current_user.nil?) && ((current_user.id == @workflow.user_id) || current_user.admin) -%>
+    <%= render :partial => 'workflow_custom_ports', :locals => {:workflow => @workflow} %>
+  <% end -%>
 </div>
 
 

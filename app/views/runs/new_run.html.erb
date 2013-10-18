@@ -127,7 +127,7 @@
             <dt>Example Value</dt>
             <dd>
               <%= render :partial => 'partials/preview_and_detail',
-                :locals => {:content_label => portname, :content => item.example } %>
+                :locals => {:content_label => portname, :content => item.sample_value } %>
             </dd>
 
             <dt>&nbsp;</dt>
@@ -138,7 +138,7 @@
 
             <dt>Enter Value</dt>
             <dd>
-              <%= f.text_area portname, :value => item.example,
+              <%= f.text_area portname, :value => item.sample_value,
                 :rows => 2, :class => "pre-filled" %>
             </dd>
           <% end # custom value field %>

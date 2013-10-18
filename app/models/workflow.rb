@@ -230,6 +230,226 @@ class Workflow < ActiveRecord::Base
     return [sinks,descriptions]
   end
 
+  def get_custom_inputs
+    # 1 Get custom inputs
+    custom_inputs = WorkflowPort.get_custom_ports(id, 1)
+    # 2 Get all inputs
+    model = get_model
+    # 3 Add missing ports (if any) to the list
+    model.sources().each{|source|
+      if (custom_inputs).where("name='#{source.name}'").count() == 0 then
+        # missing input
+        missing_port = WorkflowPort.new()
+        missing_port.name = source.name
+        missing_port.workflow_id = id
+        missing_port.port_type = 1          # id of inputs
+        missing_port.display_control_id = 1 # default display control
+        example_values = source.example_values
+        if ((!example_values.nil?) && (example_values.size == 1)) then
+          missing_port.sample_value = example_values[0]
+        else
+          missing_port.sample_value = ""
+        end
+        custom_inputs << missing_port
+      end
+    }
+    # 4 Return the list of custom inputs
+    return custom_inputs
+  end
+  def get_custom_outputs
+    # 1 Get custom inputs
+    custom_outputs = WorkflowPort.get_custom_ports(id, 2)
+    # 2 Get all inputs
+    model = get_model
+    # 3 Add missing ports (if any) to the list
+    model.sinks().each{|sink|
+      if (custom_outputs).where("name='#{sink.name}'").count() == 0 then
+        # missing output
+        missing_port = WorkflowPort.new()
+        missing_port.name = sink.name
+        missing_port.workflow_id = id
+        missing_port.port_type = 2          # id of outputs
+        missing_port.display_control_id = 1 # default display control
+        example_values = sink.example_values
+        if ((!example_values.nil?) && (example_values.size == 1)) then
+          missing_port.sample_value = example_values[0]
+        else
+          missing_port.sample_value = ""
+        end
+        custom_outputs << missing_port
+      end
+    }
+    # 4 Return the list of custom inputs
+    return custom_outputs
+  end
+  def get_processors
+    return nil
+    # get the workflow t2flow model
+    wf_model = get_model
+    # collect the workflow processors and their descriptions
+    return wf_model.processors()
+  end
+  def get_processors_in_order
+    return nil
+    # get the workflow t2flow model
+    wf_model = get_model
+    ordered_processors = get_processors_order()
+    ordered_processors.each do |nth_processor|
+      wf_model.processors.each do |a_processor|
+        if a_processor.name == nth_processor[1]
+          ordered_processors[nth_processor[0]] = a_processor
+        end
+      end
+    end
+    # collect the workflow processors and their descriptions
+    #return ordered_processors
+    # temporarily disable this because it creates infinite loop
+    return wf_model.processors()
+  end
+
+  def get_processors_order
+    # get the workflow t2flow model
+    wf_model = get_model
+    # list should be as long as the number of processors
+    i = wf_model.processors.count
+    ordered_processors ={}
+    # need a list of sources to filter them out
+    wf_sources=[]
+    wf_model.sources.each do |e_sou|
+      wf_sources << e_sou.name
+    end
+    wf_model.sinks.each do |e_sink|
+      wf_model.datalinks.each do |dl|
+        if dl.sink == e_sink.name &&
+             !ordered_processors.has_value?(dl.source.split(':')[0])
+          ordered_processors[i] = dl.source.split(':')[0]
+          i -= 1
+        end
+      end
+    end
+
+    while ordered_processors.count < wf_model.processors.count
+      wf_model.datalinks.each do |lnk|
+        ordered_processors.dup.each do |pr|
+          unless wf_sources.include?(lnk.source.split(':')[0])
+            # processors put processors in order according to data links
+            unless ordered_processors.has_value?(lnk.source.split(':')[0])
+              if (lnk.sink.split(':')[0] == pr[1])
+                ordered_processors[i] = lnk.source.split(':')[0]
+                i -= 1
+              end
+            end
+          end
+        end
+      end
+    end
+
+    #return the list of processors with their orders
+    return ordered_processors
+  end
+
+  def get_errors
+    # need a model for storing error handling information and some benchmarks
+    # workflow_id, error_id, error_name, error_pattern, error_message,
+    # runs_count, ports_count, most_recent
+    # 1 check en results to see if there are results associated to errors
+    bad_results = filter_errors
+    # 2 Filter all duplicates, present only unique error messages
+    #   must open every error file, if different from ones already in leave else
+    #   do not add to final list of bad results
+    # 3 filter those errors that have been handled i.e. check if error file
+    #   contains a recognised error_pattern if it does then remove the error
+    #   from set
+    # 4 return the rest as unhandled error occurrences
+    return bad_results
+  end
+
+  def get_runs_with_errors_count
+    runs_with_errors =
+      Run.where('workflow_id = ?',id).joins(:results).where('filetype = ?','error').group('run_id').count.count
+    return runs_with_errors
+  end
+
+  def filter_errors
+    bad_results =
+      Result.where("filetype=? ",'error').joins(:run).where("workflow_id = ?", id)
+    collect = []
+    samples = []
+    runs = []
+    bad_results.each do |ind_error|
+      example_value = IO.read(ind_error.result_filename)
+      unless samples.include?(example_value)
+        collect << ind_error
+        samples << example_value
+        runs << ind_error.id
+      end
+    end
+    return collect
+  end
+
+  def get_error_codes
+    error_codes =
+      WorkflowError.where('workflow_id = ?',id)
+    unhandled =  unhandled_errors
+
+    return error_codes | unhandled
+  end
+
+  def get_runs_with_errors_count
+    runs_with_errors =
+      Run.where('workflow_id = ?',id).joins(:results).where('filetype = ?','error').group('run_id').count.count
+    return runs_with_errors
+  end
+
+  def unhandled_errors
+    bad_results =
+      Result.where("filetype=? ",'error').joins(:run).where("workflow_id = ?", id)
+    error_codes =
+      WorkflowError.where('workflow_id = ?',id)
+    collect = []
+    samples = []
+    runs = []
+    bad_results.each do |ind_result|
+      is_new = true
+      error_codes.each do |ind_error|
+        File.open(ind_result.result_filename) do |f|
+          f.each_line do |line|
+            if line =~ /#{ind_error.error_pattern}/ then
+              is_new = false
+            end
+          end
+        end
+      end
+      if is_new then
+        example_value = IO.read(ind_result.result_filename)
+        # 1 Filer duplicate outputs - Sometimes the same error happens several times
+        unless samples.include?(example_value)
+          new_error = WorkflowError.new
+          new_error.error_code = "E_" + (100000+ind_result.run_id).to_s + "_" + ind_result.name
+          new_error.error_message = "Workflow run produced an error for " + ind_result.name
+          new_error.error_name = name + " Error"
+          new_error.error_pattern = example_value
+          if Run.exists?(ind_result.run_id)
+            # if run still exists assign the run creation date
+            new_error.most_recent = Run.find(ind_result.run_id).creation
+          else
+            # if run has been deleted assign result creation date
+            new_error.most_recent = ind_result.created_at
+          end
+          new_error.my_experiment_id = my_experiment_id
+          new_error.ports_count = 1
+          new_error.runs_count = 1
+          new_error.workflow_id = id
+          collect << new_error
+          samples << example_value
+          runs << ind_result.id
+        end
+      end
+    end
+    return collect
+  end
+
+
   private
   #the store wffile method is called after the details are saved
   def store_wffile

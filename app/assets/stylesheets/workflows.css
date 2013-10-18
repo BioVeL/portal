@@ -43,6 +43,39 @@
 # BioVeL is funded by the European Commission 7th Framework Programme (FP7),
 # through the grant agreement number 283359.
 */
+#filmstrip{
+  width: 99%;
+  overflow-x:auto;
+  white-space: nowrap;
+  border: solid 1px #999;
+  padding: 5px
+}
+
+.componentcontainer {
+  width: 250px;
+  white-space:nowrap;
+  background-color: #FFFFFF;
+  border: solid 2px #3300CC;
+  padding: 5px 10px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.componenticon{
+  width:auto;
+  height:64px;
+}
+.componentoutput{border: 1px solid hsla(80, 90%, 40%, 0.7);
+                 padding: 5px;width:40%;
+                 float:left;}
+.componentinput{  border: 1px solid hsla(80, 90%, 40%, 0.7);
+                  padding: 5px;
+                  width:40%;
+                   }
 
 table.dataTable thead th {
   padding: 1px 1px 1px 1px;

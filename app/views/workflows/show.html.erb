@@ -60,43 +60,12 @@
 <p/>
 
 <%= render :partial => 'workflow_tabs'%>
-
-<div id="workflow_operations" style="float:right;position:relative;">
-  <b>Workflow Operations:</b><br/>
-  <div title="Run workflow" alt="Run workflow" style="float:left">
-    <%= link_to 'Run', {:controller => 'runs', :action => 'new_run',
-          :id => @workflow }, :class => "link_img" %>
-  </div>
-  <div title="Download workflow" alt="Download workflow" style="float:left">
-    <%= link_to 'Download', {:controller => 'workflows' ,
-          :action => 'download', :id => @workflow.id}, :class => "link_img" %>
-  </div>
-  <% if !current_user.nil? && @workflow.user_id == current_user.id %>
-    <div title="Toggle workflow sharing" alt="Toggle workflow sharing" style="float:left">
-      <% if @workflow.shared? -%>
-        <%= link_to "Make private", make_private_workflow_path(@workflow),
-              :method => :put, :class => "link_img"%>
-      <% else -%>
-        <%= link_to "Make public", make_public_workflow_path(@workflow),
-              :method => :put, :class => "link_img" %>
-      <% end %>
-    </div>
-    <div title="Edit workflow" alt="Edit this workflow" style="float:left">
-      <%= link_to 'Edit', taverna_lite.edit_workflow_profile_path(@workflow),
-            :class => "link_img" %>
-    </div>
-  <% end -%>
-  <% unless current_user.nil? -%>
-    <div title="Copy workflow" alt="Copy this workflow" style="float:left">
-      <%= link_to 'Copy',
-            taverna_lite.copy_workflow_profile_path(@workflow,
-              :user_id => current_user.id),
-            :method => :get,
-            :class => "link_img" %>
-    </div>
-  <% end -%>
+<div id="createrun" style="float:right;position:relative;">
+  <b>Click to execute workflow</b>
+  <%= button_to 'Create Run', :controller => 'runs', :action => 'new_run',
+  :id => @workflow %>
 </div>
-<br/><br/>
+<br/><br/><br/><br/>
 <%= javascript_tag do -%>
   $("#tabs_wf_parts").tabs();
 <% end -%>

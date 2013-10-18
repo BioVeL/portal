@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.14'
+gem 'rails', '3.2.6'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -69,9 +69,7 @@ gem "rails_autolink", "~> 1.1.0"
 # which it is required
 gem "google-analytics-rails", "~> 0.0.4"
 
-gem 'taverna_lite', path: "~/Rails/Rails3/taverna_lite"
-
 # This gem MUST BE INCLUDED LAST so that it can hook into everything else!
 # In this case we actually stop it from being automatically included here so
 # we can turn it on in the initializers if required.
-# gem "rack-mini-profiler", "~> 0.1.28", :require => false
+gem "rack-mini-profiler", "~> 0.1.28", :require => false
