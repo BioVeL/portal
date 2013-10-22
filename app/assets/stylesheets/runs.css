@@ -44,6 +44,10 @@
 # through the grant agreement number 283359.
 */
 
+.run-button-left {
+  float: left;
+}
+
 span.run-large {
   font-size: large;
 }

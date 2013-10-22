@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130924103860) do
+ActiveRecord::Schema.define(:version => 20131022105451) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -105,15 +105,20 @@ ActiveRecord::Schema.define(:version => 20130924103860) do
   end
 
   create_table "taverna_player_interactions", :force => true do |t|
-    t.string   "uri"
-    t.boolean  "replied",    :default => false
+    t.boolean  "replied",                          :default => false
     t.integer  "run_id"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.boolean  "displayed",  :default => false
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+    t.boolean  "displayed",                        :default => false
+    t.string   "unique_id"
+    t.text     "page"
+    t.string   "feed_reply"
+    t.text     "output_value", :limit => 16777215
+    t.string   "serial"
   end
 
   add_index "taverna_player_interactions", ["run_id"], :name => "index_taverna_player_interactions_on_run_id"
+  add_index "taverna_player_interactions", ["unique_id"], :name => "index_taverna_player_interactions_on_unique_id"
 
   create_table "taverna_player_run_ports", :force => true do |t|
     t.string   "name"
@@ -155,6 +160,9 @@ ActiveRecord::Schema.define(:version => 20130924103860) do
     t.integer  "log_file_size"
     t.datetime "log_updated_at"
     t.string   "name",                 :default => "None"
+    t.integer  "delayed_job_id"
+    t.text     "failure_message"
+    t.integer  "parent_id"
   end
 
   add_index "taverna_player_runs", ["run_id"], :name => "index_taverna_player_runs_on_run_id"

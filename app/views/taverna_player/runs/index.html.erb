@@ -48,6 +48,9 @@
         <td>N/A</td>
       <% end %>
       <td>
+        <div class="run-button-left">
+          <%= link_to 'Details', run, :class => "link_img" %>
+        </div>
         <%= render :partial => "button", :locals => { :run => run } %>
       </td>
     </tr>

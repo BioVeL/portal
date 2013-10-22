@@ -31,6 +31,7 @@ Portal::Application.routes.draw do
   mount TavernaPlayer::Engine, :at => "/"
 
   resources :workflows do
+    resources :runs, :controller => "TavernaPlayer::Runs", :except => [:edit, :update]
     member do
       put "make_public"
       put "make_private"

@@ -184,6 +184,32 @@ class Workflow < ActiveRecord::Base
     end
     return response
   end
+
+  def inputs
+    model = get_model
+
+    result = []
+    model.sources.each do |i|
+      custom = WorkflowPort.find_by_workflow_id_and_port_type_and_name(id, 1, i.name)
+
+      description = i.descriptions.nil? ? "" : i.descriptions.join
+      example = i.example_values.nil? ? "" : i.example_values.join
+
+      data = { :name => i.name, :description => description,
+        :example => example }
+
+      unless custom.nil?
+        data[:example] = custom.sample_value
+        data[:file] = custom.sample_file
+        data[:display_control] = custom.display_control_id
+      end
+
+      result << data
+    end
+
+    result
+  end
+
   def get_inputs
     sources = {}
     descriptions = {}

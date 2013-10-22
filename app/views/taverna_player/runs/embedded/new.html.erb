@@ -1,6 +1,6 @@
 <div class="run-heading">
   <span class="run-massive">
-  	Run this Taverna Workflow: &quot;<%= @workflow.title %>&quot;
+    Run this Taverna Workflow: &quot;<%= @workflow.title %>&quot;
   </span>
 </div>
 
@@ -9,46 +9,54 @@
   <%= f.hidden_field :embedded %>
   <%= f.hidden_field :name, :value => "Embedded Run" %>
 
-  <% @inputs.each do |input| %>
-    <div class="run-input-details">
-      <div class="run-heading">
-      <span class="run-large"><b>Input: <%= input[:name] %></b></span>
-      </div>
+  <% @workflow.inputs.each do |input| %>
+    <% input_param = params[input[:name].to_sym] %>
+    <% if input_param.nil? %>
+      <div class="run-input-details">
+        <div class="run-heading">
+        <span class="run-large"><b>Input: <%= input[:name] %></b></span>
+        </div>
 
-      <% unless input[:description].blank? %>
-        <dt>Description</dt>
-        <dd><%= input[:description] %></dd>
+        <% unless input[:description].blank? %>
+          <dt>Description</dt>
+          <dd><%= input[:description] %></dd>
+        <% end %>
+
+        <% unless input[:example].blank? %>
+          <dt>Example value</dt>
+          <dd>
+            <%= render :partial => 'partials/preview_and_detail',
+              :locals => { :content_label => "input_" + input[:name],
+                :content => input[:example] } %>
+          </dd>
+
+          <dt>&nbsp;</dt>
+          <dd>
+            The example value is automatically entered in the box below.
+            Click to edit or enter a new value directly or choose a file.
+          </dd>
+        <% else %>
+          <dt>&nbsp;</dt>
+          <dd>
+            Set this input by entering data directly or choosing a file.
+          </dd>
+        <% end %>
       <% end %>
 
-      <% unless input[:example].blank? %>
-        <dt>Example value</dt>
-        <dd>
-          <%= render :partial => 'partials/preview_and_detail',
-            :locals => { :content_label => "input_" + input[:name],
-              :content => input[:example] } %>
-        </dd>
+      <%= f.fields_for :inputs, TavernaPlayer::RunPort::Input.new do |input_fields| %>
+        <%= input_fields.hidden_field :name, :value => input[:name] %>
 
-        <dt>&nbsp;</dt>
-        <dd>
-          The example value is automatically entered in the box below.
-          Click to edit or enter a new value directly or choose a file.
-        </dd>
-      <% else %>
-        <dt>&nbsp;</dt>
-        <dd>
-          Set this input by entering data directly or choosing a file.
-        </dd>
-      <% end %>
-
-      <%= f.fields_for :inputs, input[:model] do |input_fields| %>
-        <%= input_fields.hidden_field :name %>
-
-        <dt>Enter value<br />or<br />Select file</dt>
-        <dd>
-          <%= input_fields.text_area :value, :rows => 3, :class => "pre-filled" %>
-          <br />
-          <%= input_fields.file_field :file %>
-        </dd>
+        <% if input_param.nil? %>
+          <dt>Enter value<br />or<br />Select file</dt>
+          <dd>
+            <%= input_fields.text_area :value, :value => input[:example],
+              :rows => 3, :class => "pre-filled" %>
+            <br />
+            <%= input_fields.file_field :file %>
+          </dd>
+        <% else %>
+          <%= input_fields.hidden_field :value, :value => input_param %>
+        <% end %>
       <% end %>
     </div>
   <% end %>
