@@ -60,10 +60,6 @@ gem 'oauth-plugin', ">= 0.4.0.pre1"
 # User authentication
 gem 'devise', "~> 3.0.2"
 
-gem "coderay", "~> 1.0.9"
-
-gem "rails_autolink", "~> 1.1.0"
-
 # Google analytics needs to be turned on for each environment configuration in
 # which it is required
 gem "google-analytics-rails", "~> 0.0.4"
