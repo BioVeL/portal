@@ -47,6 +47,11 @@ class ApplicationController < ActionController::Base
   helper_method :active_link?
   before_filter :allow_profiler
 
+  def current_user_admin?
+    !current_user.nil? && current_user.admin?
+  end
+  helper_method :current_user_admin?
+
   private
 
   def allow_profiler
@@ -55,15 +60,14 @@ class ApplicationController < ActionController::Base
   end
 
   def profiler_allowed?
-    defined?(Rack::MiniProfiler) && !current_user.nil? && current_user.admin?
+    defined?(Rack::MiniProfiler) && current_user_admin?
   end
 
   # detect if a user is logged in as administrator
   def admin_required
-    #if session[:user_id].nil? || current_user.nil? || !current_user.admin?
-    unless current_user.admin?
+    unless current_user_admin?
       flash[:error] = 'This content is only for system administrators'
-      redirect_to root_url
+      redirect_to main_app.root_url
     end
   end
 
