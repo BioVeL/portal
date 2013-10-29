@@ -52,6 +52,8 @@ class User < ActiveRecord::Base
     :biovel, :type_id,  :remember_me
 
   has_one :user_statistic, :dependent => :destroy
+  has_many :runs, :class_name => "TavernaPlayer::Runs", :dependent => :destroy
+
   before_create :build_default_statistic
 
   validates_presence_of :name

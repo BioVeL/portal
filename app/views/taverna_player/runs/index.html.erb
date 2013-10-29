@@ -32,7 +32,7 @@
       <th>Name</th>
       <th>Created at</th>
       <th>State</th>
-      <% if !current_user.nil? && current_user.admin %>
+      <% if current_user_admin? %>
         <th>Owner</th>
       <% end %>
       <th>Actions</th>
@@ -44,8 +44,8 @@
       <td><%= link_to run.name, run %></td>
       <td><%= run.create_time %></td>
       <td><%= run.state %></td>
-      <% if !current_user.nil? && current_user.admin %>
-        <td>N/A</td>
+      <% if current_user_admin? %>
+        <td><%= run.user.nil? ? "Guest" : run.user.name %></td>
       <% end %>
       <td>
         <div class="run-button-left">
