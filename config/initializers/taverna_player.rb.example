@@ -49,6 +49,14 @@ TavernaPlayer.setup do |config|
   #config.run_cancelled_callback = Proc.new { |run| puts "Cancelled: #{run.name}" }
   #config.run_cancelled_callback = "player_run_cancelled_callback"
   #config.run_cancelled_callback = :player_run_cancelled_callback
+
+  # Renderer callbacks particular to BioVeL portal
+  require "taverna_player_renderers.rb"
+
+  config.output_renderers do |renderer|
+    renderer.add("application/pdf", :inline_pdf)
+    renderer.add("application/x-error", :workflow_error)
+  end
 end
 
 # Example callbacks defined in the initializer.
