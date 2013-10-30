@@ -17,7 +17,7 @@ TavernaPlayer.setup do |config|
   end
 
   # Taverna Server configuration information. The poll interval is in seconds.
-  config.server_address = "https://eric.rcs.manchester.ac.uk:8443/tavserv-test"
+  config.server_address = "https://localhost:8443/taverna"
   config.server_username = "taverna"
   config.server_password = "taverna"
   config.server_poll_interval = 1
@@ -29,7 +29,7 @@ TavernaPlayer.setup do |config|
   #
   # Add callbacks in this initializer or define them elsewhere and require the
   # file as usual (if they are not pulled in by some other code).
-  #require "callbacks" # See lib/callbacks.rb for these examples.
+  require "taverna_player_callbacks"
 
   # The pre-run callback is called before the run has started (before Taverna
   # Server is contacted, in fact).
@@ -42,7 +42,7 @@ TavernaPlayer.setup do |config|
   # It takes the run model object as its parameter.
   #config.post_run_callback = Proc.new { |run| puts "Finished: #{run.name}" }
   #config.post_run_callback = "player_post_run_callback"
-  #config.post_run_callback = :player_post_run_callback
+  config.post_run_callback = :player_post_run_callback
 
   # The run-cancelled callback is called if the run is cancelled by the user.
   # It takes the run model object as its parameter.
