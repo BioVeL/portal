@@ -2,7 +2,7 @@
 module TavernaPlayer
   class RunsController < TavernaPlayer::ApplicationController
     before_filter :authenticate_user!,
-      :except => [ :new, :create, :show, :index ]
+      :except => [ :new, :create, :show, :index, :cancel ]
 
     include TavernaPlayer::Concerns::Controllers::RunsController
 
