@@ -59,5 +59,6 @@
  *= require jquery.ui.tabs
  *= require jquery.ui.accordion
  *= require dataTables/jquery.dataTables
+ *= require taverna_player/application
  *= require_tree .
  */

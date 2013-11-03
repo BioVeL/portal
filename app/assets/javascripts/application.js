@@ -56,6 +56,7 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery_ujs
+//= require taverna_player/application
 //= require jquery.ui.button
 //= require jquery.ui.tabs
 //= require jquery.ui.accordion
