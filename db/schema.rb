@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131028172503) do
+ActiveRecord::Schema.define(:version => 20131103125247) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20131028172503) do
     t.string   "feed_reply"
     t.text     "output_value", :limit => 16777215
     t.string   "serial"
+    t.string   "page_uri"
   end
 
   add_index "taverna_player_interactions", ["run_id"], :name => "index_taverna_player_interactions_on_run_id"
