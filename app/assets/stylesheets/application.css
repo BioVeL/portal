@@ -54,7 +54,6 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require vendor
  *= require jquery.ui.button
  *= require jquery.ui.tabs
  *= require jquery.ui.accordion
