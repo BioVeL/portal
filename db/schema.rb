@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131106135853) do
+ActiveRecord::Schema.define(:version => 20131106183955) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -32,19 +32,6 @@ ActiveRecord::Schema.define(:version => 20131106135853) do
 
   add_index "consumer_tokens", ["token"], :name => "index_consumer_tokens_on_token", :unique => true, :length => {"token"=>100}
 
-  create_table "credentials", :force => true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.string   "url"
-    t.string   "login"
-    t.string   "password"
-    t.string   "server_type"
-    t.boolean  "in_use",      :default => false, :null => false
-    t.boolean  "default",     :default => false, :null => false
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
-  end
-
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -60,49 +47,6 @@ ActiveRecord::Schema.define(:version => 20131106135853) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
-
-  create_table "interaction_entries", :force => true do |t|
-    t.string   "author_name"
-    t.text     "content"
-    t.string   "href"
-    t.string   "in_reply_to"
-    t.text     "input_data"
-    t.string   "interaction_id"
-    t.datetime "published"
-    t.boolean  "response",               :default => false
-    t.text     "result_data"
-    t.string   "result_status"
-    t.string   "run_id"
-    t.string   "taverna_interaction_id"
-    t.text     "title"
-    t.datetime "updated"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
-  end
-
-  create_table "results", :force => true do |t|
-    t.string   "name"
-    t.string   "filetype"
-    t.integer  "depth"
-    t.integer  "run_id"
-    t.string   "filepath"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "runs", :force => true do |t|
-    t.string   "run_identification"
-    t.string   "state"
-    t.datetime "creation"
-    t.datetime "start"
-    t.datetime "end"
-    t.datetime "expiry"
-    t.integer  "workflow_id"
-    t.string   "description"
-    t.integer  "user_id"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
-  end
 
   create_table "taverna_player_interactions", :force => true do |t|
     t.boolean  "replied",                        :default => false
@@ -178,11 +122,6 @@ ActiveRecord::Schema.define(:version => 20131106135853) do
   end
 
   add_index "taverna_player_service_credentials", ["uri"], :name => "index_taverna_player_service_credentials_on_uri"
-
-  create_table "tavernaservs", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "user_statistics", :force => true do |t|
     t.integer  "run_count",          :default => 0
