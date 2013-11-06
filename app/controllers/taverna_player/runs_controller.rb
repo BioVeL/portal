@@ -24,7 +24,16 @@ module TavernaPlayer
 
     def find_run
       @run = Run.find(params[:id])
-      authenticate_user! if current_user.nil? && !@run.user_id.nil?
+
+      # Everyone can view guest runs.
+      return if @run.user_id.nil?
+
+      authenticate_user!
+
+      if current_user.id != @run.user_id
+        flash[:error] = "Sorry, you are not authorized to view that run."
+        redirect_to runs_path
+      end
     end
 
     def set_user
