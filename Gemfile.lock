@@ -1,17 +1,6 @@
 GIT
-  remote: git://github.com/myGrid/t2-server-gem
-  revision: dcbc8a959763a743202e68eb6c076ce6055569b6
-  branch: next
-  specs:
-    t2-server (1.0.0)
-      hirb (>= 0.4.0)
-      net-http-persistent (~> 2.6)
-      ratom (~> 0.8.2)
-      taverna-baclava (~> 1.0.0)
-
-GIT
   remote: git://github.com/myGrid/taverna-player
-  revision: c47d74da70e99bd85d53f6d25c8d301ca5e63ef3
+  revision: fccdb896a1d4de4279c639ffffd166db7b0da218
   branch: master
   specs:
     taverna-player (0.0.1)
@@ -25,6 +14,7 @@ GIT
       rails_autolink (~> 1.1.0)
       require_all (~> 1.3.1)
       rubyzip (~> 0.9.9)
+      t2-server (~> 1.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -185,6 +175,11 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
+    t2-server (1.0.0)
+      hirb (>= 0.4.0)
+      net-http-persistent (~> 2.6)
+      ratom (~> 0.8.2)
+      taverna-baclava (~> 1.0.0)
     taverna-baclava (1.0.0)
       builder (~> 3.0.0)
     taverna-t2flow (0.4.5)
@@ -229,7 +224,6 @@ DEPENDENCIES
   rack-mini-profiler (~> 0.1.28)
   rails (= 3.2.14)
   sass-rails (~> 3.2.3)
-  t2-server!
   taverna-player!
   taverna-t2flow (~> 0.4.3)
   therubyracer (~> 0.11.3)
