@@ -8,7 +8,9 @@
       <ul>
       <% run.outputs.each do |output| %>
         <li>
-          <a href="#tab_<%= output.name %>"><%= label_tag output.name %></a>
+          <a href="#tab_<%= output.name %>">
+            <%= label_tag output.name, output.display_name %>
+          </a>
         </li>
       <% end %>
       </ul>

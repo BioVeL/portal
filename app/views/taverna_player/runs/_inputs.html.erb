@@ -6,7 +6,9 @@
     <ul>
     <% run.inputs.each do |input| %>
       <li>
-        <a href="#tab_<%= input.name %>"><%= label_tag input.name %></a>
+        <a href="#tab_<%= input.name %>">
+          <%= label_tag input.name, input.display_name %>
+        </a>
       </li>
     <% end %>
     </ul>
